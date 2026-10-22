@@ -1,0 +1,68 @@
+name: Lighthouse CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    # Performance budget for /en/track (CLAUDE.md / Phase E spec):
+    # < 170 KB compressed JS on first load, LCP < 3s, CLS < 0.1, on a
+    # simulated slow-4G mobile profile. See apps/web/lighthouse/lighthouserc.cjs.
+    env:
+      DATABASE_URL: postgres://mwezicare:mwezicare@localhost:5432/mwezicare
+      AUTH_SECRET: lighthouse-ci-dev-secret-not-for-real-use-00000000
+      AFRICASTALKING_USERNAME: sandbox
+      AFRICASTALKING_API_KEY: lighthouse-ci-placeholder
+      AI_GATEWAY_API_KEY: lighthouse-ci-placeholder
+      # Disposable keys for this ephemeral CI-only Postgres — never real secrets.
+      ENCRYPTION_KEYS: '{"1":"5Gr+4GFjDZ7IwTr+jgZib51Dh6BzsswL7q99Tp0uOqE="}'
+      ENCRYPTION_KEY_ID: "1"
+      HMAC_LOOKUP_KEY: sxz8DbRsd/4ORIPMZmKuu/plyHj4HYoaLt5sFKmlA8w=
+      ANALYTICS_KEY: m19j2Dnxq8cdxkTQMaUwHCZKtlTOwhJ7CpceehRP0Q0=
+      S3_ENDPOINT: http://localhost:9000
+      S3_ACCESS_KEY: lighthouse-ci-placeholder
+      S3_SECRET_KEY: lighthouse-ci-placeholder
+      S3_BUCKET: lighthouse-ci-placeholder
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Start Postgres (PostGIS/pgvector/pg_trgm — see infra/postgres)
+        run: docker compose up -d --build postgres
+
+      - name: Wait for Postgres to be healthy
+        run: |
+          for _ in $(seq 1 30); do
+            status=$(docker inspect --format='{{.State.Health.Status}}' "$(docker compose ps -q postgres)" 2>/dev/null || echo missing)
+            [ "$status" = "healthy" ] && exit 0
+            sleep 2
+          done
+          echo "Postgres did not become healthy in time" >&2
+          exit 1
+
+      - name: Run migrations
+        run: pnpm db:migrate
+
+      - name: Build, start, and run Lighthouse CI against /en/track
+        run: pnpm --filter @mwezicare/web run lighthouse
+
+      - name: Upload Lighthouse report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report
+          path: apps/web/.lighthouseci
+          retention-days: 14

@@ -1,0 +1,79 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`renderSummaryPdf > matches the expected synthetic SummaryData shape (data snapshot, not PDF bytes — see plan decision 7) 1`] = `
+{
+  "assessment": {
+    "outcome": "assess_soon",
+    "reasons": [
+      {
+        "en": "Test reason",
+        "sw": "Sababu ya mtihani",
+      },
+    ],
+    "rulesetVersion": 2,
+  },
+  "cycles": [
+    {
+      "cycleLengthDays": 28,
+      "periodLengthDays": 4,
+      "startDate": "2026-01-01",
+    },
+    {
+      "cycleLengthDays": 30,
+      "periodLengthDays": 5,
+      "startDate": "2026-01-29",
+    },
+    {
+      "cycleLengthDays": null,
+      "periodLengthDays": 3,
+      "startDate": "2026-02-28",
+    },
+  ],
+  "from": "2026-01-01",
+  "missedSchoolDays": 3,
+  "missedWorkDays": 0,
+  "painChart": [
+    {
+      "avgPainScore": 4,
+      "cycleStartDate": "2026-01-01",
+      "impactDays": 1,
+      "maxPainScore": 6,
+    },
+    {
+      "avgPainScore": 5.5,
+      "cycleStartDate": "2026-01-29",
+      "impactDays": 2,
+      "maxPainScore": 8,
+    },
+    {
+      "avgPainScore": 2,
+      "cycleStartDate": "2026-02-28",
+      "impactDays": 0,
+      "maxPainScore": 3,
+    },
+  ],
+  "symptomFrequency": [
+    {
+      "days": 7,
+      "symptom": "fatigue",
+    },
+    {
+      "days": 2,
+      "symptom": "nausea",
+    },
+    {
+      "days": 1,
+      "symptom": "painWithBowelMovements",
+    },
+    {
+      "days": 0,
+      "symptom": "painWithUrination",
+    },
+    {
+      "days": 0,
+      "symptom": "painWithSex",
+    },
+  ],
+  "to": "2026-03-31",
+}
+`;

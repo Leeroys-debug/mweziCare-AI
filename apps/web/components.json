@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "new-york",
+  "rsc": true,
+  "tsx": true,
+  "tailwind": {
+    "config": "",
+    "css": "app/globals.css",
+    "baseColor": "neutral",
+    "cssVariables": true,
+    "prefix": ""
+  },
+  "iconLibrary": "lucide",
+  "aliases": {
+    "components": "@mwezicare/ui/src",
+    "utils": "@mwezicare/ui/src/lib/utils",
+    "ui": "@mwezicare/ui/src",
+    "lib": "@mwezicare/ui/src/lib",
+    "hooks": "@/lib/hooks"
+  }
+}

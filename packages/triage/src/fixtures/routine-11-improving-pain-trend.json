@@ -1,0 +1,271 @@
+{
+  "id": "routine-11-improving-pain-trend",
+  "description": "Pain score is improving (negative slope) across recent cycles.",
+  "expectedOutcome": "routine",
+  "logs": [
+    {
+      "logDate": "2026-01-01",
+      "periodDay": true,
+      "bleedingLevel": "light",
+      "painScore": 6,
+      "painLocations": ["lower_abdomen"],
+      "symptoms": {
+        "painWithBowelMovements": false,
+        "painWithUrination": false
+      },
+      "impact": {
+        "missedSchool": false,
+        "missedWork": false,
+        "sleepDisrupted": false,
+        "activitiesLimited": false
+      },
+      "redFlags": {
+        "suddenSeverePain": false,
+        "fainting": false,
+        "possiblePregnancySuspected": false
+      }
+    },
+    {
+      "logDate": "2026-01-02",
+      "periodDay": true,
+      "bleedingLevel": "light",
+      "painScore": 6,
+      "painLocations": ["lower_abdomen"],
+      "symptoms": {
+        "painWithBowelMovements": false,
+        "painWithUrination": false
+      },
+      "impact": {
+        "missedSchool": false,
+        "missedWork": false,
+        "sleepDisrupted": false,
+        "activitiesLimited": false
+      },
+      "redFlags": {
+        "suddenSeverePain": false,
+        "fainting": false,
+        "possiblePregnancySuspected": false
+      }
+    },
+    {
+      "logDate": "2026-01-03",
+      "periodDay": true,
+      "bleedingLevel": "light",
+      "painScore": 6,
+      "painLocations": ["lower_abdomen"],
+      "symptoms": {
+        "painWithBowelMovements": false,
+        "painWithUrination": false
+      },
+      "impact": {
+        "missedSchool": false,
+        "missedWork": false,
+        "sleepDisrupted": false,
+        "activitiesLimited": false
+      },
+      "redFlags": {
+        "suddenSeverePain": false,
+        "fainting": false,
+        "possiblePregnancySuspected": false
+      }
+    },
+    {
+      "logDate": "2026-01-04",
+      "periodDay": true,
+      "bleedingLevel": "light",
+      "painScore": 6,
+      "painLocations": ["lower_abdomen"],
+      "symptoms": {
+        "painWithBowelMovements": false,
+        "painWithUrination": false
+      },
+      "impact": {
+        "missedSchool": false,
+        "missedWork": false,
+        "sleepDisrupted": false,
+        "activitiesLimited": false
+      },
+      "redFlags": {
+        "suddenSeverePain": false,
+        "fainting": false,
+        "possiblePregnancySuspected": false
+      }
+    },
+    {
+      "logDate": "2026-01-29",
+      "periodDay": true,
+      "bleedingLevel": "light",
+      "painScore": 5,
+      "painLocations": ["lower_abdomen"],
+      "symptoms": {
+        "painWithBowelMovements": false,
+        "painWithUrination": false
+      },
+      "impact": {
+        "missedSchool": false,
+        "missedWork": false,
+        "sleepDisrupted": false,
+        "activitiesLimited": false
+      },
+      "redFlags": {
+        "suddenSeverePain": false,
+        "fainting": false,
+        "possiblePregnancySuspected": false
+      }
+    },
+    {
+      "logDate": "2026-01-30",
+      "periodDay": true,
+      "bleedingLevel": "light",
+      "painScore": 5,
+      "painLocations": ["lower_abdomen"],
+      "symptoms": {
+        "painWithBowelMovements": false,
+        "painWithUrination": false
+      },
+      "impact": {
+        "missedSchool": false,
+        "missedWork": false,
+        "sleepDisrupted": false,
+        "activitiesLimited": false
+      },
+      "redFlags": {
+        "suddenSeverePain": false,
+        "fainting": false,
+        "possiblePregnancySuspected": false
+      }
+    },
+    {
+      "logDate": "2026-01-31",
+      "periodDay": true,
+      "bleedingLevel": "light",
+      "painScore": 5,
+      "painLocations": ["lower_abdomen"],
+      "symptoms": {
+        "painWithBowelMovements": false,
+        "painWithUrination": false
+      },
+      "impact": {
+        "missedSchool": false,
+        "missedWork": false,
+        "sleepDisrupted": false,
+        "activitiesLimited": false
+      },
+      "redFlags": {
+        "suddenSeverePain": false,
+        "fainting": false,
+        "possiblePregnancySuspected": false
+      }
+    },
+    {
+      "logDate": "2026-02-01",
+      "periodDay": true,
+      "bleedingLevel": "light",
+      "painScore": 5,
+      "painLocations": ["lower_abdomen"],
+      "symptoms": {
+        "painWithBowelMovements": false,
+        "painWithUrination": false
+      },
+      "impact": {
+        "missedSchool": false,
+        "missedWork": false,
+        "sleepDisrupted": false,
+        "activitiesLimited": false
+      },
+      "redFlags": {
+        "suddenSeverePain": false,
+        "fainting": false,
+        "possiblePregnancySuspected": false
+      }
+    },
+    {
+      "logDate": "2026-02-26",
+      "periodDay": true,
+      "bleedingLevel": "light",
+      "painScore": 3,
+      "painLocations": ["lower_abdomen"],
+      "symptoms": {
+        "painWithBowelMovements": false,
+        "painWithUrination": false
+      },
+      "impact": {
+        "missedSchool": false,
+        "missedWork": false,
+        "sleepDisrupted": false,
+        "activitiesLimited": false
+      },
+      "redFlags": {
+        "suddenSeverePain": false,
+        "fainting": false,
+        "possiblePregnancySuspected": false
+      }
+    },
+    {
+      "logDate": "2026-02-27",
+      "periodDay": true,
+      "bleedingLevel": "light",
+      "painScore": 3,
+      "painLocations": ["lower_abdomen"],
+      "symptoms": {
+        "painWithBowelMovements": false,
+        "painWithUrination": false
+      },
+      "impact": {
+        "missedSchool": false,
+        "missedWork": false,
+        "sleepDisrupted": false,
+        "activitiesLimited": false
+      },
+      "redFlags": {
+        "suddenSeverePain": false,
+        "fainting": false,
+        "possiblePregnancySuspected": false
+      }
+    },
+    {
+      "logDate": "2026-02-28",
+      "periodDay": true,
+      "bleedingLevel": "light",
+      "painScore": 3,
+      "painLocations": ["lower_abdomen"],
+      "symptoms": {
+        "painWithBowelMovements": false,
+        "painWithUrination": false
+      },
+      "impact": {
+        "missedSchool": false,
+        "missedWork": false,
+        "sleepDisrupted": false,
+        "activitiesLimited": false
+      },
+      "redFlags": {
+        "suddenSeverePain": false,
+        "fainting": false,
+        "possiblePregnancySuspected": false
+      }
+    },
+    {
+      "logDate": "2026-03-01",
+      "periodDay": true,
+      "bleedingLevel": "light",
+      "painScore": 3,
+      "painLocations": ["lower_abdomen"],
+      "symptoms": {
+        "painWithBowelMovements": false,
+        "painWithUrination": false
+      },
+      "impact": {
+        "missedSchool": false,
+        "missedWork": false,
+        "sleepDisrupted": false,
+        "activitiesLimited": false
+      },
+      "redFlags": {
+        "suddenSeverePain": false,
+        "fainting": false,
+        "possiblePregnancySuspected": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,111 @@
+import { like } from "drizzle-orm";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { schema, type Database } from "@mwezicare/db";
+import {
+  startTestDatabase,
+  type TestDatabase,
+} from "@mwezicare/db/testcontainers-setup";
+import { geoSearch } from "./geo-search";
+
+const CONTAINER_TIMEOUT_MS = 180_000;
+
+/**
+ * Real-Postgres (PostGIS) integration test for geoSearch, against a
+ * database this test builds and migrates itself
+ * (packages/db/src/testcontainers-setup.ts — the same custom image
+ * docker-compose.yml's `postgres` service builds, full migration set), not
+ * the dev docker-compose stack or a hand-rolled minimal schema.
+ */
+describe("geoSearch (testcontainers)", () => {
+  let testDb: TestDatabase;
+  let db: Database;
+
+  const nairobiCbd = { lat: -1.2921, lng: 36.8219 };
+  // Offsets along latitude only, so straight-line distance ~= |offsetKm|.
+  const kmToDegrees = (km: number) => km / 111;
+
+  beforeAll(async () => {
+    testDb = await startTestDatabase();
+    db = testDb.db;
+
+    async function seed(code: string, name: string, offsetKm: number) {
+      const [facility] = await db
+        .insert(schema.facilities)
+        .values({
+          kmhflCode: code,
+          name,
+          county: "Nairobi",
+          geom: {
+            lat: nairobiCbd.lat - kmToDegrees(offsetKm),
+            lng: nairobiCbd.lng,
+          },
+        })
+        .returning({ id: schema.facilities.id });
+      return facility!.id;
+    }
+
+    const nearId = await seed("TC-GEO-NEAR", "Near Facility (~0.5km)", 0.5);
+    const midId = await seed("TC-GEO-MID", "Mid Facility (~5km)", 5);
+    await seed("TC-GEO-FAR", "Far-but-in-range Facility (~20km)", 20);
+    await seed("TC-GEO-OUT-OF-RANGE", "Out of range Facility (~50km)", 50);
+
+    await db.insert(schema.facilityServices).values([
+      { facilityId: nearId, serviceCode: "GYN", status: "verified" },
+      { facilityId: midId, serviceCode: "GYN", status: "listed" },
+    ]);
+  }, CONTAINER_TIMEOUT_MS);
+
+  afterAll(async () => {
+    if (db)
+      await db
+        .delete(schema.facilities)
+        .where(like(schema.facilities.kmhflCode, "TC-GEO-%"));
+    await testDb?.stop();
+  }, CONTAINER_TIMEOUT_MS);
+
+  it("returns facilities within the radius, ordered nearest-first", async () => {
+    const results = await geoSearch(db, {
+      lat: nairobiCbd.lat,
+      lng: nairobiCbd.lng,
+      radiusKm: 25,
+    });
+    const inRange = results.filter((r) => r.kmhflCode.startsWith("TC-GEO-"));
+
+    expect(inRange.map((r) => r.kmhflCode)).toEqual([
+      "TC-GEO-NEAR",
+      "TC-GEO-MID",
+      "TC-GEO-FAR",
+    ]);
+    expect(inRange.map((r) => r.distanceMeters)).toEqual(
+      [...inRange.map((r) => r.distanceMeters)].sort(
+        (a, b) => (a ?? 0) - (b ?? 0),
+      ),
+    );
+  });
+
+  it("excludes facilities outside the radius", async () => {
+    const results = await geoSearch(db, {
+      lat: nairobiCbd.lat,
+      lng: nairobiCbd.lng,
+      radiusKm: 25,
+    });
+    expect(
+      results.find((r) => r.kmhflCode === "TC-GEO-OUT-OF-RANGE"),
+    ).toBeUndefined();
+  });
+
+  it("filters to a verified service when verifiedOnly is set", async () => {
+    const results = await geoSearch(db, {
+      lat: nairobiCbd.lat,
+      lng: nairobiCbd.lng,
+      radiusKm: 25,
+      service: "GYN",
+      verifiedOnly: true,
+    });
+
+    const codes = results
+      .map((r) => r.kmhflCode)
+      .filter((c) => c.startsWith("TC-GEO-"));
+    expect(codes).toEqual(["TC-GEO-NEAR"]);
+  });
+});

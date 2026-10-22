@@ -1,0 +1,36 @@
+{
+  "name": "@mwezicare/assistant",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "ingest": "tsx scripts/ingest.ts",
+    "eval": "tsx scripts/eval.ts"
+  },
+  "dependencies": {
+    "@mwezicare/db": "workspace:*",
+    "@mwezicare/rules-engine": "workspace:*",
+    "@mwezicare/validation": "workspace:*",
+    "ai": "^7.0.148",
+    "@ai-sdk/gateway": "^4.0.121",
+    "drizzle-orm": "^0.45.4",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@mwezicare/tsconfig": "workspace:*",
+    "@mwezicare/eslint-config": "workspace:*",
+    "@types/node": "^20",
+    "dotenv": "^16.4.7",
+    "tsx": "^4.19.2",
+    "typescript": "^5",
+    "vitest": "^4.1.9"
+  }
+}

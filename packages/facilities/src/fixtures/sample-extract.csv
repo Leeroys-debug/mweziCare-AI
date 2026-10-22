@@ -1,0 +1,3 @@
+kmhfl_code,name,county,sub_county,lat,lng,phone,keph_level,ownership,services
+TEST-001,Kiambu Test Health Centre,Kiambu,Kiambu,-1.1714,36.8356,+254700010001,Level 3,public,GYN;OPD
+TEST-002,Thika Test Clinic,Kiambu,Thika,-1.0332,37.0693,+254700010002,Level 2,private,OPD

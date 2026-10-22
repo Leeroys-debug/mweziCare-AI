@@ -1,0 +1,38 @@
+{
+  "name": "mwezicare",
+  "private": true,
+  "version": "0.0.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@12.14.0",
+  "scripts": {
+    "dev": "turbo run dev --filter=@mwezicare/web",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "test:e2e": "turbo run test:e2e --filter=@mwezicare/web",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "db:migrate": "pnpm --filter @mwezicare/db migrate",
+    "db:seed": "pnpm --filter @mwezicare/db seed",
+    "db:studio": "pnpm --filter @mwezicare/db studio",
+    "facilities:import": "pnpm --filter @mwezicare/facilities run import --",
+    "assistant:ingest": "pnpm --filter @mwezicare/assistant run ingest",
+    "eval:assistant": "pnpm --filter @mwezicare/assistant run eval",
+    "lighthouse": "pnpm --filter @mwezicare/web run lighthouse",
+    "translations:review-csv": "pnpm --filter @mwezicare/web run translations:review-csv",
+    "storage:init": "bash infra/garage/bootstrap.sh",
+    "prepare": "husky",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "turbo": "^2.3.0",
+    "typescript": "^5.7.0",
+    "eslint": "^9",
+    "prettier": "^3.4.0",
+    "husky": "^9.1.0",
+    "lint-staged": "^15.2.0"
+  }
+}

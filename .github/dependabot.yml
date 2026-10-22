@@ -1,0 +1,23 @@
+version: 2
+updates:
+  # pnpm workspace — one entry covers every workspace package (apps/*,
+  # packages/*) since Dependabot resolves the whole pnpm-lock.yaml from the
+  # repo root.
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+    groups:
+      # Batch routine version bumps into one PR instead of one-per-package —
+      # security advisories still get their own separate, immediate PR
+      # (Dependabot's security-update path isn't subject to `groups`).
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+    open-pull-requests-limit: 10
+
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly

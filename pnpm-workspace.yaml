@@ -1,0 +1,36 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+
+overrides:
+  # Force a single drizzle-orm instance across the workspace — @sentry/nextjs's
+  # OpenTelemetry dependency chain was splitting it into multiple
+  # peer-hash variants, which TS then sees as structurally incompatible
+  # (SQL<unknown>'s private `shouldInlineParams` field differs across
+  # instances of "the same" version).
+  drizzle-orm: ^0.45.4
+  # Transitive dev-only deps of @lhci/cli (Lighthouse CI) — forced to their
+  # patched versions even though @lhci/cli itself hasn't bumped its own
+  # ranges yet. Both are narrow, stable utility packages; safe to force.
+  tmp: ">=0.2.6"
+  basic-ftp: ">=6.2.1"
+
+allowBuilds:
+  '@parcel/watcher': true
+  '@swc/core': true
+  esbuild: true
+  unrs-resolver: true
+  # Downloads puppeteer's bundled Chromium — needed for the Lighthouse CI
+  # authenticated-collection script (apps/web/lighthouse/auth.cjs).
+  puppeteer: true
+  # @testcontainers/postgresql (packages/facilities devDependency, F2's
+  # integration-test harness) controls Docker over SSH/gRPC via dockerode —
+  # these are its native-binding builds.
+  cpu-features: true
+  protobufjs: true
+  ssh2: true
+
+minimumReleaseAgeExclude:
+  - '@ai-sdk/gateway@4.0.121'
+  - '@ai-sdk/provider-utils@5.0.65'
+  - ai@7.0.148

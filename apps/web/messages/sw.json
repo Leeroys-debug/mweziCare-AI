@@ -1,0 +1,572 @@
+{
+  "Nav": {
+    "primary": "Uelekezaji mkuu",
+    "track": "Fuatilia",
+    "insights": "Maarifa",
+    "assistant": "Uliza",
+    "care": "Huduma",
+    "me": "Mimi"
+  },
+  "Landing": {
+    "title": "MweziCare AI",
+    "tagline": "Elewa mzunguko wako. Tambua dalili. Pata huduma mapema.",
+    "description": "Fuatilia dalili zako, pata mwongozo ulioidhinishwa kiafya, na pata huduma iliyothibitishwa karibu nawe — kwa Kiingereza au Kiswahili.",
+    "cta": "Fungua programu",
+    "signIn": "Ingia"
+  },
+  "LanguageSwitcher": {
+    "label": "Lugha",
+    "en": "Kiingereza",
+    "sw": "Kiswahili"
+  },
+  "Track": {
+    "title": "Fuatilia",
+    "placeholder": "Rekodi yako ya dalili itaonekana hapa.",
+    "viewSwitcherLabel": "Chagua mwonekano",
+    "todayTab": "Leo",
+    "calendarTab": "Kalenda",
+    "periodDay": "Niko kwenye hedhi leo",
+    "bleedingLevelLabel": "Damu ya hedhi",
+    "bleedingLevel": {
+      "none": "Hakuna",
+      "spotting": "Madoa",
+      "light": "Kidogo",
+      "medium": "Wastani",
+      "heavy": "Nyingi",
+      "very_heavy": "Nyingi sana"
+    },
+    "painScoreLabel": {
+      "title": "Maumivu",
+      "0": "Hakuna maumivu",
+      "1": "[TRANSLATION REVIEW REQUIRED] Kidogo sana",
+      "2": "Kidogo",
+      "3": "Kidogo",
+      "4": "[TRANSLATION REVIEW REQUIRED] Kidogo-wastani",
+      "5": "Wastani",
+      "6": "Wastani",
+      "7": "[TRANSLATION REVIEW REQUIRED] Wastani-makali",
+      "8": "Makali",
+      "9": "[TRANSLATION REVIEW REQUIRED] Makali sana",
+      "10": "Maumivu makali zaidi"
+    },
+    "painLocationsLabel": "Maumivu yako yako wapi?",
+    "painLocation": {
+      "lower_abdomen": "Tumbo la chini",
+      "lower_back": "Mgongo wa chini",
+      "pelvis": "Nyonga",
+      "legs": "Miguu",
+      "other": "Pengine"
+    },
+    "symptomsLabel": "Dalili",
+    "symptom": {
+      "fatigue": "Uchovu",
+      "nausea": "Kichefuchefu",
+      "painWithBowelMovements": "Maumivu wakati wa haja kubwa",
+      "painWithUrination": "Maumivu wakati wa haja ndogo",
+      "painWithSex": "Maumivu wakati wa kujamiiana"
+    },
+    "impactLabel": "Athari ya leo",
+    "impact": {
+      "missedSchool": "Nimekosa shule",
+      "missedWork": "Nimekosa kazi",
+      "sleepDisrupted": "Usingizi umevurugika",
+      "activitiesLimited": "Shughuli zimezuiwa"
+    },
+    "safetyCheckLabel": "Hivi sasa",
+    "safetyCheckHint": "Ukaguzi wa haraka wa usalama — jibu kwa ukweli, hata kama huna uhakika.",
+    "redFlag": {
+      "suddenSeverePain": "Maumivu makali ya ghafla",
+      "fainting": "Kuzimia au kuhisi kama utazimia",
+      "possiblePregnancySuspected": "Unafikiri huenda una mimba"
+    },
+    "notesLabel": "Maelezo (si lazima)",
+    "notesPlaceholder": "Kitu kingine chochote unachotaka kukumbuka kuhusu leo",
+    "saving": "Inahifadhi…",
+    "save": "Hifadhi",
+    "previousMonth": "Mwezi uliopita",
+    "nextMonth": "Mwezi ujao",
+    "weekdayAbbrev": ["Jpi", "Jtt", "Jnn", "Jtn", "Alh", "Ijm", "Jmo"],
+    "close": "Funga",
+    "urgentOverlay": {
+      "title": "Tafuta huduma ya dharura sasa",
+      "body": "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Kutokana na ulichoandika, unapaswa kupata huduma ya matibabu mara moja — usisubiri.",
+      "step1": "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Nenda hospitali au kliniki iliyo karibu, au piga simu huduma ya dharura, sasa hivi.",
+      "step2": "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Ikiwa hauko peke yako, muombe mtu akuandamane.",
+      "step3": "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Leta simu yako ili uweze kuonyesha daktari dalili ulizofuatilia ikiwa itasaidia.",
+      "uncertaintyNote": "Huu ni ukaguzi wa usalama kulingana na ulichoingiza, si utambuzi.",
+      "findCare": "Tafuta huduma",
+      "acknowledge": "Nimeelewa"
+    }
+  },
+  "Insights": {
+    "title": "Maarifa",
+    "placeholder": "Mielekeo ya mzunguko na dalili itaonekana hapa.",
+    "nextPeriodEstimate": "Hedhi yako inayofuata inakadiriwa karibu na",
+    "estimateLabel": "makadirio",
+    "painChartTitle": "Maumivu kwa kila mzunguko (mizunguko 6 iliyopita)",
+    "maxPain": "Maumivu ya juu zaidi",
+    "avgPain": "Wastani wa maumivu",
+    "impactChartTitle": "Siku zenye athari kwa shughuli kwa kila mzunguko (mizunguko 6 iliyopita)",
+    "impactDays": "Siku za athari",
+    "noDataYet": "Endelea kufuatilia — chati zitaonekana ukishafuatilia mizunguko kadhaa.",
+    "assessment": {
+      "unavailable": "Mwongozo wako binafsi bado haujapatikana. Endelea kufuatilia — tutakujulisha mara utakapokuwa tayari.",
+      "nextStep": {
+        "routine": "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Maumivu yako ya hedhi yanaonekana kuwa madogo hadi ya wastani na hayakuzuii maisha yako. Vidokezo vya kujitunza viko kwenye Jifunze — endelea kufuatilia.",
+        "assess_soon": "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Yale ambayo umekuwa ukifuatilia yanafaa kuangaliwa na daktari hivi karibuni.",
+        "urgent": "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Kulingana na ufuatiliaji wako, unapaswa kutafuta huduma ya dharura."
+      },
+      "uncertaintyNote": "Huu ni mwongozo wa jumla kulingana na mielekeo uliyofuatilia, si utambuzi.",
+      "findCare": "Tafuta huduma",
+      "shareSummary": "Shiriki muhtasari"
+    }
+  },
+  "InstallPrompt": {
+    "body": "Sakinisha programu hii kwenye kifaa chako kwa ufikiaji wa haraka na wa kutegemewa zaidi.",
+    "install": "Sakinisha",
+    "dismiss": "Si sasa"
+  },
+  "Sync": {
+    "offline": "Haupo mtandaoni — itahifadhiwa baadaye",
+    "syncing": "Inahifadhi…",
+    "synced": "Imehifadhiwa"
+  },
+  "Assistant": {
+    "title": "Uliza",
+    "disclaimer": "Elimu tu — si ushauri wa matibabu.",
+    "inputLabel": "Swali lako",
+    "inputPlaceholder": "Uliza swali kuhusu afya ya hedhi",
+    "send": "Tuma",
+    "sending": "Inafikiria…",
+    "newChat": "Mazungumzo mapya",
+    "clearHistory": "Futa historia",
+    "clearHistoryConfirm": "Futa mazungumzo haya? Hili haliwezi kutenduliwa.",
+    "sourcesLabel": "Vyanzo",
+    "draftBadge": "RASIMU",
+    "thumbsUp": "Imesaidia",
+    "thumbsDown": "Haikusaidia",
+    "feedbackThanks": "Asante kwa maoni yako",
+    "errorGeneric": "Hitilafu imetokea. Tafadhali jaribu tena.",
+    "loadingHistory": "Inapakia mazungumzo yako…",
+    "starterQuestionsTitle": "Jaribu kuuliza",
+    "starterQuestions": {
+      "q1": "Vyakula gani husaidia na maumivu ya hedhi?",
+      "q2": "Mzunguko wa kawaida una urefu gani?",
+      "q3": "Ni lini ninapaswa kumwona mtaalamu wa afya kuhusu maumivu yangu?",
+      "q4": "Nitegemee nini katika ziara yangu ya kwanza ya daktari wa wanawake?"
+    }
+  },
+  "Care": {
+    "title": "Huduma",
+    "placeholder": "Vituo vilivyothibitishwa karibu nawe vitaonekana hapa.",
+    "urgentBanner": {
+      "title": "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Tafuta huduma ya dharura",
+      "body": "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Kulingana na ufuatiliaji wako wa hivi karibuni, unapaswa kupata huduma ya matibabu kwa dharura. Angalia Maarifa kwa maelezo zaidi, au tafuta kituo hapa chini."
+    },
+    "locationConsentTitle": "Tafuta huduma karibu nawe",
+    "locationConsentBody": "Tutaomba simu yako mahali ulipo kwa ajili ya utafutaji huu tu. Inatumika tu kutafuta vituo vya karibu na haihifadhiwi kamwe — si kwenye hifadhidata yetu, si kwenye kumbukumbu, wala si kwenye takwimu.",
+    "shareLocation": "Shiriki mahali nilipo",
+    "manualSearchAlwaysAvailable": "Unaweza pia kutafuta kwa kaunti au mji hapa chini badala yake.",
+    "geolocationUnsupported": "Kivinjari chako hakiwezeshi mahali — tafuta kwa kaunti au mji badala yake.",
+    "geolocationDenied": "Mahali hapakushirikiwa. Tafuta kwa kaunti au mji badala yake.",
+    "countyLabel": "Kaunti",
+    "countyPlaceholder": "mfano, Kiambu",
+    "searchLabel": "Jina la kituo au mji",
+    "searchPlaceholder": "mfano, Thika",
+    "searchButton": "Tafuta",
+    "searching": "Inatafuta…",
+    "listView": "Orodha",
+    "mapView": "Ramani",
+    "noResults": "Hakuna vituo vilivyopatikana. Jaribu kaunti au mji mwingine.",
+    "noVerifiedFallback": "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Hakuna kituo chenye huduma za uzazi zilizothibitishwa kilichopatikana karibu. Tafuta tathmini katika kituo cha karibu cha umma kinachofaa.",
+    "gynConfirmedOn": "Huduma za uzazi zimethibitishwa tarehe {date}",
+    "gynNotConfirmed": "Huduma za nje — huduma za uzazi hazijathibitishwa",
+    "mayBeOutOfDate": "Huenda imepitwa na wakati",
+    "call": "Piga simu",
+    "directionsGoogle": "Mwelekeo (Google Maps)",
+    "directionsOsm": "Mwelekeo (OpenStreetMap)",
+    "share": "Shiriki",
+    "followUpConsent": "Niko tayari kufuatiliwa baadaye",
+    "iContactedThisFacility": "Nimewasiliana na kituo hiki",
+    "contactedRecorded": "Imerekodiwa — asante"
+  },
+  "Me": {
+    "title": "Mimi",
+    "accountTitle": "Akaunti",
+    "consentsTitle": "Ridhaa zako",
+    "consentGranted": "Imeruhusiwa",
+    "consentNotGranted": "Haijaruhusiwa",
+    "withdraw": "Ondoa",
+    "grant": "Ruhusu",
+    "discreetModeTitle": "Hali ya siri",
+    "discreetModeBody": "Ikiwa imewashwa, jina na aikoni ya programu kwenye skrini yako ya nyumbani havitataja hedhi au afya — muhimu kama unashiriki kifaa.",
+    "discreetModeOn": "Imewashwa — gusa kuzima",
+    "discreetModeOff": "Imezimwa — gusa kuwasha",
+    "exportTitle": "Pakua taarifa zako",
+    "exportBody": "Pata nakala ya kila kitu ambacho MweziCare imehifadhi kuhusu wewe.",
+    "exportButton": "Pakua JSON",
+    "deleteTitle": "Futa akaunti yangu",
+    "deleteBody": "Hii itafuta akaunti yako na taarifa zote za afya kabisa. Hairudishiki.",
+    "deleteButton": "Futa akaunti",
+    "deleteConfirm": "Una uhakika? Hatua hii haiwezi kutenduliwa.",
+    "signOut": "Toka"
+  },
+  "StaffDashboard": {
+    "title": "Dashibodi ya matokeo",
+    "description": "Viashiria vilivyojumlishwa na visivyo na utambulisho — kundi lolote la kaunti/umri lenye watu wasiozidi 10 linaonyeshwa kama \"<10\" na halijumuishwi katika upakuaji.",
+    "filters": {
+      "from": "Kutoka",
+      "to": "Hadi",
+      "county": "Kaunti",
+      "countyAll": "Kaunti zote",
+      "ageBand": "Kundi la umri",
+      "ageBandAll": "Makundi yote ya umri"
+    },
+    "kpis": {
+      "activeUsers": "Watumiaji hai (wiki ya hivi karibuni)",
+      "logsPerActiveUser": "Rekodi kwa kila mtumiaji hai",
+      "urgentShare": "Tathmini za dharura",
+      "referrals": "Rufaa zilizorekodiwa"
+    },
+    "charts": {
+      "activeUsersTrend": "Watumiaji hai kwa wiki",
+      "outcomeDistribution": "Matokeo ya tathmini (wiki ya hivi karibuni)",
+      "languageSplit": "Mgawanyo wa lugha (wiki ya hivi karibuni)"
+    },
+    "outcomeLabel": {
+      "routine": "Kawaida",
+      "assess_soon": "Tathmini hivi karibuni",
+      "urgent": "Dharura"
+    },
+    "noData": "Hakuna data ya kutosha bado kwa mwonekano huu (makundi madogo yamezuiliwa).",
+    "exportCsv": "Pakua CSV",
+    "knowledgeScoreChangeTitle": "Mabadiliko ya alama za maarifa (siku 30)",
+    "referralFollowUpTitle": "Kiwango cha ufuatiliaji wa rufaa (idhini pekee)"
+  },
+  "Staff": {
+    "title": "Dashibodi ya wafanyakazi",
+    "placeholder": "Viashiria vya matokeo vilivyojumlishwa na visivyo na utambulisho vitaonekana hapa.",
+    "nav": {
+      "dashboard": "Dashibodi",
+      "rulesets": "Seti za kanuni",
+      "knowledgeBase": "Hazina ya maarifa",
+      "facilities": "Vituo vya afya",
+      "caseSamples": "Sampuli za kesi",
+      "users": "Watumiaji"
+    }
+  },
+  "StaffRulesets": {
+    "title": "Seti za kanuni",
+    "backToList": "Rudi kwa seti za kanuni",
+    "version": "Toleo",
+    "status": "Hali",
+    "approvedBy": "Imeidhinishwa na",
+    "createdAt": "Imeundwa",
+    "newDraft": "Rasimu mpya kutoka toleo la mwisho",
+    "noVersions": "Bado hakuna matoleo ya seti za kanuni.",
+    "statusLabel": {
+      "draft": "Rasimu",
+      "approved": "Imeidhinishwa",
+      "retired": "Imeondolewa"
+    },
+    "jsonView": "JSON",
+    "formView": "Fomu",
+    "diffView": "Tofauti na toleo lililotangulia",
+    "runFixtures": "Endesha majaribio",
+    "runningFixtures": "Inaendesha…",
+    "fixtureResults": "Majaribio {pass}/{total} yamefaulu",
+    "save": "Hifadhi rasimu",
+    "saving": "Inahifadhi…",
+    "saveSuccess": "Rasimu imehifadhiwa",
+    "saveError": "Imeshindwa kuhifadhi — hakikisha JSON ni sahihi",
+    "approveTitle": "Idhinisha toleo hili",
+    "approveNameLabel": "Andika jina lako kuthibitisha idhini",
+    "approveNamePlaceholder": "Jina lako kamili",
+    "approveButton": "Idhinisha",
+    "approveConfirm": "Kuidhinisha kutaondoa toleo lililoidhinishwa sasa na kufanya hili liwe hai mara moja. Endelea?",
+    "approveSuccess": "Imeidhinishwa",
+    "approveError": "Imeshindwa kuidhinisha",
+    "readOnlyNotice": "Matoleo yaliyoidhinishwa hayabadiliki — ni matoleo ya rasimu pekee yanayoweza kuhaririwa.",
+    "diffAdded": "Imeongezwa",
+    "diffRemoved": "Imeondolewa",
+    "diffChanged": "Imebadilishwa",
+    "diffUnchanged": "Haijabadilika",
+    "noPreviousVersion": "Hakuna toleo lililotangulia la kulinganisha.",
+    "rule": "Kanuni",
+    "priority": "Kipaumbele",
+    "outcome": "Matokeo",
+    "reasonEn": "Sababu (EN)",
+    "reasonSw": "Sababu (SW)",
+    "clinicianNote": "Ujumbe wa mtaalamu wa afya",
+    "conditions": "Masharti (JSON)"
+  },
+  "StaffKnowledgeBase": {
+    "title": "Hazina ya maarifa",
+    "backToList": "Rudi kwa hazina ya maarifa",
+    "locale": "Lugha",
+    "slug": "Slug",
+    "articleTitle": "Kichwa",
+    "status": "Hali",
+    "reviewDue": "Ukaguzi unatakiwa",
+    "updatedAt": "Ilisasishwa mwisho",
+    "noArticles": "Bado hakuna makala.",
+    "overdue": "Imechelewa",
+    "statusLabel": {
+      "draft": "Rasimu",
+      "approved": "Imeidhinishwa"
+    },
+    "editView": "Hariri",
+    "previewView": "Hakikisho",
+    "titleLabel": "Kichwa",
+    "bodyLabel": "Maudhui (Markdown)",
+    "reviewDueLabel": "Tarehe ya ukaguzi",
+    "save": "Hifadhi",
+    "saving": "Inahifadhi…",
+    "saveSuccess": "Imehifadhiwa",
+    "saveError": "Imeshindwa kuhifadhi",
+    "approve": "Idhinisha",
+    "approving": "Inaidhinisha…",
+    "approveSuccess": "Imeidhinishwa — kuingizwa upya kwa hazina ya maarifa kumepangwa",
+    "approveError": "Imeshindwa kuidhinisha",
+    "sendBack": "Rudisha kwa rasimu",
+    "sendBackConfirm": "Rudisha makala hii kwa hali ya rasimu?",
+    "sendBackSuccess": "Imerudishwa kwa rasimu",
+    "sendBackError": "Imeshindwa kurudisha",
+    "draftBanner": "RASIMU — bado haijaonekana kwa watumiaji"
+  },
+  "StaffFacilities": {
+    "title": "Vituo vya afya",
+    "backToList": "Rudi kwa vituo vya afya",
+    "countyFilterLabel": "Kaunti",
+    "countyFilterPlaceholder": "mfano, Kiambu",
+    "statusFilterLabel": "Hali ya huduma",
+    "statusAll": "Zote",
+    "statusLabel": {
+      "listed": "Imeorodheshwa",
+      "verified": "Imethibitishwa",
+      "unavailable": "Haipatikani"
+    },
+    "dueFilterLabel": "Zinazohitaji uthibitisho mpya pekee (>miezi 6)",
+    "name": "Jina",
+    "county": "Kaunti",
+    "status": "Hali",
+    "lastVerified": "Ilithibitishwa mwisho",
+    "never": "Kamwe",
+    "dueBadge": "Inahitajika",
+    "noResults": "Hakuna vituo vinavyolingana na vichujio hivi.",
+    "phone": "Simu",
+    "callScriptTitle": "Orodha ya maswali ya simu",
+    "phoneConfirmed": "Nambari ya simu imethibitishwa",
+    "gynAvailable": "Huduma ya magonjwa ya wanawake inapatikana",
+    "daysHoursLabel": "Siku/masaa",
+    "daysHoursPlaceholder": "mfano, Jumatatu-Ijumaa 8am-5pm",
+    "referralNeeded": "Rufaa inahitajika kabla ya ziara",
+    "costInfoLabel": "Taarifa za gharama (tu kama ni za kutegemewa)",
+    "costInfoPlaceholder": "mfano, Bure wakati wa huduma",
+    "notesLabel": "Maelezo",
+    "notesPlaceholder": "Kitu kingine chochote kutoka kwenye simu",
+    "markVerified": "Weka alama ya kuthibitishwa",
+    "markUnavailable": "Weka alama ya haipatikani",
+    "saving": "Inahifadhi…",
+    "saveSuccess": "Imerekodiwa",
+    "saveError": "Imeshindwa kuhifadhi"
+  },
+  "StaffCaseSamples": {
+    "title": "Sampuli za kesi zilizowekwa alama",
+    "description": "Tathmini za hivi karibuni zisizo na utambulisho kwa ukaguzi wa ubora — hakuna majina, simu, maelezo au tarehe kamili.",
+    "week": "Wiki",
+    "ageBand": "Kundi la umri",
+    "county": "Kaunti",
+    "outcome": "Matokeo",
+    "outcomeLabel": {
+      "routine": "Kawaida",
+      "assess_soon": "Tathmini hivi karibuni",
+      "urgent": "Dharura"
+    },
+    "firedRules": "Kanuni zilizotekelezwa",
+    "none": "—",
+    "viewFeatures": "Angalia vipengele",
+    "noSamples": "Bado hakuna tathmini zilizorekodiwa."
+  },
+  "StaffUsers": {
+    "title": "Watumiaji",
+    "description": "Tafuta akaunti kwa nambari ya simu kwa ajili ya msaada — haionyeshi data ya afya kamwe. Kila utafutaji unarekodiwa.",
+    "phoneLabel": "Nambari ya simu",
+    "phonePlaceholder": "07XX XXX XXX",
+    "lookupButton": "Tafuta",
+    "lookingUp": "Inatafuta…",
+    "notFound": "Hakuna akaunti iliyopatikana kwa nambari hiyo ya simu.",
+    "role": "Wajibu",
+    "locale": "Lugha",
+    "phoneVerified": "Simu imethibitishwa",
+    "yes": "Ndiyo",
+    "no": "Hapana",
+    "createdAt": "Akaunti iliundwa",
+    "error": "Hitilafu imetokea. Tafadhali jaribu tena."
+  },
+  "Learn": {
+    "title": "Jifunze",
+    "placeholder": "Bado hakuna makala.",
+    "draftBadge": "RASIMU",
+    "backToList": "Rudi kwa Jifunze",
+    "reviewDueLabel": "Ukaguzi unatakiwa"
+  },
+  "Privacy": {
+    "title": "Faragha",
+    "placeholder": "Sera yetu ya faragha itaonekana hapa."
+  },
+  "Onboarding": {
+    "title": "Weka wasifu wako",
+    "ageBandLabel": "Kikundi cha umri",
+    "ageBandPlaceholder": "Chagua kikundi chako cha umri",
+    "countyLabel": "Kaunti",
+    "countyPlaceholder": "mfano, Kiambu",
+    "consentsTitle": "Ridhaa",
+    "consentTracking": "Ruhusu MweziCare kuhifadhi rekodi za dalili zangu ili nifuatilie mzunguko wangu",
+    "consentTrackingRequired": "Inahitajika kutumia programu",
+    "consentLocation": "Ruhusu MweziCare kutumia mahali nilipo, tu ninapotafuta huduma, kupata vituo vya karibu",
+    "consentResearch": "Ruhusu MweziCare kutumia taarifa zangu zisizo na utambulisho kwa utafiti unaoboresha huduma kwa wengine",
+    "consentSharing": "Ruhusu MweziCare kuniwezesha kushiriki muhtasari na daktari ninapochagua",
+    "submit": "Endelea",
+    "minorTitle": "[UKAGUZI WA KISHERIA UNAHITAJIKA] Ridhaa ya mzazi/mlezi inahitajika",
+    "minorBody": "Watumiaji walio chini ya miaka 18 wanahitaji mzazi au mlezi kuthibitisha ridhaa kabla ya kufuatilia kuanza. Mtiririko huu bado haujajengwa, hivyo usajili umesimamishwa hapa kwa kikundi hiki cha umri.",
+    "error": "Hitilafu imetokea. Tafadhali jaribu tena."
+  },
+  "SignIn": {
+    "title": "Ingia",
+    "phoneLabel": "Nambari ya simu",
+    "phonePlaceholder": "07XX XXX XXX",
+    "requestCode": "Tuma msimbo",
+    "codeLabel": "Msimbo wa uthibitisho",
+    "codePlaceholder": "Msimbo wa tarakimu 6",
+    "verify": "Thibitisha",
+    "changeNumber": "Tumia nambari nyingine",
+    "errorPhone": "Weka nambari sahihi ya simu ya Kenya",
+    "errorCode": "Msimbo huo si sahihi au umeisha muda",
+    "errorGeneric": "Hitilafu imetokea. Tafadhali jaribu tena."
+  },
+  "Quiz": {
+    "title": "Ukaguzi mfupi wa maarifa",
+    "intro": "Maswali 5 mafupi — si lazima, na hayakuhukumu.",
+    "submit": "Tuma majibu",
+    "submitting": "Inatuma…",
+    "resultTitle": "Kazi nzuri!",
+    "resultBody": "Umepata {score} kati ya {total} sahihi.",
+    "alreadyTaken": "Tayari umeshafanya ukaguzi huu.",
+    "skip": "Ruka kwa sasa",
+    "continue": "Endelea",
+    "error": "Hitilafu imetokea. Tafadhali jaribu tena.",
+    "day30BannerTitle": "Ukaguzi mfupi wa maarifa?",
+    "day30BannerBody": "Fanya ukaguzi wa maswali 5 — unachukua kama dakika moja.",
+    "day30BannerCta": "Fanya ukaguzi",
+    "day30BannerDismiss": "Si sasa",
+    "questions": {
+      "q1": {
+        "text": "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Mzunguko wa kawaida wa hedhi huchukua muda gani?",
+        "options": [
+          "Siku 21 hadi 35",
+          "Siku 28 hasa, kila wakati",
+          "Siku 60 hadi 90",
+          "Huwa hauna mpangilio kila wakati, kwa hivyo hakuna haja ya kufuatilia"
+        ]
+      },
+      "q2": {
+        "text": "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Ni ipi kati ya hizi ni dalili ya kumwona mtaalamu wa afya hivi karibuni?",
+        "options": [
+          "Maumivu kidogo siku ya kwanza",
+          "Maumivu yanayokuzuia mara kwa mara kwenda shuleni au kazini",
+          "Kujisikia mchovu kidogo wakati wa hedhi",
+          "Hedhi kuanza siku chache mapema kuliko ilivyotarajiwa"
+        ]
+      },
+      "q3": {
+        "text": "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Ni nini kwa ujumla huhesabiwa kama damu nyingi?",
+        "options": [
+          "Kulowesha pedi au tampon haraka kuliko kila saa 1-2",
+          "Damu yoyote ile",
+          "Kutokwa damu kwa siku 5 hasa",
+          "Madoa kati ya hedhi pekee"
+        ]
+      },
+      "q4": {
+        "text": "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Kama una maumivu makali ya ghafla ya nyonga au unahisi kama utazimia, unapaswa kufanya nini?",
+        "options": [
+          "Subiri siku chache kuona kama yatapita",
+          "Tafuta huduma ya dharura ya matibabu mara moja",
+          "Andika tu kwenye programu kwa baadaye",
+          "Hakuna — hii ni ya kawaida kila wakati"
+        ]
+      },
+      "q5": {
+        "text": "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Je, unaweza kupata ujauzito wakati wa hedhi?",
+        "options": [
+          "Hapana, kamwe",
+          "Uwezekano wa ujauzito ni mdogo lakini si sifuri wakati wowote wa mzunguko",
+          "Siku ya mwisho tu",
+          "Tu kama umeshawahi kuwa mjamzito hapo awali"
+        ]
+      }
+    }
+  },
+  "Summary": {
+    "title": "Muhtasari ulioshirikiwa",
+    "placeholder": "Kiungo hiki si sahihi, kimeisha muda, au kimebatilishwa.",
+    "downloadPdf": "Pakua PDF",
+    "createTitle": "Muhtasari wa daktari",
+    "rangeLabel": "Kipindi",
+    "range": {
+      "3_cycles": "Mizunguko 3 iliyopita",
+      "6_cycles": "Mizunguko 6 iliyopita",
+      "custom": "Chagua mwenyewe"
+    },
+    "displayLabelLabel": "Jina la kuonyesha au herufi za mwanzo (si lazima)",
+    "displayLabelPlaceholder": "mfano, A.N. — itaonyeshwa kwenye PDF badala ya maelezo ya akaunti yako",
+    "sharingConsentRequired": "Ruhusu ridhaa ya 'kushiriki' kwenye ukurasa wako wa Mimi kabla ya kutengeneza muhtasari — kila muhtasari hutengeneza kiungo cha kushiriki.",
+    "generateError": "Hitilafu imetokea wakati wa kutengeneza muhtasari. Tafadhali jaribu tena.",
+    "goToConsents": "Nenda Mimi → ridhaa",
+    "generating": "Inatengeneza…",
+    "generateButton": "Tengeneza muhtasari",
+    "shareTitle": "Kiungo cha kushiriki",
+    "revoked": "Kiungo hiki kimebatilishwa na hakifanyi kazi tena.",
+    "qrCodeAlt": "Msimbo wa QR wa kiungo cha kushiriki",
+    "viewCount": "[TRANSLATION REVIEW REQUIRED] {count, plural, =0 {Bado hakijatazamwa} one {Kimetazamwa mara #} other {Kimetazamwa mara #}}",
+    "expiresAt": "Kinaisha muda {date}",
+    "copyLink": "Nakili kiungo",
+    "openLink": "Fungua kiungo",
+    "revokeLink": "Batilisha kiungo",
+    "pdf": {
+      "title": "Muhtasari wa daktari",
+      "dateRangeLabel": "Kipindi cha tarehe",
+      "displayLabelFallback": "Mtumiaji wa MweziCare",
+      "ageBandLabel": "Kikundi cha umri",
+      "cyclesTitle": "Mizunguko",
+      "cycleStartColumn": "Mwanzo",
+      "periodLengthColumn": "Urefu wa hedhi",
+      "cycleLengthColumn": "Urefu wa mzunguko",
+      "daysUnit": "siku",
+      "painChartTitle": "Maumivu kwa kila mzunguko",
+      "maxPainLegend": "Maumivu ya juu zaidi",
+      "avgPainLegend": "Wastani wa maumivu",
+      "symptomFrequencyTitle": "Marudio ya dalili",
+      "symptom": {
+        "fatigue": "Uchovu",
+        "nausea": "Kichefuchefu",
+        "painWithBowelMovements": "Maumivu wakati wa haja kubwa",
+        "painWithUrination": "Maumivu wakati wa haja ndogo",
+        "painWithSex": "Maumivu wakati wa kujamiiana"
+      },
+      "missedSchoolLabel": "Siku za kukosa shule",
+      "missedWorkLabel": "Siku za kukosa kazi",
+      "assessmentTitle": "Tathmini ya hivi karibuni",
+      "assessmentUnavailable": "Bado haijapatikana",
+      "outcome": {
+        "routine": "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Kawaida — kujitunza, endelea kufuatilia",
+        "assess_soon": "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Tathmini hivi karibuni",
+        "urgent": "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Dharura"
+      },
+      "rulesetVersionLabel": "Toleo la kanuni",
+      "noDataLabel": "Hakuna data kwa kipindi hiki",
+      "footer": "Imetengenezwa kutoka kwa data uliyoripoti mwenyewe. Si utambuzi."
+    }
+  }
+}

@@ -1,0 +1,572 @@
+{
+  "Nav": {
+    "primary": "Primary navigation",
+    "track": "Track",
+    "insights": "Insights",
+    "assistant": "Ask",
+    "care": "Care",
+    "me": "Me"
+  },
+  "Landing": {
+    "title": "MweziCare AI",
+    "tagline": "Understand your cycle. Recognize the signs. Get care sooner.",
+    "description": "Track your symptoms, get clinically reviewed guidance, and find verified care near you — in English or Kiswahili.",
+    "cta": "Open the app",
+    "signIn": "Sign in"
+  },
+  "LanguageSwitcher": {
+    "label": "Language",
+    "en": "English",
+    "sw": "Kiswahili"
+  },
+  "Track": {
+    "title": "Track",
+    "placeholder": "Your symptom log will appear here.",
+    "viewSwitcherLabel": "Choose a view",
+    "todayTab": "Today",
+    "calendarTab": "Calendar",
+    "periodDay": "On my period today",
+    "bleedingLevelLabel": "Bleeding",
+    "bleedingLevel": {
+      "none": "None",
+      "spotting": "Spotting",
+      "light": "Light",
+      "medium": "Medium",
+      "heavy": "Heavy",
+      "very_heavy": "Very heavy"
+    },
+    "painScoreLabel": {
+      "title": "Pain",
+      "0": "No pain",
+      "1": "Barely noticeable",
+      "2": "Mild",
+      "3": "Mild",
+      "4": "Mild-moderate",
+      "5": "Moderate",
+      "6": "Moderate",
+      "7": "Moderate-severe",
+      "8": "Severe",
+      "9": "Very severe",
+      "10": "Worst pain"
+    },
+    "painLocationsLabel": "Where does it hurt?",
+    "painLocation": {
+      "lower_abdomen": "Lower abdomen",
+      "lower_back": "Lower back",
+      "pelvis": "Pelvis",
+      "legs": "Legs",
+      "other": "Other"
+    },
+    "symptomsLabel": "Symptoms",
+    "symptom": {
+      "fatigue": "Fatigue",
+      "nausea": "Nausea",
+      "painWithBowelMovements": "Pain with bowel movements",
+      "painWithUrination": "Pain with urination",
+      "painWithSex": "Pain with sex"
+    },
+    "impactLabel": "Today's impact",
+    "impact": {
+      "missedSchool": "Missed school",
+      "missedWork": "Missed work",
+      "sleepDisrupted": "Sleep disrupted",
+      "activitiesLimited": "Activities limited"
+    },
+    "safetyCheckLabel": "Right now",
+    "safetyCheckHint": "A quick safety check — answer honestly, even if you're not sure.",
+    "redFlag": {
+      "suddenSeverePain": "Sudden, severe pain",
+      "fainting": "Fainting or feeling like you might faint",
+      "possiblePregnancySuspected": "You think you might be pregnant"
+    },
+    "notesLabel": "Notes (optional)",
+    "notesPlaceholder": "Anything else you want to remember about today",
+    "saving": "Saving…",
+    "save": "Save",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "weekdayAbbrev": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    "close": "Close",
+    "urgentOverlay": {
+      "title": "Seek urgent care now",
+      "body": "[CLINICAL REVIEW REQUIRED] Based on what you just logged, you should get medical care right away — don't wait.",
+      "step1": "[CLINICAL REVIEW REQUIRED] Go to the nearest hospital or clinic, or call emergency services, now.",
+      "step2": "[CLINICAL REVIEW REQUIRED] If you're not alone, ask someone to go with you.",
+      "step3": "[CLINICAL REVIEW REQUIRED] Bring your phone so you can show a clinician your tracked symptoms if helpful.",
+      "uncertaintyNote": "This is a safety check based on what you entered, not a diagnosis.",
+      "findCare": "Find care",
+      "acknowledge": "I understand"
+    }
+  },
+  "Insights": {
+    "title": "Insights",
+    "placeholder": "Cycle and symptom patterns will appear here.",
+    "nextPeriodEstimate": "Your next period is estimated around",
+    "estimateLabel": "estimate",
+    "painChartTitle": "Pain per cycle (last 6 cycles)",
+    "maxPain": "Highest pain",
+    "avgPain": "Average pain",
+    "impactChartTitle": "Days with activity impact per cycle (last 6 cycles)",
+    "impactDays": "Impact days",
+    "noDataYet": "Keep tracking — charts will appear once you have logged a few cycles.",
+    "assessment": {
+      "unavailable": "Your personalized guidance isn't available yet. Keep tracking — we'll let you know as soon as it's ready.",
+      "nextStep": {
+        "routine": "[CLINICAL REVIEW REQUIRED] Your cramps look mild to moderate and aren't disrupting your life. Self-care tips are in Learn — keep tracking.",
+        "assess_soon": "[CLINICAL REVIEW REQUIRED] What you've been tracking is worth having a clinician look at soon.",
+        "urgent": "[CLINICAL REVIEW REQUIRED] Based on your tracking, you should seek care urgently."
+      },
+      "uncertaintyNote": "This is general guidance based on your tracked patterns, not a diagnosis.",
+      "findCare": "Find care",
+      "shareSummary": "Share summary"
+    }
+  },
+  "InstallPrompt": {
+    "body": "Install this app on your device for quicker, more reliable access.",
+    "install": "Install",
+    "dismiss": "Not now"
+  },
+  "Sync": {
+    "offline": "Offline — will sync later",
+    "syncing": "Syncing…",
+    "synced": "Synced"
+  },
+  "Assistant": {
+    "title": "Ask",
+    "disclaimer": "Education only — not medical advice.",
+    "inputLabel": "Your question",
+    "inputPlaceholder": "Ask a menstrual health question",
+    "send": "Send",
+    "sending": "Thinking…",
+    "newChat": "New chat",
+    "clearHistory": "Clear history",
+    "clearHistoryConfirm": "Clear this conversation? This can't be undone.",
+    "sourcesLabel": "Sources",
+    "draftBadge": "DRAFT",
+    "thumbsUp": "Helpful",
+    "thumbsDown": "Not helpful",
+    "feedbackThanks": "Thanks for the feedback",
+    "errorGeneric": "Something went wrong. Please try again.",
+    "loadingHistory": "Loading your conversation…",
+    "starterQuestionsTitle": "Try asking",
+    "starterQuestions": {
+      "q1": "What foods help with period cramps?",
+      "q2": "What's a normal cycle length?",
+      "q3": "When should I see a clinician about my pain?",
+      "q4": "What should I expect at my first gynaecology visit?"
+    }
+  },
+  "Care": {
+    "title": "Care",
+    "placeholder": "Verified nearby facilities will appear here.",
+    "urgentBanner": {
+      "title": "[CLINICAL REVIEW REQUIRED] Seek urgent care",
+      "body": "[CLINICAL REVIEW REQUIRED] Based on your latest tracking, you should get medical care urgently. See Insights for details, or find a facility below."
+    },
+    "locationConsentTitle": "Find care near you",
+    "locationConsentBody": "We'll ask your phone for your location just for this search. It's used only to find nearby facilities and is never stored — not in our database, not in logs, not in analytics.",
+    "shareLocation": "Share my location",
+    "manualSearchAlwaysAvailable": "You can also always search by county or town below instead.",
+    "geolocationUnsupported": "Your browser doesn't support location — search by county or town instead.",
+    "geolocationDenied": "Location wasn't shared. Search by county or town instead.",
+    "countyLabel": "County",
+    "countyPlaceholder": "e.g. Kiambu",
+    "searchLabel": "Facility name or town",
+    "searchPlaceholder": "e.g. Thika",
+    "searchButton": "Search",
+    "searching": "Searching…",
+    "listView": "List",
+    "mapView": "Map",
+    "noResults": "No facilities found. Try a different county or town.",
+    "noVerifiedFallback": "[CLINICAL REVIEW REQUIRED] No facility with confirmed gynaecology services was found nearby. Seek assessment at the nearest appropriate public facility.",
+    "gynConfirmedOn": "Gynaecology confirmed on {date}",
+    "gynNotConfirmed": "General outpatient — gynaecology not confirmed",
+    "mayBeOutOfDate": "May be out of date",
+    "call": "Call",
+    "directionsGoogle": "Directions (Google Maps)",
+    "directionsOsm": "Directions (OpenStreetMap)",
+    "share": "Share",
+    "followUpConsent": "I'm open to a follow-up check-in",
+    "iContactedThisFacility": "I contacted this facility",
+    "contactedRecorded": "Recorded — thank you"
+  },
+  "Me": {
+    "title": "Me",
+    "accountTitle": "Account",
+    "consentsTitle": "Your consents",
+    "consentGranted": "Granted",
+    "consentNotGranted": "Not granted",
+    "withdraw": "Withdraw",
+    "grant": "Grant",
+    "discreetModeTitle": "Discreet mode",
+    "discreetModeBody": "When on, the app's name and icon on your home screen won't mention periods or health — useful if you share a device.",
+    "discreetModeOn": "On — tap to turn off",
+    "discreetModeOff": "Off — tap to turn on",
+    "exportTitle": "Download your data",
+    "exportBody": "Get a copy of everything MweziCare has stored for you.",
+    "exportButton": "Download JSON",
+    "deleteTitle": "Delete my account",
+    "deleteBody": "This permanently deletes your account and all health data. This cannot be undone.",
+    "deleteButton": "Delete account",
+    "deleteConfirm": "Are you sure? This cannot be undone.",
+    "signOut": "Sign out"
+  },
+  "StaffDashboard": {
+    "title": "Impact dashboard",
+    "description": "Aggregated, de-identified indicators — any county/age-band cell with fewer than 10 people is shown as \"<10\" and left out of exports.",
+    "filters": {
+      "from": "From",
+      "to": "To",
+      "county": "County",
+      "countyAll": "All counties",
+      "ageBand": "Age band",
+      "ageBandAll": "All age bands"
+    },
+    "kpis": {
+      "activeUsers": "Active users (latest week)",
+      "logsPerActiveUser": "Logs per active user",
+      "urgentShare": "Urgent assessments",
+      "referrals": "Referrals recorded"
+    },
+    "charts": {
+      "activeUsersTrend": "Weekly active users",
+      "outcomeDistribution": "Assessment outcomes (latest week)",
+      "languageSplit": "Language split (latest week)"
+    },
+    "outcomeLabel": {
+      "routine": "Routine",
+      "assess_soon": "Assess soon",
+      "urgent": "Urgent"
+    },
+    "noData": "Not enough data yet for this view (small cells are suppressed).",
+    "exportCsv": "Export CSV",
+    "knowledgeScoreChangeTitle": "Knowledge score change (day 30)",
+    "referralFollowUpTitle": "Referral follow-up rate (consented only)"
+  },
+  "Staff": {
+    "title": "Staff dashboard",
+    "placeholder": "Aggregated, de-identified impact indicators will appear here.",
+    "nav": {
+      "dashboard": "Dashboard",
+      "rulesets": "Rulesets",
+      "knowledgeBase": "Knowledge base",
+      "facilities": "Facilities",
+      "caseSamples": "Case samples",
+      "users": "Users"
+    }
+  },
+  "StaffRulesets": {
+    "title": "Rulesets",
+    "backToList": "Back to rulesets",
+    "version": "Version",
+    "status": "Status",
+    "approvedBy": "Approved by",
+    "createdAt": "Created",
+    "newDraft": "New draft from latest",
+    "noVersions": "No ruleset versions yet.",
+    "statusLabel": {
+      "draft": "Draft",
+      "approved": "Approved",
+      "retired": "Retired"
+    },
+    "jsonView": "JSON",
+    "formView": "Form",
+    "diffView": "Diff vs previous",
+    "runFixtures": "Run fixtures",
+    "runningFixtures": "Running…",
+    "fixtureResults": "{pass}/{total} fixtures passed",
+    "save": "Save draft",
+    "saving": "Saving…",
+    "saveSuccess": "Draft saved",
+    "saveError": "Could not save — check the JSON is valid",
+    "approveTitle": "Approve this version",
+    "approveNameLabel": "Type your name to confirm approval",
+    "approveNamePlaceholder": "Your full name",
+    "approveButton": "Approve",
+    "approveConfirm": "Approving retires the current approved version and makes this one live immediately. Continue?",
+    "approveSuccess": "Approved",
+    "approveError": "Could not approve",
+    "readOnlyNotice": "Approved versions are immutable — only draft versions can be edited.",
+    "diffAdded": "Added",
+    "diffRemoved": "Removed",
+    "diffChanged": "Changed",
+    "diffUnchanged": "Unchanged",
+    "noPreviousVersion": "No previous version to compare.",
+    "rule": "Rule",
+    "priority": "Priority",
+    "outcome": "Outcome",
+    "reasonEn": "Reason (EN)",
+    "reasonSw": "Reason (SW)",
+    "clinicianNote": "Clinician note",
+    "conditions": "Conditions (JSON)"
+  },
+  "StaffKnowledgeBase": {
+    "title": "Knowledge base",
+    "backToList": "Back to knowledge base",
+    "locale": "Locale",
+    "slug": "Slug",
+    "articleTitle": "Title",
+    "status": "Status",
+    "reviewDue": "Review due",
+    "updatedAt": "Last updated",
+    "noArticles": "No articles yet.",
+    "overdue": "Overdue",
+    "statusLabel": {
+      "draft": "Draft",
+      "approved": "Approved"
+    },
+    "editView": "Edit",
+    "previewView": "Preview",
+    "titleLabel": "Title",
+    "bodyLabel": "Body (Markdown)",
+    "reviewDueLabel": "Review due date",
+    "save": "Save",
+    "saving": "Saving…",
+    "saveSuccess": "Saved",
+    "saveError": "Could not save",
+    "approve": "Approve",
+    "approving": "Approving…",
+    "approveSuccess": "Approved — knowledge base re-ingestion queued",
+    "approveError": "Could not approve",
+    "sendBack": "Send back to draft",
+    "sendBackConfirm": "Send this article back to draft status?",
+    "sendBackSuccess": "Sent back to draft",
+    "sendBackError": "Could not send back",
+    "draftBanner": "DRAFT — not visible to users yet"
+  },
+  "StaffFacilities": {
+    "title": "Facilities",
+    "backToList": "Back to facilities",
+    "countyFilterLabel": "County",
+    "countyFilterPlaceholder": "e.g. Kiambu",
+    "statusFilterLabel": "Service status",
+    "statusAll": "All",
+    "statusLabel": {
+      "listed": "Listed",
+      "verified": "Verified",
+      "unavailable": "Unavailable"
+    },
+    "dueFilterLabel": "Due for re-verification only (>6 months)",
+    "name": "Name",
+    "county": "County",
+    "status": "Status",
+    "lastVerified": "Last verified",
+    "never": "Never",
+    "dueBadge": "Due",
+    "noResults": "No facilities match these filters.",
+    "phone": "Phone",
+    "callScriptTitle": "Call-script checklist",
+    "phoneConfirmed": "Phone number confirmed",
+    "gynAvailable": "Gynaecology service available",
+    "daysHoursLabel": "Days/hours",
+    "daysHoursPlaceholder": "e.g. Mon-Fri 8am-5pm",
+    "referralNeeded": "Referral needed before visit",
+    "costInfoLabel": "Cost info (only if reliable)",
+    "costInfoPlaceholder": "e.g. Free at point of care",
+    "notesLabel": "Notes",
+    "notesPlaceholder": "Anything else from the call",
+    "markVerified": "Mark verified",
+    "markUnavailable": "Mark unavailable",
+    "saving": "Saving…",
+    "saveSuccess": "Recorded",
+    "saveError": "Could not save"
+  },
+  "StaffCaseSamples": {
+    "title": "Flagged-case samples",
+    "description": "De-identified recent assessments for quality review — no names, phones, notes or exact dates.",
+    "week": "Week",
+    "ageBand": "Age band",
+    "county": "County",
+    "outcome": "Outcome",
+    "outcomeLabel": {
+      "routine": "Routine",
+      "assess_soon": "Assess soon",
+      "urgent": "Urgent"
+    },
+    "firedRules": "Fired rules",
+    "none": "—",
+    "viewFeatures": "View features",
+    "noSamples": "No assessments recorded yet."
+  },
+  "StaffUsers": {
+    "title": "Users",
+    "description": "Look up an account by phone number for support — never shows health data. Every lookup is logged.",
+    "phoneLabel": "Phone number",
+    "phonePlaceholder": "07XX XXX XXX",
+    "lookupButton": "Look up",
+    "lookingUp": "Looking up…",
+    "notFound": "No account found for that phone number.",
+    "role": "Role",
+    "locale": "Locale",
+    "phoneVerified": "Phone verified",
+    "yes": "Yes",
+    "no": "No",
+    "createdAt": "Account created",
+    "error": "Something went wrong. Please try again."
+  },
+  "Learn": {
+    "title": "Learn",
+    "placeholder": "No articles yet.",
+    "draftBadge": "DRAFT",
+    "backToList": "Back to Learn",
+    "reviewDueLabel": "Review due"
+  },
+  "Privacy": {
+    "title": "Privacy",
+    "placeholder": "Our privacy policy will appear here."
+  },
+  "Onboarding": {
+    "title": "Set up your profile",
+    "ageBandLabel": "Age band",
+    "ageBandPlaceholder": "Select your age band",
+    "countyLabel": "County",
+    "countyPlaceholder": "e.g. Kiambu",
+    "consentsTitle": "Consent",
+    "consentTracking": "Let MweziCare store my symptom logs so I can track my cycle",
+    "consentTrackingRequired": "Required to use the app",
+    "consentLocation": "Let MweziCare use my location, only when I search for care, to find nearby facilities",
+    "consentResearch": "Let MweziCare use my de-identified data for research that improves care for others",
+    "consentSharing": "Let MweziCare let me share a summary with a clinician when I choose to",
+    "submit": "Continue",
+    "minorTitle": "[LEGAL REVIEW REQUIRED] Guardian consent needed",
+    "minorBody": "Users under 18 need a parent or guardian to confirm consent before tracking can start. This flow isn't built yet, so sign-up is paused here for this age band.",
+    "error": "Something went wrong. Please try again."
+  },
+  "SignIn": {
+    "title": "Sign in",
+    "phoneLabel": "Phone number",
+    "phonePlaceholder": "07XX XXX XXX",
+    "requestCode": "Send code",
+    "codeLabel": "Verification code",
+    "codePlaceholder": "6-digit code",
+    "verify": "Verify",
+    "changeNumber": "Use a different number",
+    "errorPhone": "Enter a valid Kenyan phone number",
+    "errorCode": "That code is incorrect or has expired",
+    "errorGeneric": "Something went wrong. Please try again."
+  },
+  "Quiz": {
+    "title": "Quick knowledge check",
+    "intro": "5 short questions — optional, and never scored against you.",
+    "submit": "Submit answers",
+    "submitting": "Submitting…",
+    "resultTitle": "Nice work!",
+    "resultBody": "You got {score} out of {total} right.",
+    "alreadyTaken": "You've already taken this quiz.",
+    "skip": "Skip for now",
+    "continue": "Continue",
+    "error": "Something went wrong. Please try again.",
+    "day30BannerTitle": "Quick knowledge check?",
+    "day30BannerBody": "Take a 5-question knowledge check — it takes about a minute.",
+    "day30BannerCta": "Take the quiz",
+    "day30BannerDismiss": "Not now",
+    "questions": {
+      "q1": {
+        "text": "[CLINICAL REVIEW REQUIRED] How long does a typical menstrual cycle usually last?",
+        "options": [
+          "21 to 35 days",
+          "Exactly 28 days, always",
+          "60 to 90 days",
+          "It's always irregular, so it's not worth tracking"
+        ]
+      },
+      "q2": {
+        "text": "[CLINICAL REVIEW REQUIRED] Which of these is a sign you should see a clinician soon?",
+        "options": [
+          "Mild cramping on the first day",
+          "Pain that repeatedly stops you going to school or work",
+          "Feeling a bit tired during your period",
+          "A period starting a few days earlier than expected"
+        ]
+      },
+      "q3": {
+        "text": "[CLINICAL REVIEW REQUIRED] What generally counts as heavy bleeding?",
+        "options": [
+          "Soaking a pad or tampon faster than about every 1-2 hours",
+          "Any bleeding at all",
+          "Bleeding for exactly 5 days",
+          "Spotting between periods only"
+        ]
+      },
+      "q4": {
+        "text": "[CLINICAL REVIEW REQUIRED] If you have sudden, severe pelvic pain or feel like you might faint, what should you do?",
+        "options": [
+          "Wait a few days to see if it passes",
+          "Seek urgent medical care right away",
+          "Only log it in the app for later",
+          "Nothing — this is always normal"
+        ]
+      },
+      "q5": {
+        "text": "[CLINICAL REVIEW REQUIRED] Can you get pregnant during your period?",
+        "options": [
+          "No, never",
+          "Pregnancy risk is lower but not zero at any point in the cycle",
+          "Only on the very last day",
+          "Only if you've been pregnant before"
+        ]
+      }
+    }
+  },
+  "Summary": {
+    "title": "Shared summary",
+    "placeholder": "This link is invalid, expired, or has been revoked.",
+    "downloadPdf": "Download PDF",
+    "createTitle": "Clinician summary",
+    "rangeLabel": "Range",
+    "range": {
+      "3_cycles": "Last 3 cycles",
+      "6_cycles": "Last 6 cycles",
+      "custom": "Custom"
+    },
+    "displayLabelLabel": "Display name or initials (optional)",
+    "displayLabelPlaceholder": "e.g. A.N. — shown on the PDF instead of your account details",
+    "sharingConsentRequired": "Grant the 'sharing' consent on your Me page before generating a summary — every summary creates a shareable link.",
+    "generateError": "Something went wrong generating the summary. Please try again.",
+    "goToConsents": "Go to Me → consents",
+    "generating": "Generating…",
+    "generateButton": "Generate summary",
+    "shareTitle": "Share link",
+    "revoked": "This link has been revoked and no longer works.",
+    "qrCodeAlt": "QR code for the share link",
+    "viewCount": "{count, plural, =0 {Not viewed yet} one {Viewed # time} other {Viewed # times}}",
+    "expiresAt": "Expires {date}",
+    "copyLink": "Copy link",
+    "openLink": "Open link",
+    "revokeLink": "Revoke link",
+    "pdf": {
+      "title": "Clinician summary",
+      "dateRangeLabel": "Date range",
+      "displayLabelFallback": "MweziCare user",
+      "ageBandLabel": "Age band",
+      "cyclesTitle": "Cycles",
+      "cycleStartColumn": "Start",
+      "periodLengthColumn": "Period length",
+      "cycleLengthColumn": "Cycle length",
+      "daysUnit": "days",
+      "painChartTitle": "Pain per cycle",
+      "maxPainLegend": "Highest pain",
+      "avgPainLegend": "Average pain",
+      "symptomFrequencyTitle": "Symptom frequency",
+      "symptom": {
+        "fatigue": "Fatigue",
+        "nausea": "Nausea",
+        "painWithBowelMovements": "Pain with bowel movements",
+        "painWithUrination": "Pain with urination",
+        "painWithSex": "Pain with sex"
+      },
+      "missedSchoolLabel": "Missed school days",
+      "missedWorkLabel": "Missed work days",
+      "assessmentTitle": "Latest assessment",
+      "assessmentUnavailable": "Not available yet",
+      "outcome": {
+        "routine": "[CLINICAL REVIEW REQUIRED] Routine — self-care, keep tracking",
+        "assess_soon": "[CLINICAL REVIEW REQUIRED] Assess soon",
+        "urgent": "[CLINICAL REVIEW REQUIRED] Urgent"
+      },
+      "rulesetVersionLabel": "Ruleset version",
+      "noDataLabel": "No data for this range",
+      "footer": "Generated from self-reported app data. Not a diagnosis."
+    }
+  }
+}

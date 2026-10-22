@@ -1,0 +1,27 @@
+{
+  "name": "@mwezicare/rules-engine",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@mwezicare/tsconfig": "workspace:*",
+    "@mwezicare/eslint-config": "workspace:*",
+    "@vitest/coverage-v8": "^4.1.9",
+    "fast-check": "^3.23.0",
+    "typescript": "^5",
+    "vitest": "^4.1.9"
+  }
+}

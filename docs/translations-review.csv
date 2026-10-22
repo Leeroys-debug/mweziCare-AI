@@ -1,0 +1,440 @@
+key,en,sw,context
+Assistant.clearHistory,Clear history,Futa historia,Assistant
+Assistant.clearHistoryConfirm,Clear this conversation? This can't be undone.,Futa mazungumzo haya? Hili haliwezi kutenduliwa.,Assistant
+Assistant.disclaimer,Education only — not medical advice.,Elimu tu — si ushauri wa matibabu.,Assistant
+Assistant.draftBadge,DRAFT,RASIMU,Assistant
+Assistant.errorGeneric,Something went wrong. Please try again.,Hitilafu imetokea. Tafadhali jaribu tena.,Assistant
+Assistant.feedbackThanks,Thanks for the feedback,Asante kwa maoni yako,Assistant
+Assistant.inputLabel,Your question,Swali lako,Assistant
+Assistant.inputPlaceholder,Ask a menstrual health question,Uliza swali kuhusu afya ya hedhi,Assistant
+Assistant.loadingHistory,Loading your conversation…,Inapakia mazungumzo yako…,Assistant
+Assistant.newChat,New chat,Mazungumzo mapya,Assistant
+Assistant.send,Send,Tuma,Assistant
+Assistant.sending,Thinking…,Inafikiria…,Assistant
+Assistant.sourcesLabel,Sources,Vyanzo,Assistant
+Assistant.starterQuestions.q1,What foods help with period cramps?,Vyakula gani husaidia na maumivu ya hedhi?,Assistant
+Assistant.starterQuestions.q2,What's a normal cycle length?,Mzunguko wa kawaida una urefu gani?,Assistant
+Assistant.starterQuestions.q3,When should I see a clinician about my pain?,Ni lini ninapaswa kumwona mtaalamu wa afya kuhusu maumivu yangu?,Assistant
+Assistant.starterQuestions.q4,What should I expect at my first gynaecology visit?,Nitegemee nini katika ziara yangu ya kwanza ya daktari wa wanawake?,Assistant
+Assistant.starterQuestionsTitle,Try asking,Jaribu kuuliza,Assistant
+Assistant.thumbsDown,Not helpful,Haikusaidia,Assistant
+Assistant.thumbsUp,Helpful,Imesaidia,Assistant
+Assistant.title,Ask,Uliza,Assistant
+Care.call,Call,Piga simu,Care
+Care.contactedRecorded,Recorded — thank you,Imerekodiwa — asante,Care
+Care.countyLabel,County,Kaunti,Care
+Care.countyPlaceholder,e.g. Kiambu,"mfano, Kiambu",Care
+Care.directionsGoogle,Directions (Google Maps),Mwelekeo (Google Maps),Care
+Care.directionsOsm,Directions (OpenStreetMap),Mwelekeo (OpenStreetMap),Care
+Care.followUpConsent,I'm open to a follow-up check-in,Niko tayari kufuatiliwa baadaye,Care
+Care.geolocationDenied,Location wasn't shared. Search by county or town instead.,Mahali hapakushirikiwa. Tafuta kwa kaunti au mji badala yake.,Care
+Care.geolocationUnsupported,Your browser doesn't support location — search by county or town instead.,Kivinjari chako hakiwezeshi mahali — tafuta kwa kaunti au mji badala yake.,Care
+Care.gynConfirmedOn,Gynaecology confirmed on {date},Huduma za uzazi zimethibitishwa tarehe {date},Care
+Care.gynNotConfirmed,General outpatient — gynaecology not confirmed,Huduma za nje — huduma za uzazi hazijathibitishwa,Care
+Care.iContactedThisFacility,I contacted this facility,Nimewasiliana na kituo hiki,Care
+Care.listView,List,Orodha,Care
+Care.locationConsentBody,"We'll ask your phone for your location just for this search. It's used only to find nearby facilities and is never stored — not in our database, not in logs, not in analytics.","Tutaomba simu yako mahali ulipo kwa ajili ya utafutaji huu tu. Inatumika tu kutafuta vituo vya karibu na haihifadhiwi kamwe — si kwenye hifadhidata yetu, si kwenye kumbukumbu, wala si kwenye takwimu.",Care
+Care.locationConsentTitle,Find care near you,Tafuta huduma karibu nawe,Care
+Care.manualSearchAlwaysAvailable,You can also always search by county or town below instead.,Unaweza pia kutafuta kwa kaunti au mji hapa chini badala yake.,Care
+Care.mapView,Map,Ramani,Care
+Care.mayBeOutOfDate,May be out of date,Huenda imepitwa na wakati,Care
+Care.noResults,No facilities found. Try a different county or town.,Hakuna vituo vilivyopatikana. Jaribu kaunti au mji mwingine.,Care
+Care.noVerifiedFallback,[CLINICAL REVIEW REQUIRED] No facility with confirmed gynaecology services was found nearby. Seek assessment at the nearest appropriate public facility.,[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Hakuna kituo chenye huduma za uzazi zilizothibitishwa kilichopatikana karibu. Tafuta tathmini katika kituo cha karibu cha umma kinachofaa.,Care
+Care.placeholder,Verified nearby facilities will appear here.,Vituo vilivyothibitishwa karibu nawe vitaonekana hapa.,Care
+Care.searchButton,Search,Tafuta,Care
+Care.searchLabel,Facility name or town,Jina la kituo au mji,Care
+Care.searchPlaceholder,e.g. Thika,"mfano, Thika",Care
+Care.searching,Searching…,Inatafuta…,Care
+Care.share,Share,Shiriki,Care
+Care.shareLocation,Share my location,Shiriki mahali nilipo,Care
+Care.title,Care,Huduma,Care
+Care.urgentBanner.body,"[CLINICAL REVIEW REQUIRED] Based on your latest tracking, you should get medical care urgently. See Insights for details, or find a facility below.","[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Kulingana na ufuatiliaji wako wa hivi karibuni, unapaswa kupata huduma ya matibabu kwa dharura. Angalia Maarifa kwa maelezo zaidi, au tafuta kituo hapa chini.",Care
+Care.urgentBanner.title,[CLINICAL REVIEW REQUIRED] Seek urgent care,[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Tafuta huduma ya dharura,Care
+Insights.assessment.findCare,Find care,Tafuta huduma,Insights
+Insights.assessment.nextStep.assess_soon,[CLINICAL REVIEW REQUIRED] What you've been tracking is worth having a clinician look at soon.,[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Yale ambayo umekuwa ukifuatilia yanafaa kuangaliwa na daktari hivi karibuni.,Insights
+Insights.assessment.nextStep.routine,[CLINICAL REVIEW REQUIRED] Your cramps look mild to moderate and aren't disrupting your life. Self-care tips are in Learn — keep tracking.,[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Maumivu yako ya hedhi yanaonekana kuwa madogo hadi ya wastani na hayakuzuii maisha yako. Vidokezo vya kujitunza viko kwenye Jifunze — endelea kufuatilia.,Insights
+Insights.assessment.nextStep.urgent,"[CLINICAL REVIEW REQUIRED] Based on your tracking, you should seek care urgently.","[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Kulingana na ufuatiliaji wako, unapaswa kutafuta huduma ya dharura.",Insights
+Insights.assessment.shareSummary,Share summary,Shiriki muhtasari,Insights
+Insights.assessment.unavailable,Your personalized guidance isn't available yet. Keep tracking — we'll let you know as soon as it's ready.,Mwongozo wako binafsi bado haujapatikana. Endelea kufuatilia — tutakujulisha mara utakapokuwa tayari.,Insights
+Insights.assessment.uncertaintyNote,"This is general guidance based on your tracked patterns, not a diagnosis.","Huu ni mwongozo wa jumla kulingana na mielekeo uliyofuatilia, si utambuzi.",Insights
+Insights.avgPain,Average pain,Wastani wa maumivu,Insights
+Insights.estimateLabel,estimate,makadirio,Insights
+Insights.impactChartTitle,Days with activity impact per cycle (last 6 cycles),Siku zenye athari kwa shughuli kwa kila mzunguko (mizunguko 6 iliyopita),Insights
+Insights.impactDays,Impact days,Siku za athari,Insights
+Insights.maxPain,Highest pain,Maumivu ya juu zaidi,Insights
+Insights.nextPeriodEstimate,Your next period is estimated around,Hedhi yako inayofuata inakadiriwa karibu na,Insights
+Insights.noDataYet,Keep tracking — charts will appear once you have logged a few cycles.,Endelea kufuatilia — chati zitaonekana ukishafuatilia mizunguko kadhaa.,Insights
+Insights.painChartTitle,Pain per cycle (last 6 cycles),Maumivu kwa kila mzunguko (mizunguko 6 iliyopita),Insights
+Insights.placeholder,Cycle and symptom patterns will appear here.,Mielekeo ya mzunguko na dalili itaonekana hapa.,Insights
+Insights.title,Insights,Maarifa,Insights
+InstallPrompt.body,"Install this app on your device for quicker, more reliable access.",Sakinisha programu hii kwenye kifaa chako kwa ufikiaji wa haraka na wa kutegemewa zaidi.,InstallPrompt
+InstallPrompt.dismiss,Not now,Si sasa,InstallPrompt
+InstallPrompt.install,Install,Sakinisha,InstallPrompt
+Landing.cta,Open the app,Fungua programu,Landing
+Landing.description,"Track your symptoms, get clinically reviewed guidance, and find verified care near you — in English or Kiswahili.","Fuatilia dalili zako, pata mwongozo ulioidhinishwa kiafya, na pata huduma iliyothibitishwa karibu nawe — kwa Kiingereza au Kiswahili.",Landing
+Landing.signIn,Sign in,Ingia,Landing
+Landing.tagline,Understand your cycle. Recognize the signs. Get care sooner.,Elewa mzunguko wako. Tambua dalili. Pata huduma mapema.,Landing
+Landing.title,MweziCare AI,MweziCare AI,Landing
+LanguageSwitcher.en,English,Kiingereza,LanguageSwitcher
+LanguageSwitcher.label,Language,Lugha,LanguageSwitcher
+LanguageSwitcher.sw,Kiswahili,Kiswahili,LanguageSwitcher
+Learn.backToList,Back to Learn,Rudi kwa Jifunze,Learn
+Learn.draftBadge,DRAFT,RASIMU,Learn
+Learn.placeholder,No articles yet.,Bado hakuna makala.,Learn
+Learn.reviewDueLabel,Review due,Ukaguzi unatakiwa,Learn
+Learn.title,Learn,Jifunze,Learn
+Me.accountTitle,Account,Akaunti,Me
+Me.consentGranted,Granted,Imeruhusiwa,Me
+Me.consentNotGranted,Not granted,Haijaruhusiwa,Me
+Me.consentsTitle,Your consents,Ridhaa zako,Me
+Me.deleteBody,This permanently deletes your account and all health data. This cannot be undone.,Hii itafuta akaunti yako na taarifa zote za afya kabisa. Hairudishiki.,Me
+Me.deleteButton,Delete account,Futa akaunti,Me
+Me.deleteConfirm,Are you sure? This cannot be undone.,Una uhakika? Hatua hii haiwezi kutenduliwa.,Me
+Me.deleteTitle,Delete my account,Futa akaunti yangu,Me
+Me.discreetModeBody,"When on, the app's name and icon on your home screen won't mention periods or health — useful if you share a device.","Ikiwa imewashwa, jina na aikoni ya programu kwenye skrini yako ya nyumbani havitataja hedhi au afya — muhimu kama unashiriki kifaa.",Me
+Me.discreetModeOff,Off — tap to turn on,Imezimwa — gusa kuwasha,Me
+Me.discreetModeOn,On — tap to turn off,Imewashwa — gusa kuzima,Me
+Me.discreetModeTitle,Discreet mode,Hali ya siri,Me
+Me.exportBody,Get a copy of everything MweziCare has stored for you.,Pata nakala ya kila kitu ambacho MweziCare imehifadhi kuhusu wewe.,Me
+Me.exportButton,Download JSON,Pakua JSON,Me
+Me.exportTitle,Download your data,Pakua taarifa zako,Me
+Me.grant,Grant,Ruhusu,Me
+Me.signOut,Sign out,Toka,Me
+Me.title,Me,Mimi,Me
+Me.withdraw,Withdraw,Ondoa,Me
+Nav.assistant,Ask,Uliza,Nav
+Nav.care,Care,Huduma,Nav
+Nav.insights,Insights,Maarifa,Nav
+Nav.me,Me,Mimi,Nav
+Nav.primary,Primary navigation,Uelekezaji mkuu,Nav
+Nav.track,Track,Fuatilia,Nav
+Onboarding.ageBandLabel,Age band,Kikundi cha umri,Onboarding
+Onboarding.ageBandPlaceholder,Select your age band,Chagua kikundi chako cha umri,Onboarding
+Onboarding.consentLocation,"Let MweziCare use my location, only when I search for care, to find nearby facilities","Ruhusu MweziCare kutumia mahali nilipo, tu ninapotafuta huduma, kupata vituo vya karibu",Onboarding
+Onboarding.consentResearch,Let MweziCare use my de-identified data for research that improves care for others,Ruhusu MweziCare kutumia taarifa zangu zisizo na utambulisho kwa utafiti unaoboresha huduma kwa wengine,Onboarding
+Onboarding.consentSharing,Let MweziCare let me share a summary with a clinician when I choose to,Ruhusu MweziCare kuniwezesha kushiriki muhtasari na daktari ninapochagua,Onboarding
+Onboarding.consentTracking,Let MweziCare store my symptom logs so I can track my cycle,Ruhusu MweziCare kuhifadhi rekodi za dalili zangu ili nifuatilie mzunguko wangu,Onboarding
+Onboarding.consentTrackingRequired,Required to use the app,Inahitajika kutumia programu,Onboarding
+Onboarding.consentsTitle,Consent,Ridhaa,Onboarding
+Onboarding.countyLabel,County,Kaunti,Onboarding
+Onboarding.countyPlaceholder,e.g. Kiambu,"mfano, Kiambu",Onboarding
+Onboarding.error,Something went wrong. Please try again.,Hitilafu imetokea. Tafadhali jaribu tena.,Onboarding
+Onboarding.minorBody,"Users under 18 need a parent or guardian to confirm consent before tracking can start. This flow isn't built yet, so sign-up is paused here for this age band.","Watumiaji walio chini ya miaka 18 wanahitaji mzazi au mlezi kuthibitisha ridhaa kabla ya kufuatilia kuanza. Mtiririko huu bado haujajengwa, hivyo usajili umesimamishwa hapa kwa kikundi hiki cha umri.",Onboarding
+Onboarding.minorTitle,[LEGAL REVIEW REQUIRED] Guardian consent needed,[UKAGUZI WA KISHERIA UNAHITAJIKA] Ridhaa ya mzazi/mlezi inahitajika,Onboarding
+Onboarding.submit,Continue,Endelea,Onboarding
+Onboarding.title,Set up your profile,Weka wasifu wako,Onboarding
+Privacy.placeholder,Our privacy policy will appear here.,Sera yetu ya faragha itaonekana hapa.,Privacy
+Privacy.title,Privacy,Faragha,Privacy
+Quiz.alreadyTaken,You've already taken this quiz.,Tayari umeshafanya ukaguzi huu.,Quiz
+Quiz.continue,Continue,Endelea,Quiz
+Quiz.day30BannerBody,Take a 5-question knowledge check — it takes about a minute.,Fanya ukaguzi wa maswali 5 — unachukua kama dakika moja.,Quiz
+Quiz.day30BannerCta,Take the quiz,Fanya ukaguzi,Quiz
+Quiz.day30BannerDismiss,Not now,Si sasa,Quiz
+Quiz.day30BannerTitle,Quick knowledge check?,Ukaguzi mfupi wa maarifa?,Quiz
+Quiz.error,Something went wrong. Please try again.,Hitilafu imetokea. Tafadhali jaribu tena.,Quiz
+Quiz.intro,"5 short questions — optional, and never scored against you.","Maswali 5 mafupi — si lazima, na hayakuhukumu.",Quiz
+Quiz.questions.q1.options,"21 to 35 days | Exactly 28 days, always | 60 to 90 days | It's always irregular, so it's not worth tracking","Siku 21 hadi 35 | Siku 28 hasa, kila wakati | Siku 60 hadi 90 | Huwa hauna mpangilio kila wakati, kwa hivyo hakuna haja ya kufuatilia",Quiz
+Quiz.questions.q1.text,[CLINICAL REVIEW REQUIRED] How long does a typical menstrual cycle usually last?,[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Mzunguko wa kawaida wa hedhi huchukua muda gani?,Quiz
+Quiz.questions.q2.options,Mild cramping on the first day | Pain that repeatedly stops you going to school or work | Feeling a bit tired during your period | A period starting a few days earlier than expected,Maumivu kidogo siku ya kwanza | Maumivu yanayokuzuia mara kwa mara kwenda shuleni au kazini | Kujisikia mchovu kidogo wakati wa hedhi | Hedhi kuanza siku chache mapema kuliko ilivyotarajiwa,Quiz
+Quiz.questions.q2.text,[CLINICAL REVIEW REQUIRED] Which of these is a sign you should see a clinician soon?,[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Ni ipi kati ya hizi ni dalili ya kumwona mtaalamu wa afya hivi karibuni?,Quiz
+Quiz.questions.q3.options,Soaking a pad or tampon faster than about every 1-2 hours | Any bleeding at all | Bleeding for exactly 5 days | Spotting between periods only,Kulowesha pedi au tampon haraka kuliko kila saa 1-2 | Damu yoyote ile | Kutokwa damu kwa siku 5 hasa | Madoa kati ya hedhi pekee,Quiz
+Quiz.questions.q3.text,[CLINICAL REVIEW REQUIRED] What generally counts as heavy bleeding?,[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Ni nini kwa ujumla huhesabiwa kama damu nyingi?,Quiz
+Quiz.questions.q4.options,Wait a few days to see if it passes | Seek urgent medical care right away | Only log it in the app for later | Nothing — this is always normal,Subiri siku chache kuona kama yatapita | Tafuta huduma ya dharura ya matibabu mara moja | Andika tu kwenye programu kwa baadaye | Hakuna — hii ni ya kawaida kila wakati,Quiz
+Quiz.questions.q4.text,"[CLINICAL REVIEW REQUIRED] If you have sudden, severe pelvic pain or feel like you might faint, what should you do?","[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Kama una maumivu makali ya ghafla ya nyonga au unahisi kama utazimia, unapaswa kufanya nini?",Quiz
+Quiz.questions.q5.options,"No, never | Pregnancy risk is lower but not zero at any point in the cycle | Only on the very last day | Only if you've been pregnant before","Hapana, kamwe | Uwezekano wa ujauzito ni mdogo lakini si sifuri wakati wowote wa mzunguko | Siku ya mwisho tu | Tu kama umeshawahi kuwa mjamzito hapo awali",Quiz
+Quiz.questions.q5.text,[CLINICAL REVIEW REQUIRED] Can you get pregnant during your period?,"[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Je, unaweza kupata ujauzito wakati wa hedhi?",Quiz
+Quiz.resultBody,You got {score} out of {total} right.,Umepata {score} kati ya {total} sahihi.,Quiz
+Quiz.resultTitle,Nice work!,Kazi nzuri!,Quiz
+Quiz.skip,Skip for now,Ruka kwa sasa,Quiz
+Quiz.submit,Submit answers,Tuma majibu,Quiz
+Quiz.submitting,Submitting…,Inatuma…,Quiz
+Quiz.title,Quick knowledge check,Ukaguzi mfupi wa maarifa,Quiz
+SignIn.changeNumber,Use a different number,Tumia nambari nyingine,SignIn
+SignIn.codeLabel,Verification code,Msimbo wa uthibitisho,SignIn
+SignIn.codePlaceholder,6-digit code,Msimbo wa tarakimu 6,SignIn
+SignIn.errorCode,That code is incorrect or has expired,Msimbo huo si sahihi au umeisha muda,SignIn
+SignIn.errorGeneric,Something went wrong. Please try again.,Hitilafu imetokea. Tafadhali jaribu tena.,SignIn
+SignIn.errorPhone,Enter a valid Kenyan phone number,Weka nambari sahihi ya simu ya Kenya,SignIn
+SignIn.phoneLabel,Phone number,Nambari ya simu,SignIn
+SignIn.phonePlaceholder,07XX XXX XXX,07XX XXX XXX,SignIn
+SignIn.requestCode,Send code,Tuma msimbo,SignIn
+SignIn.title,Sign in,Ingia,SignIn
+SignIn.verify,Verify,Thibitisha,SignIn
+Staff.nav.caseSamples,Case samples,Sampuli za kesi,Staff
+Staff.nav.dashboard,Dashboard,Dashibodi,Staff
+Staff.nav.facilities,Facilities,Vituo vya afya,Staff
+Staff.nav.knowledgeBase,Knowledge base,Hazina ya maarifa,Staff
+Staff.nav.rulesets,Rulesets,Seti za kanuni,Staff
+Staff.nav.users,Users,Watumiaji,Staff
+Staff.placeholder,"Aggregated, de-identified impact indicators will appear here.",Viashiria vya matokeo vilivyojumlishwa na visivyo na utambulisho vitaonekana hapa.,Staff
+Staff.title,Staff dashboard,Dashibodi ya wafanyakazi,Staff
+StaffCaseSamples.ageBand,Age band,Kundi la umri,StaffCaseSamples
+StaffCaseSamples.county,County,Kaunti,StaffCaseSamples
+StaffCaseSamples.description,"De-identified recent assessments for quality review — no names, phones, notes or exact dates.","Tathmini za hivi karibuni zisizo na utambulisho kwa ukaguzi wa ubora — hakuna majina, simu, maelezo au tarehe kamili.",StaffCaseSamples
+StaffCaseSamples.firedRules,Fired rules,Kanuni zilizotekelezwa,StaffCaseSamples
+StaffCaseSamples.noSamples,No assessments recorded yet.,Bado hakuna tathmini zilizorekodiwa.,StaffCaseSamples
+StaffCaseSamples.none,—,—,StaffCaseSamples
+StaffCaseSamples.outcome,Outcome,Matokeo,StaffCaseSamples
+StaffCaseSamples.outcomeLabel.assess_soon,Assess soon,Tathmini hivi karibuni,StaffCaseSamples
+StaffCaseSamples.outcomeLabel.routine,Routine,Kawaida,StaffCaseSamples
+StaffCaseSamples.outcomeLabel.urgent,Urgent,Dharura,StaffCaseSamples
+StaffCaseSamples.title,Flagged-case samples,Sampuli za kesi zilizowekwa alama,StaffCaseSamples
+StaffCaseSamples.viewFeatures,View features,Angalia vipengele,StaffCaseSamples
+StaffCaseSamples.week,Week,Wiki,StaffCaseSamples
+StaffDashboard.charts.activeUsersTrend,Weekly active users,Watumiaji hai kwa wiki,StaffDashboard
+StaffDashboard.charts.languageSplit,Language split (latest week),Mgawanyo wa lugha (wiki ya hivi karibuni),StaffDashboard
+StaffDashboard.charts.outcomeDistribution,Assessment outcomes (latest week),Matokeo ya tathmini (wiki ya hivi karibuni),StaffDashboard
+StaffDashboard.description,"Aggregated, de-identified indicators — any county/age-band cell with fewer than 10 people is shown as ""<10"" and left out of exports.","Viashiria vilivyojumlishwa na visivyo na utambulisho — kundi lolote la kaunti/umri lenye watu wasiozidi 10 linaonyeshwa kama ""<10"" na halijumuishwi katika upakuaji.",StaffDashboard
+StaffDashboard.exportCsv,Export CSV,Pakua CSV,StaffDashboard
+StaffDashboard.filters.ageBand,Age band,Kundi la umri,StaffDashboard
+StaffDashboard.filters.ageBandAll,All age bands,Makundi yote ya umri,StaffDashboard
+StaffDashboard.filters.county,County,Kaunti,StaffDashboard
+StaffDashboard.filters.countyAll,All counties,Kaunti zote,StaffDashboard
+StaffDashboard.filters.from,From,Kutoka,StaffDashboard
+StaffDashboard.filters.to,To,Hadi,StaffDashboard
+StaffDashboard.knowledgeScoreChangeTitle,Knowledge score change (day 30),Mabadiliko ya alama za maarifa (siku 30),StaffDashboard
+StaffDashboard.kpis.activeUsers,Active users (latest week),Watumiaji hai (wiki ya hivi karibuni),StaffDashboard
+StaffDashboard.kpis.logsPerActiveUser,Logs per active user,Rekodi kwa kila mtumiaji hai,StaffDashboard
+StaffDashboard.kpis.referrals,Referrals recorded,Rufaa zilizorekodiwa,StaffDashboard
+StaffDashboard.kpis.urgentShare,Urgent assessments,Tathmini za dharura,StaffDashboard
+StaffDashboard.noData,Not enough data yet for this view (small cells are suppressed).,Hakuna data ya kutosha bado kwa mwonekano huu (makundi madogo yamezuiliwa).,StaffDashboard
+StaffDashboard.outcomeLabel.assess_soon,Assess soon,Tathmini hivi karibuni,StaffDashboard
+StaffDashboard.outcomeLabel.routine,Routine,Kawaida,StaffDashboard
+StaffDashboard.outcomeLabel.urgent,Urgent,Dharura,StaffDashboard
+StaffDashboard.referralFollowUpTitle,Referral follow-up rate (consented only),Kiwango cha ufuatiliaji wa rufaa (idhini pekee),StaffDashboard
+StaffDashboard.title,Impact dashboard,Dashibodi ya matokeo,StaffDashboard
+StaffFacilities.backToList,Back to facilities,Rudi kwa vituo vya afya,StaffFacilities
+StaffFacilities.callScriptTitle,Call-script checklist,Orodha ya maswali ya simu,StaffFacilities
+StaffFacilities.costInfoLabel,Cost info (only if reliable),Taarifa za gharama (tu kama ni za kutegemewa),StaffFacilities
+StaffFacilities.costInfoPlaceholder,e.g. Free at point of care,"mfano, Bure wakati wa huduma",StaffFacilities
+StaffFacilities.county,County,Kaunti,StaffFacilities
+StaffFacilities.countyFilterLabel,County,Kaunti,StaffFacilities
+StaffFacilities.countyFilterPlaceholder,e.g. Kiambu,"mfano, Kiambu",StaffFacilities
+StaffFacilities.daysHoursLabel,Days/hours,Siku/masaa,StaffFacilities
+StaffFacilities.daysHoursPlaceholder,e.g. Mon-Fri 8am-5pm,"mfano, Jumatatu-Ijumaa 8am-5pm",StaffFacilities
+StaffFacilities.dueBadge,Due,Inahitajika,StaffFacilities
+StaffFacilities.dueFilterLabel,Due for re-verification only (>6 months),Zinazohitaji uthibitisho mpya pekee (>miezi 6),StaffFacilities
+StaffFacilities.gynAvailable,Gynaecology service available,Huduma ya magonjwa ya wanawake inapatikana,StaffFacilities
+StaffFacilities.lastVerified,Last verified,Ilithibitishwa mwisho,StaffFacilities
+StaffFacilities.markUnavailable,Mark unavailable,Weka alama ya haipatikani,StaffFacilities
+StaffFacilities.markVerified,Mark verified,Weka alama ya kuthibitishwa,StaffFacilities
+StaffFacilities.name,Name,Jina,StaffFacilities
+StaffFacilities.never,Never,Kamwe,StaffFacilities
+StaffFacilities.noResults,No facilities match these filters.,Hakuna vituo vinavyolingana na vichujio hivi.,StaffFacilities
+StaffFacilities.notesLabel,Notes,Maelezo,StaffFacilities
+StaffFacilities.notesPlaceholder,Anything else from the call,Kitu kingine chochote kutoka kwenye simu,StaffFacilities
+StaffFacilities.phone,Phone,Simu,StaffFacilities
+StaffFacilities.phoneConfirmed,Phone number confirmed,Nambari ya simu imethibitishwa,StaffFacilities
+StaffFacilities.referralNeeded,Referral needed before visit,Rufaa inahitajika kabla ya ziara,StaffFacilities
+StaffFacilities.saveError,Could not save,Imeshindwa kuhifadhi,StaffFacilities
+StaffFacilities.saveSuccess,Recorded,Imerekodiwa,StaffFacilities
+StaffFacilities.saving,Saving…,Inahifadhi…,StaffFacilities
+StaffFacilities.status,Status,Hali,StaffFacilities
+StaffFacilities.statusAll,All,Zote,StaffFacilities
+StaffFacilities.statusFilterLabel,Service status,Hali ya huduma,StaffFacilities
+StaffFacilities.statusLabel.listed,Listed,Imeorodheshwa,StaffFacilities
+StaffFacilities.statusLabel.unavailable,Unavailable,Haipatikani,StaffFacilities
+StaffFacilities.statusLabel.verified,Verified,Imethibitishwa,StaffFacilities
+StaffFacilities.title,Facilities,Vituo vya afya,StaffFacilities
+StaffKnowledgeBase.approve,Approve,Idhinisha,StaffKnowledgeBase
+StaffKnowledgeBase.approveError,Could not approve,Imeshindwa kuidhinisha,StaffKnowledgeBase
+StaffKnowledgeBase.approveSuccess,Approved — knowledge base re-ingestion queued,Imeidhinishwa — kuingizwa upya kwa hazina ya maarifa kumepangwa,StaffKnowledgeBase
+StaffKnowledgeBase.approving,Approving…,Inaidhinisha…,StaffKnowledgeBase
+StaffKnowledgeBase.articleTitle,Title,Kichwa,StaffKnowledgeBase
+StaffKnowledgeBase.backToList,Back to knowledge base,Rudi kwa hazina ya maarifa,StaffKnowledgeBase
+StaffKnowledgeBase.bodyLabel,Body (Markdown),Maudhui (Markdown),StaffKnowledgeBase
+StaffKnowledgeBase.draftBanner,DRAFT — not visible to users yet,RASIMU — bado haijaonekana kwa watumiaji,StaffKnowledgeBase
+StaffKnowledgeBase.editView,Edit,Hariri,StaffKnowledgeBase
+StaffKnowledgeBase.locale,Locale,Lugha,StaffKnowledgeBase
+StaffKnowledgeBase.noArticles,No articles yet.,Bado hakuna makala.,StaffKnowledgeBase
+StaffKnowledgeBase.overdue,Overdue,Imechelewa,StaffKnowledgeBase
+StaffKnowledgeBase.previewView,Preview,Hakikisho,StaffKnowledgeBase
+StaffKnowledgeBase.reviewDue,Review due,Ukaguzi unatakiwa,StaffKnowledgeBase
+StaffKnowledgeBase.reviewDueLabel,Review due date,Tarehe ya ukaguzi,StaffKnowledgeBase
+StaffKnowledgeBase.save,Save,Hifadhi,StaffKnowledgeBase
+StaffKnowledgeBase.saveError,Could not save,Imeshindwa kuhifadhi,StaffKnowledgeBase
+StaffKnowledgeBase.saveSuccess,Saved,Imehifadhiwa,StaffKnowledgeBase
+StaffKnowledgeBase.saving,Saving…,Inahifadhi…,StaffKnowledgeBase
+StaffKnowledgeBase.sendBack,Send back to draft,Rudisha kwa rasimu,StaffKnowledgeBase
+StaffKnowledgeBase.sendBackConfirm,Send this article back to draft status?,Rudisha makala hii kwa hali ya rasimu?,StaffKnowledgeBase
+StaffKnowledgeBase.sendBackError,Could not send back,Imeshindwa kurudisha,StaffKnowledgeBase
+StaffKnowledgeBase.sendBackSuccess,Sent back to draft,Imerudishwa kwa rasimu,StaffKnowledgeBase
+StaffKnowledgeBase.slug,Slug,Slug,StaffKnowledgeBase
+StaffKnowledgeBase.status,Status,Hali,StaffKnowledgeBase
+StaffKnowledgeBase.statusLabel.approved,Approved,Imeidhinishwa,StaffKnowledgeBase
+StaffKnowledgeBase.statusLabel.draft,Draft,Rasimu,StaffKnowledgeBase
+StaffKnowledgeBase.title,Knowledge base,Hazina ya maarifa,StaffKnowledgeBase
+StaffKnowledgeBase.titleLabel,Title,Kichwa,StaffKnowledgeBase
+StaffKnowledgeBase.updatedAt,Last updated,Ilisasishwa mwisho,StaffKnowledgeBase
+StaffRulesets.approveButton,Approve,Idhinisha,StaffRulesets
+StaffRulesets.approveConfirm,Approving retires the current approved version and makes this one live immediately. Continue?,Kuidhinisha kutaondoa toleo lililoidhinishwa sasa na kufanya hili liwe hai mara moja. Endelea?,StaffRulesets
+StaffRulesets.approveError,Could not approve,Imeshindwa kuidhinisha,StaffRulesets
+StaffRulesets.approveNameLabel,Type your name to confirm approval,Andika jina lako kuthibitisha idhini,StaffRulesets
+StaffRulesets.approveNamePlaceholder,Your full name,Jina lako kamili,StaffRulesets
+StaffRulesets.approveSuccess,Approved,Imeidhinishwa,StaffRulesets
+StaffRulesets.approveTitle,Approve this version,Idhinisha toleo hili,StaffRulesets
+StaffRulesets.approvedBy,Approved by,Imeidhinishwa na,StaffRulesets
+StaffRulesets.backToList,Back to rulesets,Rudi kwa seti za kanuni,StaffRulesets
+StaffRulesets.clinicianNote,Clinician note,Ujumbe wa mtaalamu wa afya,StaffRulesets
+StaffRulesets.conditions,Conditions (JSON),Masharti (JSON),StaffRulesets
+StaffRulesets.createdAt,Created,Imeundwa,StaffRulesets
+StaffRulesets.diffAdded,Added,Imeongezwa,StaffRulesets
+StaffRulesets.diffChanged,Changed,Imebadilishwa,StaffRulesets
+StaffRulesets.diffRemoved,Removed,Imeondolewa,StaffRulesets
+StaffRulesets.diffUnchanged,Unchanged,Haijabadilika,StaffRulesets
+StaffRulesets.diffView,Diff vs previous,Tofauti na toleo lililotangulia,StaffRulesets
+StaffRulesets.fixtureResults,{pass}/{total} fixtures passed,Majaribio {pass}/{total} yamefaulu,StaffRulesets
+StaffRulesets.formView,Form,Fomu,StaffRulesets
+StaffRulesets.jsonView,JSON,JSON,StaffRulesets
+StaffRulesets.newDraft,New draft from latest,Rasimu mpya kutoka toleo la mwisho,StaffRulesets
+StaffRulesets.noPreviousVersion,No previous version to compare.,Hakuna toleo lililotangulia la kulinganisha.,StaffRulesets
+StaffRulesets.noVersions,No ruleset versions yet.,Bado hakuna matoleo ya seti za kanuni.,StaffRulesets
+StaffRulesets.outcome,Outcome,Matokeo,StaffRulesets
+StaffRulesets.priority,Priority,Kipaumbele,StaffRulesets
+StaffRulesets.readOnlyNotice,Approved versions are immutable — only draft versions can be edited.,Matoleo yaliyoidhinishwa hayabadiliki — ni matoleo ya rasimu pekee yanayoweza kuhaririwa.,StaffRulesets
+StaffRulesets.reasonEn,Reason (EN),Sababu (EN),StaffRulesets
+StaffRulesets.reasonSw,Reason (SW),Sababu (SW),StaffRulesets
+StaffRulesets.rule,Rule,Kanuni,StaffRulesets
+StaffRulesets.runFixtures,Run fixtures,Endesha majaribio,StaffRulesets
+StaffRulesets.runningFixtures,Running…,Inaendesha…,StaffRulesets
+StaffRulesets.save,Save draft,Hifadhi rasimu,StaffRulesets
+StaffRulesets.saveError,Could not save — check the JSON is valid,Imeshindwa kuhifadhi — hakikisha JSON ni sahihi,StaffRulesets
+StaffRulesets.saveSuccess,Draft saved,Rasimu imehifadhiwa,StaffRulesets
+StaffRulesets.saving,Saving…,Inahifadhi…,StaffRulesets
+StaffRulesets.status,Status,Hali,StaffRulesets
+StaffRulesets.statusLabel.approved,Approved,Imeidhinishwa,StaffRulesets
+StaffRulesets.statusLabel.draft,Draft,Rasimu,StaffRulesets
+StaffRulesets.statusLabel.retired,Retired,Imeondolewa,StaffRulesets
+StaffRulesets.title,Rulesets,Seti za kanuni,StaffRulesets
+StaffRulesets.version,Version,Toleo,StaffRulesets
+StaffUsers.createdAt,Account created,Akaunti iliundwa,StaffUsers
+StaffUsers.description,Look up an account by phone number for support — never shows health data. Every lookup is logged.,Tafuta akaunti kwa nambari ya simu kwa ajili ya msaada — haionyeshi data ya afya kamwe. Kila utafutaji unarekodiwa.,StaffUsers
+StaffUsers.error,Something went wrong. Please try again.,Hitilafu imetokea. Tafadhali jaribu tena.,StaffUsers
+StaffUsers.locale,Locale,Lugha,StaffUsers
+StaffUsers.lookingUp,Looking up…,Inatafuta…,StaffUsers
+StaffUsers.lookupButton,Look up,Tafuta,StaffUsers
+StaffUsers.no,No,Hapana,StaffUsers
+StaffUsers.notFound,No account found for that phone number.,Hakuna akaunti iliyopatikana kwa nambari hiyo ya simu.,StaffUsers
+StaffUsers.phoneLabel,Phone number,Nambari ya simu,StaffUsers
+StaffUsers.phonePlaceholder,07XX XXX XXX,07XX XXX XXX,StaffUsers
+StaffUsers.phoneVerified,Phone verified,Simu imethibitishwa,StaffUsers
+StaffUsers.role,Role,Wajibu,StaffUsers
+StaffUsers.title,Users,Watumiaji,StaffUsers
+StaffUsers.yes,Yes,Ndiyo,StaffUsers
+Summary.copyLink,Copy link,Nakili kiungo,Summary
+Summary.createTitle,Clinician summary,Muhtasari wa daktari,Summary
+Summary.displayLabelLabel,Display name or initials (optional),Jina la kuonyesha au herufi za mwanzo (si lazima),Summary
+Summary.displayLabelPlaceholder,e.g. A.N. — shown on the PDF instead of your account details,"mfano, A.N. — itaonyeshwa kwenye PDF badala ya maelezo ya akaunti yako",Summary
+Summary.downloadPdf,Download PDF,Pakua PDF,Summary
+Summary.expiresAt,Expires {date},Kinaisha muda {date},Summary
+Summary.generateButton,Generate summary,Tengeneza muhtasari,Summary
+Summary.generateError,Something went wrong generating the summary. Please try again.,Hitilafu imetokea wakati wa kutengeneza muhtasari. Tafadhali jaribu tena.,Summary
+Summary.generating,Generating…,Inatengeneza…,Summary
+Summary.goToConsents,Go to Me → consents,Nenda Mimi → ridhaa,Summary
+Summary.openLink,Open link,Fungua kiungo,Summary
+Summary.pdf.ageBandLabel,Age band,Kikundi cha umri,Summary
+Summary.pdf.assessmentTitle,Latest assessment,Tathmini ya hivi karibuni,Summary
+Summary.pdf.assessmentUnavailable,Not available yet,Bado haijapatikana,Summary
+Summary.pdf.avgPainLegend,Average pain,Wastani wa maumivu,Summary
+Summary.pdf.cycleLengthColumn,Cycle length,Urefu wa mzunguko,Summary
+Summary.pdf.cycleStartColumn,Start,Mwanzo,Summary
+Summary.pdf.cyclesTitle,Cycles,Mizunguko,Summary
+Summary.pdf.dateRangeLabel,Date range,Kipindi cha tarehe,Summary
+Summary.pdf.daysUnit,days,siku,Summary
+Summary.pdf.displayLabelFallback,MweziCare user,Mtumiaji wa MweziCare,Summary
+Summary.pdf.footer,Generated from self-reported app data. Not a diagnosis.,Imetengenezwa kutoka kwa data uliyoripoti mwenyewe. Si utambuzi.,Summary
+Summary.pdf.maxPainLegend,Highest pain,Maumivu ya juu zaidi,Summary
+Summary.pdf.missedSchoolLabel,Missed school days,Siku za kukosa shule,Summary
+Summary.pdf.missedWorkLabel,Missed work days,Siku za kukosa kazi,Summary
+Summary.pdf.noDataLabel,No data for this range,Hakuna data kwa kipindi hiki,Summary
+Summary.pdf.outcome.assess_soon,[CLINICAL REVIEW REQUIRED] Assess soon,[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Tathmini hivi karibuni,Summary
+Summary.pdf.outcome.routine,"[CLINICAL REVIEW REQUIRED] Routine — self-care, keep tracking","[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Kawaida — kujitunza, endelea kufuatilia",Summary
+Summary.pdf.outcome.urgent,[CLINICAL REVIEW REQUIRED] Urgent,[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Dharura,Summary
+Summary.pdf.painChartTitle,Pain per cycle,Maumivu kwa kila mzunguko,Summary
+Summary.pdf.periodLengthColumn,Period length,Urefu wa hedhi,Summary
+Summary.pdf.rulesetVersionLabel,Ruleset version,Toleo la kanuni,Summary
+Summary.pdf.symptom.fatigue,Fatigue,Uchovu,Summary
+Summary.pdf.symptom.nausea,Nausea,Kichefuchefu,Summary
+Summary.pdf.symptom.painWithBowelMovements,Pain with bowel movements,Maumivu wakati wa haja kubwa,Summary
+Summary.pdf.symptom.painWithSex,Pain with sex,Maumivu wakati wa kujamiiana,Summary
+Summary.pdf.symptom.painWithUrination,Pain with urination,Maumivu wakati wa haja ndogo,Summary
+Summary.pdf.symptomFrequencyTitle,Symptom frequency,Marudio ya dalili,Summary
+Summary.pdf.title,Clinician summary,Muhtasari wa daktari,Summary
+Summary.placeholder,"This link is invalid, expired, or has been revoked.","Kiungo hiki si sahihi, kimeisha muda, au kimebatilishwa.",Summary
+Summary.qrCodeAlt,QR code for the share link,Msimbo wa QR wa kiungo cha kushiriki,Summary
+Summary.range.3_cycles,Last 3 cycles,Mizunguko 3 iliyopita,Summary
+Summary.range.6_cycles,Last 6 cycles,Mizunguko 6 iliyopita,Summary
+Summary.range.custom,Custom,Chagua mwenyewe,Summary
+Summary.rangeLabel,Range,Kipindi,Summary
+Summary.revokeLink,Revoke link,Batilisha kiungo,Summary
+Summary.revoked,This link has been revoked and no longer works.,Kiungo hiki kimebatilishwa na hakifanyi kazi tena.,Summary
+Summary.shareTitle,Share link,Kiungo cha kushiriki,Summary
+Summary.sharingConsentRequired,Grant the 'sharing' consent on your Me page before generating a summary — every summary creates a shareable link.,Ruhusu ridhaa ya 'kushiriki' kwenye ukurasa wako wa Mimi kabla ya kutengeneza muhtasari — kila muhtasari hutengeneza kiungo cha kushiriki.,Summary
+Summary.title,Shared summary,Muhtasari ulioshirikiwa,Summary
+Summary.viewCount,"{count, plural, =0 {Not viewed yet} one {Viewed # time} other {Viewed # times}}","[TRANSLATION REVIEW REQUIRED] {count, plural, =0 {Bado hakijatazamwa} one {Kimetazamwa mara #} other {Kimetazamwa mara #}}",Summary
+Sync.offline,Offline — will sync later,Haupo mtandaoni — itahifadhiwa baadaye,Sync
+Sync.synced,Synced,Imehifadhiwa,Sync
+Sync.syncing,Syncing…,Inahifadhi…,Sync
+Track.bleedingLevel.heavy,Heavy,Nyingi,Track
+Track.bleedingLevel.light,Light,Kidogo,Track
+Track.bleedingLevel.medium,Medium,Wastani,Track
+Track.bleedingLevel.none,None,Hakuna,Track
+Track.bleedingLevel.spotting,Spotting,Madoa,Track
+Track.bleedingLevel.very_heavy,Very heavy,Nyingi sana,Track
+Track.bleedingLevelLabel,Bleeding,Damu ya hedhi,Track
+Track.calendarTab,Calendar,Kalenda,Track
+Track.close,Close,Funga,Track
+Track.impact.activitiesLimited,Activities limited,Shughuli zimezuiwa,Track
+Track.impact.missedSchool,Missed school,Nimekosa shule,Track
+Track.impact.missedWork,Missed work,Nimekosa kazi,Track
+Track.impact.sleepDisrupted,Sleep disrupted,Usingizi umevurugika,Track
+Track.impactLabel,Today's impact,Athari ya leo,Track
+Track.nextMonth,Next month,Mwezi ujao,Track
+Track.notesLabel,Notes (optional),Maelezo (si lazima),Track
+Track.notesPlaceholder,Anything else you want to remember about today,Kitu kingine chochote unachotaka kukumbuka kuhusu leo,Track
+Track.painLocation.legs,Legs,Miguu,Track
+Track.painLocation.lower_abdomen,Lower abdomen,Tumbo la chini,Track
+Track.painLocation.lower_back,Lower back,Mgongo wa chini,Track
+Track.painLocation.other,Other,Pengine,Track
+Track.painLocation.pelvis,Pelvis,Nyonga,Track
+Track.painLocationsLabel,Where does it hurt?,Maumivu yako yako wapi?,Track
+Track.painScoreLabel.0,No pain,Hakuna maumivu,Track
+Track.painScoreLabel.1,Barely noticeable,[TRANSLATION REVIEW REQUIRED] Kidogo sana,Track
+Track.painScoreLabel.10,Worst pain,Maumivu makali zaidi,Track
+Track.painScoreLabel.2,Mild,Kidogo,Track
+Track.painScoreLabel.3,Mild,Kidogo,Track
+Track.painScoreLabel.4,Mild-moderate,[TRANSLATION REVIEW REQUIRED] Kidogo-wastani,Track
+Track.painScoreLabel.5,Moderate,Wastani,Track
+Track.painScoreLabel.6,Moderate,Wastani,Track
+Track.painScoreLabel.7,Moderate-severe,[TRANSLATION REVIEW REQUIRED] Wastani-makali,Track
+Track.painScoreLabel.8,Severe,Makali,Track
+Track.painScoreLabel.9,Very severe,[TRANSLATION REVIEW REQUIRED] Makali sana,Track
+Track.painScoreLabel.title,Pain,Maumivu,Track
+Track.periodDay,On my period today,Niko kwenye hedhi leo,Track
+Track.placeholder,Your symptom log will appear here.,Rekodi yako ya dalili itaonekana hapa.,Track
+Track.previousMonth,Previous month,Mwezi uliopita,Track
+Track.redFlag.fainting,Fainting or feeling like you might faint,Kuzimia au kuhisi kama utazimia,Track
+Track.redFlag.possiblePregnancySuspected,You think you might be pregnant,Unafikiri huenda una mimba,Track
+Track.redFlag.suddenSeverePain,"Sudden, severe pain",Maumivu makali ya ghafla,Track
+Track.safetyCheckHint,"A quick safety check — answer honestly, even if you're not sure.","Ukaguzi wa haraka wa usalama — jibu kwa ukweli, hata kama huna uhakika.",Track
+Track.safetyCheckLabel,Right now,Hivi sasa,Track
+Track.save,Save,Hifadhi,Track
+Track.saving,Saving…,Inahifadhi…,Track
+Track.symptom.fatigue,Fatigue,Uchovu,Track
+Track.symptom.nausea,Nausea,Kichefuchefu,Track
+Track.symptom.painWithBowelMovements,Pain with bowel movements,Maumivu wakati wa haja kubwa,Track
+Track.symptom.painWithSex,Pain with sex,Maumivu wakati wa kujamiiana,Track
+Track.symptom.painWithUrination,Pain with urination,Maumivu wakati wa haja ndogo,Track
+Track.symptomsLabel,Symptoms,Dalili,Track
+Track.title,Track,Fuatilia,Track
+Track.todayTab,Today,Leo,Track
+Track.urgentOverlay.acknowledge,I understand,Nimeelewa,Track
+Track.urgentOverlay.body,"[CLINICAL REVIEW REQUIRED] Based on what you just logged, you should get medical care right away — don't wait.","[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Kutokana na ulichoandika, unapaswa kupata huduma ya matibabu mara moja — usisubiri.",Track
+Track.urgentOverlay.findCare,Find care,Tafuta huduma,Track
+Track.urgentOverlay.step1,"[CLINICAL REVIEW REQUIRED] Go to the nearest hospital or clinic, or call emergency services, now.","[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Nenda hospitali au kliniki iliyo karibu, au piga simu huduma ya dharura, sasa hivi.",Track
+Track.urgentOverlay.step2,"[CLINICAL REVIEW REQUIRED] If you're not alone, ask someone to go with you.","[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Ikiwa hauko peke yako, muombe mtu akuandamane.",Track
+Track.urgentOverlay.step3,[CLINICAL REVIEW REQUIRED] Bring your phone so you can show a clinician your tracked symptoms if helpful.,[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Leta simu yako ili uweze kuonyesha daktari dalili ulizofuatilia ikiwa itasaidia.,Track
+Track.urgentOverlay.title,Seek urgent care now,Tafuta huduma ya dharura sasa,Track
+Track.urgentOverlay.uncertaintyNote,"This is a safety check based on what you entered, not a diagnosis.","Huu ni ukaguzi wa usalama kulingana na ulichoingiza, si utambuzi.",Track
+Track.viewSwitcherLabel,Choose a view,Chagua mwonekano,Track
+Track.weekdayAbbrev,Sun | Mon | Tue | Wed | Thu | Fri | Sat,Jpi | Jtt | Jnn | Jtn | Alh | Ijm | Jmo,Track

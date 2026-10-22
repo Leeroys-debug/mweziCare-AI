@@ -1,0 +1,14 @@
+title = "MweziCare AI gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Known-safe placeholder values — not real secrets"
+paths = [
+  # Every value here is blank or a documentation placeholder, never a real secret.
+  '''\.env\.example$''',
+  # Hardcoded, clearly-labeled "disposable keys for this ephemeral CI-only
+  # Postgres" — generated for this repo, never used anywhere real.
+  '''\.github/workflows/lighthouse\.yml$''',
+]

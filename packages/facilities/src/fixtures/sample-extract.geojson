@@ -1,0 +1,19 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [36.8356, -1.1714] },
+      "properties": {
+        "kmhfl_code": "TEST-003",
+        "name": "Ruiru Test Dispensary",
+        "county": "Kiambu",
+        "sub_county": "Ruiru",
+        "phone": "+254700010003",
+        "keph_level": "Level 2",
+        "ownership": "faith-based",
+        "services": ["GYN"]
+      }
+    }
+  ]
+}

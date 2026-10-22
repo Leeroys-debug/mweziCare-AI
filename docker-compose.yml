@@ -1,0 +1,47 @@
+services:
+  postgres:
+    build:
+      context: ./infra/postgres
+    environment:
+      POSTGRES_USER: mwezicare
+      POSTGRES_PASSWORD: mwezicare
+      POSTGRES_DB: mwezicare
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infra/postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mwezicare -d mwezicare"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # S3-compatible object storage for generated clinician-summary PDFs (dev
+  # only — see docs/MweziCare_AI_Technical_Architecture.docx "Object storage
+  # (S3-compatible)...with 7-day lifecycle expiry"). Using Garage, not MinIO:
+  # the official minio/minio image was pulled from Docker Hub and quay.io
+  # now requires auth even for old pinned tags, so it can't be pulled
+  # anonymously. Garage speaks the S3 API apps/web/lib/object-storage.ts
+  # needs, with no licensing-driven distribution restrictions.
+  garage:
+    image: dxflrs/garage:v1.0.1
+    volumes:
+      - ./infra/garage/garage.toml:/etc/garage.toml:ro
+      - garage_data:/data
+    ports:
+      - "9000:3900" # S3 API (kept on 9000 so S3_ENDPOINT doesn't need to change)
+    healthcheck:
+      test: ["CMD", "/garage", "status"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    # Bootstrap (layout/key/bucket) is a one-time step run from the host via
+    # `pnpm storage:init` (infra/garage/bootstrap.sh) — the dxflrs/garage
+    # image is scratch-based (no shell/coreutils), so it can't run a
+    # bootstrap script as a docker-compose one-shot service the way
+    # shell-having images can.
+
+volumes:
+  postgres_data:
+  garage_data:

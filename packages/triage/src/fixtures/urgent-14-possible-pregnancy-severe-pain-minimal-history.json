@@ -1,0 +1,95 @@
+{
+  "id": "urgent-14-possible-pregnancy-severe-pain-minimal-history",
+  "description": "Possible pregnancy with severe pain, only a single period ever logged.",
+  "expectedOutcome": "urgent",
+  "logs": [
+    {
+      "logDate": "2026-01-01",
+      "periodDay": true,
+      "bleedingLevel": "light",
+      "painScore": 3,
+      "painLocations": ["lower_abdomen"],
+      "symptoms": {
+        "painWithBowelMovements": false,
+        "painWithUrination": false
+      },
+      "impact": {
+        "missedSchool": false,
+        "missedWork": false,
+        "sleepDisrupted": false,
+        "activitiesLimited": false
+      },
+      "redFlags": {
+        "suddenSeverePain": false,
+        "fainting": false,
+        "possiblePregnancySuspected": false
+      }
+    },
+    {
+      "logDate": "2026-01-02",
+      "periodDay": true,
+      "bleedingLevel": "light",
+      "painScore": 3,
+      "painLocations": ["lower_abdomen"],
+      "symptoms": {
+        "painWithBowelMovements": false,
+        "painWithUrination": false
+      },
+      "impact": {
+        "missedSchool": false,
+        "missedWork": false,
+        "sleepDisrupted": false,
+        "activitiesLimited": false
+      },
+      "redFlags": {
+        "suddenSeverePain": false,
+        "fainting": false,
+        "possiblePregnancySuspected": false
+      }
+    },
+    {
+      "logDate": "2026-01-03",
+      "periodDay": true,
+      "bleedingLevel": "light",
+      "painScore": 3,
+      "painLocations": ["lower_abdomen"],
+      "symptoms": {
+        "painWithBowelMovements": false,
+        "painWithUrination": false
+      },
+      "impact": {
+        "missedSchool": false,
+        "missedWork": false,
+        "sleepDisrupted": false,
+        "activitiesLimited": false
+      },
+      "redFlags": {
+        "suddenSeverePain": false,
+        "fainting": false,
+        "possiblePregnancySuspected": false
+      }
+    },
+    {
+      "logDate": "2026-01-04",
+      "periodDay": true,
+      "bleedingLevel": "light",
+      "painScore": 8,
+      "painLocations": ["lower_abdomen"],
+      "symptoms": {
+        "painWithBowelMovements": false,
+        "painWithUrination": false
+      },
+      "impact": {
+        "missedSchool": false,
+        "missedWork": false,
+        "sleepDisrupted": false,
+        "activitiesLimited": false
+      },
+      "redFlags": {
+        "suddenSeverePain": false,
+        "fainting": false,
+        "possiblePregnancySuspected": true
+      }
+    }
+  ]
+}

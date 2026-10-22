@@ -1,0 +1,120 @@
+# Production-shaped compose file — run `docker compose -f docker-compose.prod.yml up`
+# locally to exercise the full stack (web + worker + Postgres + Garage) the
+# way it actually ships, or as a starting point for a single-VM deployment.
+# Every secret below is a required `${VAR}` substitution (docker-compose
+# fails fast with ":?" if unset) — never hardcoded, unlike the dev-only
+# docker-compose.yml. No OTP_TEST_CAPTURE_DIR anywhere here: unset means
+# lib/sms.ts's createSmsSender() uses the real Africa's Talking sender, not
+# the dev console backdoor (see that file's own doc comment).
+#
+# [REVIEW REQUIRED] Written against this repo's actual Dockerfile/schema but
+# not yet run end to end (no Docker daemon in the environment this was
+# built in) — see docs/deploy.md's verification note before relying on it.
+
+services:
+  postgres:
+    build:
+      context: ./infra/postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?set POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:?set POSTGRES_DB}
+    volumes:
+      - postgres_prod_data:/var/lib/postgresql/data
+      - ./infra/postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  garage:
+    image: dxflrs/garage:v1.0.1
+    # [LEGAL/SECURITY REVIEW REQUIRED] infra/garage/garage.toml's rpc_secret
+    # and admin_token are committed, dev-shaped placeholder values — rotate
+    # both before any real deployment reusing this file. Low exploitability
+    # as long as the admin API (port 3903) stays unpublished, as it is here
+    # and in the dev docker-compose.yml, but they're still public in this repo.
+    volumes:
+      - ./infra/garage/garage.toml:/etc/garage.toml:ro
+      - garage_prod_data:/data
+    healthcheck:
+      test: ["CMD", "/garage", "status"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+    # Bucket/key bootstrap (infra/garage/bootstrap.sh) is still a one-time,
+    # manually-run step against this service — same as dev.
+
+  migrate:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      target: migrate
+    environment: &app-env
+      DATABASE_URL: postgres://${POSTGRES_USER:?set POSTGRES_USER}:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:?set POSTGRES_DB}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      target: web
+    environment:
+      <<: *app-env
+      AUTH_SECRET: ${AUTH_SECRET:?set AUTH_SECRET}
+      AFRICASTALKING_USERNAME: ${AFRICASTALKING_USERNAME:?set AFRICASTALKING_USERNAME}
+      AFRICASTALKING_API_KEY: ${AFRICASTALKING_API_KEY:?set AFRICASTALKING_API_KEY}
+      AFRICASTALKING_SENDER_ID: ${AFRICASTALKING_SENDER_ID:-}
+      AI_GATEWAY_API_KEY: ${AI_GATEWAY_API_KEY:?set AI_GATEWAY_API_KEY}
+      ENCRYPTION_KEYS: ${ENCRYPTION_KEYS:?set ENCRYPTION_KEYS}
+      ENCRYPTION_KEY_ID: ${ENCRYPTION_KEY_ID:?set ENCRYPTION_KEY_ID}
+      HMAC_LOOKUP_KEY: ${HMAC_LOOKUP_KEY:?set HMAC_LOOKUP_KEY}
+      ANALYTICS_KEY: ${ANALYTICS_KEY:?set ANALYTICS_KEY}
+      SENTRY_DSN: ${SENTRY_DSN:-}
+      SENTRY_ENVIRONMENT: ${SENTRY_ENVIRONMENT:-production}
+      S3_ENDPOINT: http://garage:3900
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY:?set S3_ACCESS_KEY}
+      S3_SECRET_KEY: ${S3_SECRET_KEY:?set S3_SECRET_KEY}
+      S3_BUCKET: ${S3_BUCKET:-mwezicare-summaries}
+      S3_REGION: ${S3_REGION:-garage}
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:?set NEXT_PUBLIC_APP_URL}
+      NEXT_PUBLIC_SENTRY_DSN: ${NEXT_PUBLIC_SENTRY_DSN:-}
+      CHAT_RETENTION_DAYS: ${CHAT_RETENTION_DAYS:-90}
+      SHARE_LINK_RETENTION_DAYS: ${SHARE_LINK_RETENTION_DAYS:-7}
+      ACCOUNT_PURGE_DAYS: ${ACCOUNT_PURGE_DAYS:-30}
+      AUDIT_RETENTION_DAYS: ${AUDIT_RETENTION_DAYS:-365}
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      garage:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      target: worker
+    environment: *app-env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      garage:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+volumes:
+  postgres_prod_data:
+  garage_prod_data:

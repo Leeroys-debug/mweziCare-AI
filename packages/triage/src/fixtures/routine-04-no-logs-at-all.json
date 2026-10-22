@@ -1,0 +1,6 @@
+{
+  "id": "routine-04-no-logs-at-all",
+  "description": "No logs at all yet — the system must default to routine, not crash.",
+  "expectedOutcome": "routine",
+  "logs": []
+}
