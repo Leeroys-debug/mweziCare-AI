@@ -9,13 +9,22 @@ import {
   it,
   vi,
 } from "vitest";
-import { createDb, schema, withUser, type Database } from "@mwezicare/db";
+import {
+  createDb,
+  EnvKeyProvider,
+  schema,
+  withUser,
+  type Database,
+} from "@mwezicare/db";
 
 config({ path: "../../.env" });
 
 const databaseUrl = process.env.DATABASE_URL;
 const db: Database | undefined = databaseUrl
   ? createDb(databaseUrl)
+  : undefined;
+const analyticsKeyProvider = process.env.ANALYTICS_KEY
+  ? new EnvKeyProvider(process.env.ANALYTICS_KEY)
   : undefined;
 
 let userId: string;
@@ -31,7 +40,7 @@ function sameOriginRequest(): Request {
 vi.mock("@/lib/rbac", () => ({
   getCurrentUser: vi.fn(async () => ({ id: userId })),
 }));
-vi.mock("@/lib/server-db", () => ({ db }));
+vi.mock("@/lib/server-db", () => ({ db, analyticsKeyProvider }));
 
 describe.skipIf(!db)("POST & GET /api/v1/assessments", () => {
   beforeAll(async () => {

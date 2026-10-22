@@ -7,7 +7,13 @@ import {
 } from "@mwezicare/db/testcontainers-setup";
 import { retrieve } from "./retrieval";
 
-const CONTAINER_TIMEOUT_MS = 180_000;
+// A cold build of infra/postgres/Dockerfile pulls the full PostGIS/GDAL
+// dependency chain (dozens of packages) over apt — comfortably over 3
+// minutes on a slower network/mirror, well past vitest's hook default
+// (measured ~16 min cold on a fresh Docker Desktop install with no prior
+// image/layer cache at all).
+// Only the first run per machine pays this.
+const CONTAINER_TIMEOUT_MS = 1_200_000;
 const DIMENSIONS = 1536;
 
 /** A unit vector with every weight on one axis — exact cosine similarity between two such vectors is trivial to reason about. */

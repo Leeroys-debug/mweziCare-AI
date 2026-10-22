@@ -7,7 +7,13 @@ import {
 } from "@mwezicare/db/testcontainers-setup";
 import { geoSearch } from "./geo-search";
 
-const CONTAINER_TIMEOUT_MS = 180_000;
+// A cold build of infra/postgres/Dockerfile pulls the full PostGIS/GDAL
+// dependency chain (dozens of packages) over apt — comfortably over 3
+// minutes on a slower network/mirror, well past vitest's hook default
+// (measured ~16 min cold on a fresh Docker Desktop install with no prior
+// image/layer cache at all).
+// Only the first run per machine pays this.
+const CONTAINER_TIMEOUT_MS = 1_200_000;
 
 /**
  * Real-Postgres (PostGIS) integration test for geoSearch, against a

@@ -38,7 +38,7 @@ export async function purgeExpiredShareLinks(
     .select({ id: schema.summaries.id, pdfKey: schema.summaries.pdfKey })
     .from(schema.summaries)
     .where(
-      sql`coalesce(${schema.summaries.revokedAt}, ${schema.summaries.expiresAt}) < ${cutoff}`,
+      sql`coalesce(${schema.summaries.revokedAt}, ${schema.summaries.expiresAt}) < ${cutoff.toISOString()}`,
     );
 
   if (expired.length === 0) return 0;

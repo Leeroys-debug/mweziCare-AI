@@ -11,7 +11,15 @@ import { listTriageLogs } from "./symptom-logs";
 import { loadRuleset } from "./rulesets";
 import { startTestDatabase, type TestDatabase } from "./testcontainers-setup";
 
-const CONTAINER_TIMEOUT_MS = 180_000;
+// A cold build of infra/postgres/Dockerfile pulls the full PostGIS/GDAL
+// dependency chain (dozens of packages) over apt — comfortably over 3
+// minutes on a slower network/mirror, well past vitest's hook default
+// (measured ~16 min cold on a fresh Docker Desktop install with no prior
+// image/layer cache at all).
+// Only the first run per machine pays this; testTimeout below doesn't need
+// the same margin since the rest of the suite runs against an already-
+// running container.
+const CONTAINER_TIMEOUT_MS = 1_200_000;
 
 /**
  * End-to-end: seed a symptom log with a red-flag symptom, approve a ruleset

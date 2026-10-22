@@ -1,7 +1,7 @@
 import { config } from "dotenv";
 import { like } from "drizzle-orm";
 import { afterAll, describe, expect, it, vi } from "vitest";
-import { createDb, schema, type Database } from "@mwezicare/db";
+import { createDb, EnvKeyProvider, schema, type Database } from "@mwezicare/db";
 
 config({ path: "../../.env" }); // dotenv resolves relative to process.cwd(), i.e. apps/web
 
@@ -9,11 +9,16 @@ const databaseUrl = process.env.DATABASE_URL;
 const db: Database | undefined = databaseUrl
   ? createDb(databaseUrl)
   : undefined;
+const analyticsKeyProvider = process.env.ANALYTICS_KEY
+  ? new EnvKeyProvider(process.env.ANALYTICS_KEY)
+  : undefined;
 
 vi.mock("@/lib/rbac", () => ({
-  getCurrentUser: vi.fn(async () => ({ id: "route-test-user" })),
+  getCurrentUser: vi.fn(async () => ({
+    id: "5f1c5e3a-0000-4000-8000-000000000099",
+  })),
 }));
-vi.mock("@/lib/server-db", () => ({ db }));
+vi.mock("@/lib/server-db", () => ({ db, analyticsKeyProvider }));
 
 describe.skipIf(!db)("GET /api/v1/facilities/search", () => {
   afterAll(async () => {

@@ -1,13 +1,16 @@
 import { config } from "dotenv";
 import { eq } from "drizzle-orm";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
-import { createDb, schema, type Database } from "@mwezicare/db";
+import { createDb, EnvKeyProvider, schema, type Database } from "@mwezicare/db";
 
 config({ path: "../../.env" });
 
 const databaseUrl = process.env.DATABASE_URL;
 const db: Database | undefined = databaseUrl
   ? createDb(databaseUrl)
+  : undefined;
+const analyticsKeyProvider = process.env.ANALYTICS_KEY
+  ? new EnvKeyProvider(process.env.ANALYTICS_KEY)
   : undefined;
 
 let userId: string;
@@ -16,7 +19,7 @@ let facilityId: string;
 vi.mock("@/lib/rbac", () => ({
   getCurrentUser: vi.fn(async () => ({ id: userId })),
 }));
-vi.mock("@/lib/server-db", () => ({ db }));
+vi.mock("@/lib/server-db", () => ({ db, analyticsKeyProvider }));
 
 describe.skipIf(!db)("POST /api/v1/referrals", () => {
   beforeAll(async () => {

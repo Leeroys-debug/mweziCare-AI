@@ -22,13 +22,20 @@ const keyProvider =
         process.env.ENCRYPTION_KEY_ID,
       )
     : undefined;
+const analyticsKeyProvider = process.env.ANALYTICS_KEY
+  ? new EnvKeyProvider(process.env.ANALYTICS_KEY)
+  : undefined;
 
 let userId: string;
 
 vi.mock("@/lib/rbac", () => ({
   getCurrentUser: vi.fn(async () => ({ id: userId, locale: "en" })),
 }));
-vi.mock("@/lib/server-db", () => ({ db, encryptionKeyProvider: keyProvider }));
+vi.mock("@/lib/server-db", () => ({
+  db,
+  encryptionKeyProvider: keyProvider,
+  analyticsKeyProvider,
+}));
 
 // The real pipeline makes live AI Gateway calls — route tests only need to
 // prove the HTTP/SSE/persistence plumbing works, which packages/assistant's

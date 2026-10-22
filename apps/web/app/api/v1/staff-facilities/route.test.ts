@@ -35,6 +35,7 @@ vi.mock("@/lib/rbac", () => ({
 vi.mock("@/lib/server-db", () => ({ db }));
 
 let facilityId: string;
+let verifierId: string;
 
 describe.skipIf(!db)("/api/v1/staff-facilities — role enforcement", () => {
   beforeAll(async () => {
@@ -56,6 +57,8 @@ describe.skipIf(!db)("/api/v1/staff-facilities — role enforcement", () => {
     await db!
       .delete(schema.facilities)
       .where(like(schema.facilities.kmhflCode, "ROLE-TEST-%"));
+    if (verifierId)
+      await db!.delete(schema.users).where(eq(schema.users.id, verifierId));
   });
 
   it("GET list denies 'clinician'", async () => {
@@ -102,7 +105,15 @@ describe.skipIf(!db)("/api/v1/staff-facilities — role enforcement", () => {
     );
     expect(denied.status).toBe(403);
 
-    currentUser = { id: "u-verifier", role: "verifier" };
+    const [verifier] = await db!
+      .insert(schema.users)
+      .values({
+        phoneNumber: `staff-verifier-test-${Date.now()}`,
+        email: `staff-verifier-test-${Date.now()}@phone.mwezicare.invalid`,
+      })
+      .returning({ id: schema.users.id });
+    verifierId = verifier!.id;
+    currentUser = { id: verifierId, role: "verifier" };
     const allowed = await POST(
       new Request(
         `http://localhost/api/v1/staff-facilities/${facilityId}/verify`,

@@ -22,6 +22,9 @@ vi.mock("@/lib/server-db", async () => {
     encryptionKeyProvider: new EnvKeyProvider(
       Buffer.alloc(32, 7).toString("base64"),
     ),
+    analyticsKeyProvider: new EnvKeyProvider(
+      Buffer.alloc(32, 9).toString("base64"),
+    ),
   };
 });
 

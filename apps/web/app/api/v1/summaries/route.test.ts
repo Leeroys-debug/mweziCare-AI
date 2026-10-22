@@ -3,6 +3,7 @@ import { eq } from "drizzle-orm";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import {
   createDb,
+  EnvKeyProvider,
   schema,
   sha256Hex,
   withUser,
@@ -15,13 +16,16 @@ const databaseUrl = process.env.DATABASE_URL;
 const db: Database | undefined = databaseUrl
   ? createDb(databaseUrl)
   : undefined;
+const analyticsKeyProvider = process.env.ANALYTICS_KEY
+  ? new EnvKeyProvider(process.env.ANALYTICS_KEY)
+  : undefined;
 
 let userId: string;
 
 vi.mock("@/lib/rbac", () => ({
   getCurrentUser: vi.fn(async () => ({ id: userId, locale: "en" })),
 }));
-vi.mock("@/lib/server-db", () => ({ db }));
+vi.mock("@/lib/server-db", () => ({ db, analyticsKeyProvider }));
 
 async function grantSharingConsent() {
   await db!

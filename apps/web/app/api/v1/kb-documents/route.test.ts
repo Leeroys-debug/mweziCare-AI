@@ -38,6 +38,7 @@ vi.mock("@/lib/job-queue", () => ({
 }));
 
 let documentId: string;
+let clinicianId: string;
 
 describe.skipIf(!db)("/api/v1/kb-documents — role enforcement", () => {
   afterAll(async () => {
@@ -45,6 +46,8 @@ describe.skipIf(!db)("/api/v1/kb-documents — role enforcement", () => {
       await db!
         .delete(schema.kbDocuments)
         .where(eq(schema.kbDocuments.id, documentId));
+    if (clinicianId)
+      await db!.delete(schema.users).where(eq(schema.users.id, clinicianId));
   });
 
   it("GET denies 'verifier' and 'user'", async () => {
@@ -93,7 +96,15 @@ describe.skipIf(!db)("/api/v1/kb-documents — role enforcement", () => {
   });
 
   it("PUT and approve succeed for 'clinician'", async () => {
-    currentUser = { id: "u-clinician", role: "clinician" };
+    const [clinician] = await db!
+      .insert(schema.users)
+      .values({
+        phoneNumber: `kb-clinician-test-${Date.now()}`,
+        email: `kb-clinician-test-${Date.now()}@phone.mwezicare.invalid`,
+      })
+      .returning({ id: schema.users.id });
+    clinicianId = clinician!.id;
+    currentUser = { id: clinicianId, role: "clinician" };
     const { PUT } = await import("./[id]/route");
     const putResponse = await PUT(
       new Request(`http://localhost/api/v1/kb-documents/${documentId}`, {
