@@ -52,7 +52,7 @@
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "react-hook-form": "^7.54.0",
-    "recharts": "^2.13.3",
+    "recharts": "^3.10.1",
     "serwist": "^9.0.0",
     "tailwind-merge": "^2.5.0",
     "use-intl": "^4.14.0",
