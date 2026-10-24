@@ -29,7 +29,7 @@ export function BottomNav({ items, ariaLabel }: BottomNavProps) {
               className={cn(
                 "flex min-h-[56px] flex-col items-center justify-center gap-1 px-1 py-2 text-xs font-medium",
                 item.active
-                  ? "text-emerald-700 dark:text-emerald-400"
+                  ? "text-brand-700 dark:text-brand-400"
                   : "text-neutral-500 dark:text-neutral-400",
               )}
             >

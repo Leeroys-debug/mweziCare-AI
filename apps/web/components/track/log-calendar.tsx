@@ -19,11 +19,12 @@ function toIsoDate(date: Date): string {
   return date.toISOString().slice(0, 10);
 }
 
-function painBucketClass(painScore: number | null): string {
-  if (painScore == null || painScore === 0) return "";
-  if (painScore <= 3) return "bg-amber-100 dark:bg-amber-950";
-  if (painScore <= 6) return "bg-orange-200 dark:bg-orange-900";
-  return "bg-red-300 dark:bg-red-900";
+/** Small pain-severity badge color — a secondary signal, kept separate from the period-day fill so the two don't visually compete on the same cell. */
+function painBadgeClass(painScore: number | null): string | null {
+  if (painScore == null || painScore === 0) return null;
+  if (painScore <= 3) return "bg-amber-400 dark:bg-amber-500";
+  if (painScore <= 6) return "bg-orange-500 dark:bg-orange-600";
+  return "bg-red-600 dark:bg-red-700";
 }
 
 export interface LogCalendarProps {
@@ -140,39 +141,79 @@ export function LogCalendar({ onUrgent }: LogCalendarProps) {
       </div>
 
       <div className="grid grid-cols-7 gap-1">
-        {cells.map((date, i) =>
-          date == null ? (
-            <div key={`blank-${i}`} />
-          ) : (
+        {cells.map((date, i) => {
+          if (date == null) return <div key={`blank-${i}`} />;
+
+          const log = logsByDate.get(date);
+          const isPeriodDay = log?.periodDay ?? false;
+          const painScore = log?.painScore ?? null;
+          const badgeClass = painBadgeClass(painScore);
+          const isToday = date === toIsoDate(today);
+
+          const srParts = [date];
+          if (isPeriodDay) srParts.push(t("periodDay"));
+          if (painScore)
+            srParts.push(`${t("painScoreLabel.title")} ${painScore}`);
+
+          return (
             <button
               key={date}
               type="button"
               onClick={() => setSelectedDate(date)}
+              aria-label={srParts.join(" — ")}
               className={cn(
-                "flex min-h-[44px] flex-col items-center justify-center rounded-md border border-neutral-200 text-xs dark:border-neutral-800",
-                painBucketClass(logsByDate.get(date)?.painScore ?? null),
+                "relative flex min-h-[44px] flex-col items-center justify-center gap-0.5 rounded-full text-xs font-medium",
+                isPeriodDay
+                  ? "bg-brand-600 text-white"
+                  : "text-neutral-900 dark:text-neutral-100",
+                isToday &&
+                  !isPeriodDay &&
+                  "border-2 border-dashed border-brand-600",
+                isToday &&
+                  isPeriodDay &&
+                  "ring-2 ring-brand-900 dark:ring-brand-200",
               )}
             >
-              <span>{Number(date.slice(-2))}</span>
-              <span className="flex gap-0.5">
-                {logsByDate.get(date)?.periodDay && (
-                  <span
-                    className="rounded bg-rose-700 px-1 text-[10px] font-bold text-white"
-                    aria-label={t("periodDay")}
-                  >
-                    P
-                  </span>
-                )}
-                {logsByDate.get(date)?.painScore != null &&
-                  logsByDate.get(date)!.painScore! > 0 && (
-                    <span aria-hidden="true">
-                      {logsByDate.get(date)!.painScore}
-                    </span>
+              <span aria-hidden="true">{Number(date.slice(-2))}</span>
+              {badgeClass && (
+                <span
+                  aria-hidden="true"
+                  className={cn(
+                    "rounded-full px-1 text-[9px] font-bold leading-tight",
+                    badgeClass,
+                    isPeriodDay ? "bg-white/90 text-neutral-900" : "text-white",
                   )}
-              </span>
+                >
+                  {painScore}
+                </span>
+              )}
             </button>
-          ),
-        )}
+          );
+        })}
+      </div>
+
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-neutral-600 dark:text-neutral-400">
+        <span className="flex items-center gap-1.5">
+          <span
+            className="h-3 w-3 rounded-full bg-brand-600"
+            aria-hidden="true"
+          />
+          {t("legend.periodDay")}
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span
+            className="h-3 w-3 rounded-full border-2 border-dashed border-brand-600"
+            aria-hidden="true"
+          />
+          {t("legend.today")}
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span
+            className="h-3 w-3 rounded-full bg-orange-500"
+            aria-hidden="true"
+          />
+          {t("legend.painLogged")}
+        </span>
       </div>
 
       <Dialog.Root

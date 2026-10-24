@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
+import { BatteryLow, Droplet, Activity, Waves, Heart } from "lucide-react";
 import { z } from "zod";
 import { evaluate, urgentOnlyRuleset } from "@mwezicare/rules-engine";
 import { extractRedFlagFeatures } from "@mwezicare/triage";
@@ -20,6 +21,14 @@ import { saveLog } from "@/lib/sync-engine";
 
 const PAIN_LOCATIONS = painLocationSchema.options;
 const BLEEDING_LEVELS = bleedingLevelSchema.options;
+
+const SYMPTOM_ICONS = {
+  fatigue: BatteryLow,
+  nausea: Waves,
+  painWithBowelMovements: Activity,
+  painWithUrination: Droplet,
+  painWithSex: Heart,
+} as const;
 
 const formSchema = z.object({
   periodDay: z.boolean(),
@@ -281,21 +290,25 @@ export function DailyLogForm({ date, onSaved, onUrgent }: DailyLogFormProps) {
               "painWithUrination",
               ...(showPainWithSex ? (["painWithSex"] as const) : []),
             ] as const
-          ).map((symptom) => (
-            <Controller
-              key={symptom}
-              control={control}
-              name={symptom}
-              render={({ field }) => (
-                <Chip
-                  selected={field.value}
-                  onClick={() => field.onChange(!field.value)}
-                >
-                  {t(`symptom.${symptom}`)}
-                </Chip>
-              )}
-            />
-          ))}
+          ).map((symptom) => {
+            const Icon = SYMPTOM_ICONS[symptom];
+            return (
+              <Controller
+                key={symptom}
+                control={control}
+                name={symptom}
+                render={({ field }) => (
+                  <Chip
+                    selected={field.value}
+                    icon={<Icon size={16} />}
+                    onClick={() => field.onChange(!field.value)}
+                  >
+                    {t(`symptom.${symptom}`)}
+                  </Chip>
+                )}
+              />
+            );
+          })}
         </div>
       </fieldset>
 

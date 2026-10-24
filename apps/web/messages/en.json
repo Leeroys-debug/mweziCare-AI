@@ -21,6 +21,12 @@
   },
   "Track": {
     "title": "Track",
+    "hero": {
+      "periodLabel": "Period",
+      "cycleLabel": "Cycle day",
+      "day": "Day {day}",
+      "weekLabel": "This week"
+    },
     "placeholder": "Your symptom log will appear here.",
     "viewSwitcherLabel": "Choose a view",
     "todayTab": "Today",
@@ -86,6 +92,11 @@
     "previousMonth": "Previous month",
     "nextMonth": "Next month",
     "weekdayAbbrev": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    "legend": {
+      "periodDay": "Period day",
+      "today": "Today",
+      "painLogged": "Pain logged"
+    },
     "close": "Close",
     "urgentOverlay": {
       "title": "Seek urgent care now",
@@ -101,7 +112,9 @@
   "Insights": {
     "title": "Insights",
     "placeholder": "Cycle and symptom patterns will appear here.",
-    "nextPeriodEstimate": "Your next period is estimated around",
+    "nextPeriodEstimate": "Next period",
+    "daysUntilLabel": "In {days} days",
+    "dueTodayLabel": "Due today",
     "estimateLabel": "estimate",
     "painChartTitle": "Pain per cycle (last 6 cycles)",
     "maxPain": "Highest pain",

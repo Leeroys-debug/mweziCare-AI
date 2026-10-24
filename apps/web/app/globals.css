@@ -4,11 +4,38 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Soft, girly pink brand scale — 700 is the darkest shade still used for
+     white-text fills (buttons, selected chips), so it's kept just dark
+     enough for WCAG AA contrast; 50-300 are pastel tints for hero
+     backgrounds and gradients. */
+  --color-brand-50: #fff1f6;
+  --color-brand-100: #ffe0ec;
+  --color-brand-200: #ffc2da;
+  --color-brand-300: #ff9ec4;
+  --color-brand-400: #fb76a8;
+  --color-brand-500: #f2528c;
+  --color-brand-600: #dd3a73;
+  --color-brand-700: #b82c5e;
+  --color-brand-800: #8f2149;
+  --color-brand-900: #641734;
+  --color-brand-950: #3c0e1f;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-brand-50: var(--color-brand-50);
+  --color-brand-100: var(--color-brand-100);
+  --color-brand-200: var(--color-brand-200);
+  --color-brand-300: var(--color-brand-300);
+  --color-brand-400: var(--color-brand-400);
+  --color-brand-500: var(--color-brand-500);
+  --color-brand-600: var(--color-brand-600);
+  --color-brand-700: var(--color-brand-700);
+  --color-brand-800: var(--color-brand-800);
+  --color-brand-900: var(--color-brand-900);
+  --color-brand-950: var(--color-brand-950);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }

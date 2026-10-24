@@ -17,7 +17,7 @@ const valueLabels = [
 ];
 
 describe("PainSlider", () => {
-  it("renders with the accessible label and current value", () => {
+  it("renders with the accessible label and marks the current value as checked", () => {
     render(
       <PainSlider
         value={4}
@@ -26,12 +26,16 @@ describe("PainSlider", () => {
         valueLabels={valueLabels}
       />,
     );
-    const slider = screen.getByRole("slider", { name: "Pain" });
-    expect(slider).toHaveValue("4");
+    const group = screen.getByRole("radiogroup", { name: "Pain" });
+    expect(group).toBeInTheDocument();
+    expect(screen.getByRole("radio", { name: "4 — Moderate" })).toHaveAttribute(
+      "aria-checked",
+      "true",
+    );
     expect(screen.getByText("4 · Moderate")).toBeInTheDocument();
   });
 
-  it("calls onChange with the new numeric value", () => {
+  it("calls onChange with the new numeric value on click", () => {
     const onChange = vi.fn();
     render(
       <PainSlider
@@ -41,12 +45,25 @@ describe("PainSlider", () => {
         valueLabels={valueLabels}
       />,
     );
-    const slider = screen.getByRole("slider", { name: "Pain" });
-    fireEvent.change(slider, { target: { value: "7" } });
+    fireEvent.click(screen.getByRole("radio", { name: "7 — Severe" }));
     expect(onChange).toHaveBeenCalledWith(7);
   });
 
-  it("exposes a descriptive aria-valuetext for screen readers", () => {
+  it("moves to the next value on ArrowRight", () => {
+    const onChange = vi.fn();
+    render(
+      <PainSlider
+        value={3}
+        onChange={onChange}
+        label="Pain"
+        valueLabels={valueLabels}
+      />,
+    );
+    fireEvent.keyDown(screen.getByRole("radiogroup"), { key: "ArrowRight" });
+    expect(onChange).toHaveBeenCalledWith(4);
+  });
+
+  it("exposes a descriptive accessible name for each option", () => {
     render(
       <PainSlider
         value={10}
@@ -55,9 +72,8 @@ describe("PainSlider", () => {
         valueLabels={valueLabels}
       />,
     );
-    expect(screen.getByRole("slider")).toHaveAttribute(
-      "aria-valuetext",
-      "10 — Worst pain",
-    );
+    expect(
+      screen.getByRole("radio", { name: "10 — Worst pain" }),
+    ).toHaveAttribute("aria-checked", "true");
   });
 });

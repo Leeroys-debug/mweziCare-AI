@@ -6,6 +6,7 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
+  Legend,
   Line,
   LineChart,
   ResponsiveContainer,
@@ -42,6 +43,48 @@ interface Assessment {
 interface AssessmentsResponse {
   available: boolean;
   assessment?: Assessment;
+}
+
+// Pain chart: 2-series categorical palette, validated with dataviz skill's
+// validate_palette.js (CVD ΔE 68.8, passes). Amber's contrast vs. the white
+// surface is below 3:1 (a WARN, not a fail) — mitigated by the Legend below
+// plus the Tooltip, so the series are never color-only.
+const MAX_PAIN_COLOR = "#b82c5e";
+const AVG_PAIN_COLOR = "#eda100";
+// Impact-days chart: single series (magnitude), one brand hue.
+const IMPACT_COLOR = "#dd3a73";
+
+function daysUntil(dateIso: string): number {
+  const today = new Date().toISOString().slice(0, 10);
+  const ms =
+    new Date(`${dateIso}T00:00:00.000Z`).getTime() -
+    new Date(`${today}T00:00:00.000Z`).getTime();
+  return Math.round(ms / (24 * 60 * 60 * 1000));
+}
+
+function NextPeriodHero({
+  estimate,
+  t,
+}: {
+  estimate: { date: string; isEstimate: true } | null | undefined;
+  t: (key: string, values?: Record<string, string | number>) => string;
+}) {
+  if (!estimate) return null;
+  const days = Math.max(0, daysUntil(estimate.date));
+
+  return (
+    <div className="-mx-4 -mt-4 flex flex-col items-center gap-1 bg-gradient-to-b from-brand-100 to-transparent px-4 pb-4 pt-6 text-center dark:from-brand-950">
+      <p className="text-sm font-medium text-brand-700 dark:text-brand-300">
+        {t("nextPeriodEstimate")}
+      </p>
+      <p className="text-4xl font-bold text-brand-900 dark:text-brand-100">
+        {days === 0 ? t("dueTodayLabel") : t("daysUntilLabel", { days })}
+      </p>
+      <p className="text-xs italic text-neutral-500 dark:text-neutral-400">
+        {estimate.date} ({t("estimateLabel")})
+      </p>
+    </div>
+  );
 }
 
 const OUTCOME_TONE: Record<TriageOutcome, string> = {
@@ -126,15 +169,10 @@ export default function InsightsPage() {
 
   return (
     <div className="flex flex-col gap-6">
+      <NextPeriodHero estimate={cyclesData?.nextPeriodEstimate} t={t} />
+
       <h1 className="text-2xl font-semibold">{t("title")}</h1>
       <OfflineBanner />
-
-      {cyclesData?.nextPeriodEstimate && (
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">
-          {t("nextPeriodEstimate")} {cyclesData.nextPeriodEstimate.date}{" "}
-          <span className="text-xs italic">({t("estimateLabel")})</span>
-        </p>
-      )}
 
       <AssessmentCard data={assessmentData} locale={locale} t={t} />
 
@@ -143,23 +181,28 @@ export default function InsightsPage() {
         {chartData.length === 0 ? (
           <p className="text-sm text-neutral-500">{t("noDataYet")}</p>
         ) : (
-          <ResponsiveContainer width="100%" height={200}>
-            <LineChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
+          <ResponsiveContainer width="100%" height={220}>
+            <LineChart data={chartData} margin={{ bottom: 8 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" />
               <XAxis dataKey="cycleStartDate" tick={{ fontSize: 10 }} />
               <YAxis domain={[0, 10]} tick={{ fontSize: 10 }} />
               <Tooltip />
+              <Legend wrapperStyle={{ fontSize: 12 }} />
               <Line
                 type="monotone"
                 dataKey="maxPainScore"
                 name={t("maxPain")}
-                stroke="#be123c"
+                stroke={MAX_PAIN_COLOR}
+                strokeWidth={2}
+                dot={{ r: 3 }}
               />
               <Line
                 type="monotone"
                 dataKey="avgPainScore"
                 name={t("avgPain")}
-                stroke="#f59e0b"
+                stroke={AVG_PAIN_COLOR}
+                strokeWidth={2}
+                dot={{ r: 3 }}
               />
             </LineChart>
           </ResponsiveContainer>
@@ -173,11 +216,16 @@ export default function InsightsPage() {
         ) : (
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" />
               <XAxis dataKey="cycleStartDate" tick={{ fontSize: 10 }} />
               <YAxis allowDecimals={false} tick={{ fontSize: 10 }} />
               <Tooltip />
-              <Bar dataKey="impactDays" name={t("impactDays")} fill="#0f766e" />
+              <Bar
+                dataKey="impactDays"
+                name={t("impactDays")}
+                fill={IMPACT_COLOR}
+                radius={[4, 4, 0, 0]}
+              />
             </BarChart>
           </ResponsiveContainer>
         )}

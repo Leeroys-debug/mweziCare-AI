@@ -21,6 +21,12 @@
   },
   "Track": {
     "title": "Fuatilia",
+    "hero": {
+      "periodLabel": "Hedhi",
+      "cycleLabel": "Siku ya mzunguko",
+      "day": "Siku {day}",
+      "weekLabel": "Wiki hii"
+    },
     "placeholder": "Rekodi yako ya dalili itaonekana hapa.",
     "viewSwitcherLabel": "Chagua mwonekano",
     "todayTab": "Leo",
@@ -86,6 +92,11 @@
     "previousMonth": "Mwezi uliopita",
     "nextMonth": "Mwezi ujao",
     "weekdayAbbrev": ["Jpi", "Jtt", "Jnn", "Jtn", "Alh", "Ijm", "Jmo"],
+    "legend": {
+      "periodDay": "Siku ya hedhi",
+      "today": "Leo",
+      "painLogged": "Maumivu yameandikwa"
+    },
     "close": "Funga",
     "urgentOverlay": {
       "title": "Tafuta huduma ya dharura sasa",
@@ -101,7 +112,9 @@
   "Insights": {
     "title": "Maarifa",
     "placeholder": "Mielekeo ya mzunguko na dalili itaonekana hapa.",
-    "nextPeriodEstimate": "Hedhi yako inayofuata inakadiriwa karibu na",
+    "nextPeriodEstimate": "Hedhi inayofuata",
+    "daysUntilLabel": "Baada ya siku {days}",
+    "dueTodayLabel": "Inatarajiwa leo",
     "estimateLabel": "makadirio",
     "painChartTitle": "Maumivu kwa kila mzunguko (mizunguko 6 iliyopita)",
     "maxPain": "Maumivu ya juu zaidi",
