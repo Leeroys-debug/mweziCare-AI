@@ -92,6 +92,13 @@
       "when": 1792858846430,
       "tag": "0012_add_family_history_endometriosis",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1792926367341,
+      "tag": "0013_drop_phone_auth_columns",
+      "breakpoints": true
     }
   ]
 }

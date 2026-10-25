@@ -1,12 +1,14 @@
 # CLAUDE.md
 
 ## Product
+
 MweziCare AI is a mobile-first menstrual health companion for girls and young women in Kenya. It supports
 symptom tracking, clinically reviewed triage, an education assistant, verified facility navigation, a
 shareable clinician summary, and an aggregated impact dashboard. **It never diagnoses endometriosis or any
 other condition** — only early recognition, risk-informed next steps, and connection to qualified care.
 
 ## Stack
+
 - pnpm + Turborepo monorepo
 - `apps/web`: Next.js (App Router), React 19, TypeScript strict
 - Tailwind CSS + shadcn/ui (Radix primitives)
@@ -16,7 +18,7 @@ other condition** — only early recognition, risk-informed next steps, and conn
 - Offline: Serwist (service worker) + Dexie (IndexedDB)
 - Drizzle ORM + drizzle-kit
 - PostgreSQL 16 with PostGIS, pgvector, pgcrypto
-- Better Auth (phone OTP, sessions in Postgres)
+- Better Auth (email + password, sessions in Postgres)
 - pg-boss (Postgres-backed background jobs)
 - Vercel AI SDK for the conversational assistant (streaming chat)
 - @react-pdf/renderer (clinician summary PDFs)
@@ -24,6 +26,7 @@ other condition** — only early recognition, risk-informed next steps, and conn
 - Vitest, Testing Library, Playwright
 
 ## Repo layout
+
 ```
 mwezicare/
 ├─ apps/
@@ -50,20 +53,22 @@ mwezicare/
 ```
 
 ## Commands
-| Task | Command |
-|---|---|
-| Install deps | `pnpm install` |
-| Dev server | `pnpm dev` |
+
+| Task                 | Command                       |
+| -------------------- | ----------------------------- |
+| Install deps         | `pnpm install`                |
+| Dev server           | `pnpm dev`                    |
 | Start local Postgres | `pnpm db:up` (docker compose) |
-| Run migrations | `pnpm db:migrate` |
-| Seed synthetic data | `pnpm db:seed` |
-| Lint | `pnpm lint` |
-| Typecheck | `pnpm typecheck` |
-| Unit/component tests | `pnpm test` |
-| End-to-end tests | `pnpm test:e2e` |
-| Build | `pnpm build` |
+| Run migrations       | `pnpm db:migrate`             |
+| Seed synthetic data  | `pnpm db:seed`                |
+| Lint                 | `pnpm lint`                   |
+| Typecheck            | `pnpm typecheck`              |
+| Unit/component tests | `pnpm test`                   |
+| End-to-end tests     | `pnpm test:e2e`               |
+| Build                | `pnpm build`                  |
 
 ## Coding conventions
+
 - TypeScript strict everywhere; no `any`.
 - Validation schemas live in `packages/validation` and are shared by client and server — one Zod schema
   validates a form and its API route.
@@ -77,6 +82,7 @@ mwezicare/
 - Components must meet WCAG 2.2 AA: large touch targets, readable at 200% zoom, keyboard navigable.
 
 ## Non-negotiable safety and privacy rules
+
 These override convenience or speed in every session. If a task seems to require breaking one, stop and
 flag it instead.
 
@@ -102,7 +108,9 @@ flag it instead.
   local dev.
 
 ## Definition of done
+
 A task is done only when:
+
 - `pnpm lint`, `pnpm typecheck`, and `pnpm test` all pass.
 - New business logic (rules, triage features, API handlers) has unit tests.
 - Any new or changed user-facing string exists in both `en` and `sw` message files.

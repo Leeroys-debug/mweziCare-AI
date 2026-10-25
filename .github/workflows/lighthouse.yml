@@ -14,8 +14,6 @@ jobs:
     env:
       DATABASE_URL: postgres://mwezicare:mwezicare@localhost:5432/mwezicare
       AUTH_SECRET: lighthouse-ci-dev-secret-not-for-real-use-00000000
-      AFRICASTALKING_USERNAME: sandbox
-      AFRICASTALKING_API_KEY: lighthouse-ci-placeholder
       AI_GATEWAY_API_KEY: lighthouse-ci-placeholder
       # Disposable keys for this ephemeral CI-only Postgres — never real secrets.
       ENCRYPTION_KEYS: '{"1":"5Gr+4GFjDZ7IwTr+jgZib51Dh6BzsswL7q99Tp0uOqE="}'

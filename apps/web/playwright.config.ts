@@ -1,9 +1,4 @@
-import path from "node:path";
 import { defineConfig, devices } from "@playwright/test";
-
-// Lets the dev-only ConsoleSmsSender (lib/sms.ts) write OTP codes to a file
-// e2e/auth.spec.ts can read, instead of a production-shaped backdoor.
-export const OTP_CAPTURE_DIR = path.join(__dirname, ".otp-test-capture");
 
 export default defineConfig({
   testDir: "./e2e",
@@ -26,6 +21,5 @@ export default defineConfig({
     url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
-    env: { OTP_TEST_CAPTURE_DIR: OTP_CAPTURE_DIR },
   },
 });

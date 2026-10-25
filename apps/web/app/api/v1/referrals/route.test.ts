@@ -26,8 +26,7 @@ describe.skipIf(!db)("POST /api/v1/referrals", () => {
     const [user] = await db!
       .insert(schema.users)
       .values({
-        phoneNumber: `referral-test-${Date.now()}`,
-        email: `referral-test-${Date.now()}@phone.mwezicare.invalid`,
+        email: `referral-test-${Date.now()}@example.com`,
       })
       .returning({ id: schema.users.id });
     userId = user!.id;

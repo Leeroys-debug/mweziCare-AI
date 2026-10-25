@@ -22,7 +22,7 @@ export const metadata = {
 
 /**
  * Public, unauthenticated share link. Rate-limited per IP (the same
- * Postgres-backed token bucket used for OTP), 404s on missing/expired/
+ * Postgres-backed token bucket used elsewhere in this app), 404s on missing/expired/
  * revoked without distinguishing the reason (don't leak which), and
  * increments view_count on every successful view.
  */

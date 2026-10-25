@@ -14,10 +14,6 @@ export const serverEnvSchema = z.object({
 
   AUTH_SECRET: z.string().min(32),
 
-  AFRICASTALKING_USERNAME: z.string().min(1),
-  AFRICASTALKING_API_KEY: z.string().min(1),
-  AFRICASTALKING_SENDER_ID: z.string().optional(),
-
   // Vercel AI Gateway — the conversational assistant (packages/assistant)
   // uses plain "provider/model" strings (e.g. "openai/gpt-4o-mini") so the
   // model/provider is swappable via env, never code (CLAUDE.md "Vercel AI

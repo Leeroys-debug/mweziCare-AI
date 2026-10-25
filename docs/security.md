@@ -31,9 +31,8 @@ No Server Actions exist — every mutation is a Route Handler, so the defense is
 `apps/web/lib/csrf.ts`'s `assertSameOrigin(request)` compares the `Origin` header (falling back to
 `Referer`) against `NEXT_PUBLIC_APP_URL`'s origin, rejecting with `403` on any mismatch or absence.
 Called at the top of every cookie-authenticated POST/PUT/DELETE/PATCH handler, before any body
-parsing or database access. The two unauthenticated OTP endpoints (`/api/v1/auth/otp/request`,
-`/api/v1/auth/otp/verify`) don't call it — they're the login flow itself, not a cookie-authenticated
-action, and are already rate-limited per phone and per IP.
+parsing or database access. Better Auth's own `/api/auth/sign-in/email` and `/api/auth/sign-up/email`
+endpoints don't call it — they're the login flow itself, not a cookie-authenticated action.
 
 Session cookies are explicitly `SameSite=Lax` (`apps/web/lib/auth.ts`'s `advanced.defaultCookieAttributes`
 — matches Better Auth's own default, made explicit so a future SDK default change can't silently
@@ -45,9 +44,9 @@ Every route handler validates its input with a Zod schema (`packages/validation`
 before touching the database, returning an RFC 9457 problem-details response (`apps/web/lib/
 problem-details.ts`) on failure. Audited across every handler in `app/api/v1/**` (F1): no gaps found.
 
-The only three handlers with a real `catch (error)` around something that can throw an unexpected
-exception (`/api/v1/chat`'s pipeline, `/api/v1/auth/otp/request`, `/api/v1/auth/otp/verify`) log the
-raw error server-side and return a fixed, generic message to the client — never `error.stack` or
+The only handler with a real `catch (error)` around something that can throw an unexpected
+exception (`/api/v1/chat`'s pipeline) logs the
+raw error server-side and returns a fixed, generic message to the client — never `error.stack` or
 `error.message`. No route anywhere serializes a caught exception directly into a response. An
 uncaught exception that bypasses these fails through to Next.js's own production error handling,
 which doesn't leak stack traces either.
@@ -61,7 +60,7 @@ which doesn't leak stack traces either.
   (user context, extra, tags, contexts) as a second layer. No session-replay integration — it
   screenshots the DOM, which on `/track`/`/insights` would capture symptom data. Performance tracing is
   off by default (`SENTRY_TRACES_SAMPLE_RATE=0`).
-- **pino** (`apps/web/lib/logger.ts`) is used at new/sensitive log sites (auth OTP failures, the chat
+- **pino** (`apps/web/lib/logger.ts`) is used at new/sensitive log sites (the chat
   pipeline, the retention job) — not a rewrite of every existing `console.log`. Its `redact` config
   matches the same field list at any nesting depth.
 - Neither can fully prevent a raw phone number embedded inside a third-party library's own error
@@ -72,15 +71,13 @@ which doesn't leak stack traces either.
 
 Postgres-backed token bucket (`packages/db`'s `consumeRateLimitToken`, `identity.rate_limit_buckets`):
 
-| Endpoint                        | Scope          | Capacity | Refill  |
-| ------------------------------- | -------------- | -------- | ------- |
-| `POST /api/v1/auth/otp/request` | per phone hash | 3        | /10 min |
-| `POST /api/v1/auth/otp/request` | per IP hash    | 10       | /10 min |
-| `POST /api/v1/chat`             | per user       | 20       | /hour   |
-| `POST /api/v1/analytics`        | per user       | 60       | /hour   |
-| `GET /s/[token]` (summary view) | per IP hash    | 20       | /10 min |
-| `POST /api/v1/assessments`      | per user       | 30       | /hour   |
-| `GET /api/v1/facilities/search` | per user       | 60       | /hour   |
+| Endpoint                        | Scope       | Capacity | Refill  |
+| ------------------------------- | ----------- | -------- | ------- |
+| `POST /api/v1/chat`             | per user    | 20       | /hour   |
+| `POST /api/v1/analytics`        | per user    | 60       | /hour   |
+| `GET /s/[token]` (summary view) | per IP hash | 20       | /10 min |
+| `POST /api/v1/assessments`      | per user    | 30       | /hour   |
+| `GET /api/v1/facilities/search` | per user    | 60       | /hour   |
 
 Rate limiting is always checked _after_ input validation (so a malformed request 400s without a
 database round-trip), consistent across every route above.
@@ -109,7 +106,7 @@ a fixed "now", asserts only the rows past each window are deleted.
 
 ## Encryption and key rotation
 
-AES-256-GCM field-level encryption (`packages/db/src/crypto.ts`) for `identity.users.phone_enc`,
+AES-256-GCM field-level encryption (`packages/db/src/crypto.ts`) for
 `health.symptom_logs.notes_enc`, `health.chat_messages.content_enc`. Packed ciphertext format is
 `keyId.iv.tag.ciphertext` (legacy 3-segment `iv.tag.ciphertext` values, written before key ids existed,
 still decrypt against the provider's current key).
@@ -121,9 +118,9 @@ still decrypt against the provider's current key).
   (`worker/jobs/reencrypt.ts`) — a one-off, idempotent job that re-writes every encrypted field under
   the new key. Once it reports zero rows left on the old id, that id can be dropped from
   `ENCRYPTION_KEYS`.
-- `hmacLookup` (phone/email lookup hashes) and `sha256Hex` (share-link tokens) are **not** subject to
+- `hmacLookup` (share-link token hashes, analytics pseudo-ids) and `sha256Hex` are **not** subject to
   rotation — HMAC_LOOKUP_KEY/ANALYTICS_KEY are single, fixed keys. Rotating a lookup key would silently
-  break every existing equality match (a user would no longer be findable by phone hash).
+  break every existing equality match.
 
 ## Supply chain
 

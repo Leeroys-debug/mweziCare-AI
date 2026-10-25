@@ -24,8 +24,8 @@ interface QueueStatus {
  *   schema/table pg-boss itself creates. node_modules/pg-boss/src/plans.js
  *   confirms the schema name and column names this depends on).
  *
- * Deliberately does NOT check third-party dependencies (AI Gateway,
- * Africa's Talking) — those failing shouldn't page on-call for the whole
+ * Deliberately does NOT check third-party dependencies (AI Gateway) —
+ * those failing shouldn't page on-call for the whole
  * app being down (see docs/deploy.md).
  */
 export async function GET() {

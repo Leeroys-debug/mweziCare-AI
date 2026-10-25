@@ -5,8 +5,6 @@ const validEnv = {
   NODE_ENV: "test",
   DATABASE_URL: "postgres://user:pass@localhost:5432/mwezicare",
   AUTH_SECRET: "a".repeat(32),
-  AFRICASTALKING_USERNAME: "sandbox",
-  AFRICASTALKING_API_KEY: "key",
   AI_GATEWAY_API_KEY: "key",
   ENCRYPTION_KEYS: '{"1":"key"}',
   ENCRYPTION_KEY_ID: "1",

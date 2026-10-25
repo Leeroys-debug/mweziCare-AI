@@ -20,28 +20,6 @@ function isAlreadyCurrent(packed: string, provider: KeyProvider): boolean {
   return keyId === provider.getCurrentKeyId() && packed.split(".").length === 4;
 }
 
-async function reencryptUsersPhone(
-  db: Database,
-  provider: KeyProvider,
-): Promise<number> {
-  const rows = await db
-    .select({ id: schema.users.id, phoneEnc: schema.users.phoneEnc })
-    .from(schema.users)
-    .where(isNotNull(schema.users.phoneEnc));
-
-  let rewritten = 0;
-  for (const row of rows) {
-    if (!row.phoneEnc || isAlreadyCurrent(row.phoneEnc, provider)) continue;
-    const plaintext = decryptField(row.phoneEnc, provider);
-    await db
-      .update(schema.users)
-      .set({ phoneEnc: encryptField(plaintext, provider) })
-      .where(eq(schema.users.id, row.id));
-    rewritten++;
-  }
-  return rewritten;
-}
-
 async function reencryptSymptomLogNotes(
   db: Database,
   provider: KeyProvider,
@@ -100,7 +78,6 @@ async function reencryptChatMessages(
  * current key, so an interrupted run just picks up where it left off.
  */
 export interface ReencryptCounts {
-  usersRewritten: number;
   symptomLogsRewritten: number;
   chatMessagesRewritten: number;
 }
@@ -115,7 +92,6 @@ export async function runReencrypt(
     provider ?? new EnvKeyProvider(env.ENCRYPTION_KEYS, env.ENCRYPTION_KEY_ID);
 
   const counts: ReencryptCounts = {
-    usersRewritten: await reencryptUsersPhone(database, keyProvider),
     symptomLogsRewritten: await reencryptSymptomLogNotes(database, keyProvider),
     chatMessagesRewritten: await reencryptChatMessages(database, keyProvider),
   };

@@ -26,7 +26,7 @@ export default function LandingPage() {
 
       <div className="flex flex-col gap-3">
         <Button asChild size="lg">
-          <Link href="/track">{t("cta")}</Link>
+          <Link href="/sign-up">{t("signUp")}</Link>
         </Button>
         <Button asChild variant="outline" size="lg">
           <Link href="/sign-in">{t("signIn")}</Link>

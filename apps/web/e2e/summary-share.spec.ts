@@ -1,25 +1,8 @@
-import { readFile } from "node:fs/promises";
-import path from "node:path";
 import { config } from "dotenv";
 import { test, expect } from "@playwright/test";
-import { OTP_CAPTURE_DIR } from "../playwright.config";
+import { signUpAndOnboard, uniqueTestEmail } from "./helpers";
 
 config({ path: "../../.env" });
-
-async function readCapturedOtp(e164Phone: string): Promise<string> {
-  const file = path.join(
-    OTP_CAPTURE_DIR,
-    `${encodeURIComponent(e164Phone)}.txt`,
-  );
-  for (let attempt = 0; attempt < 40; attempt++) {
-    try {
-      return (await readFile(file, "utf8")).trim();
-    } catch {
-      await new Promise((resolve) => setTimeout(resolve, 250));
-    }
-  }
-  throw new Error(`Timed out waiting for OTP capture file: ${file}`);
-}
 
 test.describe("Clinician summary: create, open, revoke", () => {
   test("creating a summary requires sharing consent; once granted, the share link works until revoked (then 404s)", async ({
@@ -31,22 +14,13 @@ test.describe("Clinician summary: create, open, revoke", () => {
     // 30s default, especially against a cold Turbopack compile.
     test.setTimeout(120_000);
 
-    const localPhone = `07${Date.now().toString().slice(-8)}`;
-    const e164Phone = `+254${localPhone.slice(1)}`;
     const county = `Kiambu-summary-e2e-${Date.now()}`;
 
-    await page.goto("/en/sign-in");
-    await page.getByLabel(/phone number/i).fill(localPhone);
-    await page.getByRole("button", { name: /send code/i }).click();
-    const code = await readCapturedOtp(e164Phone);
-    await page.getByLabel(/verification code/i).fill(code);
-    await page.getByRole("button", { name: /^verify$/i }).click();
-
-    await expect(page).toHaveURL(/\/en\/onboarding$/, { timeout: 20000 });
-    await page.getByLabel(/age band/i).selectOption("21-24");
-    await page.getByLabel(/county/i).fill(county);
-    await page.getByLabel(/location/i).check();
-    await page.getByRole("button", { name: /continue/i }).click();
+    await signUpAndOnboard(page, {
+      email: uniqueTestEmail("summary-share-e2e"),
+      county,
+      consents: { location: true },
+    });
     await expect(page).toHaveURL(/\/en\/track$/, { timeout: 20000 });
 
     // Log a day so the summary has at least one cycle to show.

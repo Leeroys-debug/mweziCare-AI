@@ -17,7 +17,5 @@ test-results/
 apps/web/public/sw.js
 apps/web/public/sw.js.map
 apps/web/public/swe-worker-*.js
-apps/web/.otp-test-capture/
-apps/web/.lighthouse-otp-capture/
 apps/web/.lighthouseci/
 evals/

@@ -1,31 +1,14 @@
-import { readFile } from "node:fs/promises";
-import path from "node:path";
 import { config } from "dotenv";
 import { eq, like } from "drizzle-orm";
 import { test, expect } from "@playwright/test";
 import { createDb, schema } from "@mwezicare/db";
-import { OTP_CAPTURE_DIR } from "../playwright.config";
+import { signUpAndOnboard, uniqueTestEmail } from "./helpers";
 
 config({ path: "../../.env" });
 
 const db = createDb(process.env.DATABASE_URL!);
 const RULESET_VERSION = 9900;
 const FACILITY_CODE_PREFIX = "E2E-CRITICAL-";
-
-async function readCapturedOtp(e164Phone: string): Promise<string> {
-  const file = path.join(
-    OTP_CAPTURE_DIR,
-    `${encodeURIComponent(e164Phone)}.txt`,
-  );
-  for (let attempt = 0; attempt < 40; attempt++) {
-    try {
-      return (await readFile(file, "utf8")).trim();
-    } catch {
-      await new Promise((resolve) => setTimeout(resolve, 250));
-    }
-  }
-  throw new Error(`Timed out waiting for OTP capture file: ${file}`);
-}
 
 /**
  * One continuous pass through the whole product, end to end: sign up,
@@ -136,24 +119,14 @@ test.describe("critical user journey", () => {
     await context.grantPermissions(["geolocation"]);
     await context.setGeolocation({ latitude: -1.1714, longitude: 36.8356 });
 
-    const localPhone = `07${Date.now().toString().slice(-8)}`;
-    const e164Phone = `+254${localPhone.slice(1)}`;
     const county = `Kiambu-critical-e2e-${Date.now()}`;
 
     // --- Sign up + onboarding ---------------------------------------
-    await page.goto("/en/sign-in");
-    await page.getByLabel(/phone number/i).fill(localPhone);
-    await page.getByRole("button", { name: /send code/i }).click();
-    const code = await readCapturedOtp(e164Phone);
-    await page.getByLabel(/verification code/i).fill(code);
-    await page.getByRole("button", { name: /^verify$/i }).click();
-
-    await expect(page).toHaveURL(/\/en\/onboarding$/, { timeout: 20000 });
-    await page.getByLabel(/age band/i).selectOption("21-24");
-    await page.getByLabel(/county/i).fill(county);
-    await page.getByLabel(/location/i).check();
-    await page.getByLabel(/share a summary with a clinician/i).check();
-    await page.getByRole("button", { name: /continue/i }).click();
+    await signUpAndOnboard(page, {
+      email: uniqueTestEmail("critical-journey-e2e"),
+      county,
+      consents: { location: true, sharing: true },
+    });
     await expect(page).toHaveURL(/\/en\/track$/, { timeout: 20000 });
 
     const [profile] = await db

@@ -24,9 +24,6 @@ locals {
   # injecting one key of a JSON-valued secret as a single ECS env var.
   app_secret_refs = {
     AUTH_SECRET              = "${aws_secretsmanager_secret.app.arn}:AUTH_SECRET::"
-    AFRICASTALKING_USERNAME  = "${aws_secretsmanager_secret.app.arn}:AFRICASTALKING_USERNAME::"
-    AFRICASTALKING_API_KEY   = "${aws_secretsmanager_secret.app.arn}:AFRICASTALKING_API_KEY::"
-    AFRICASTALKING_SENDER_ID = "${aws_secretsmanager_secret.app.arn}:AFRICASTALKING_SENDER_ID::"
     AI_GATEWAY_API_KEY       = "${aws_secretsmanager_secret.app.arn}:AI_GATEWAY_API_KEY::"
     ENCRYPTION_KEYS          = "${aws_secretsmanager_secret.app.arn}:ENCRYPTION_KEYS::"
     ENCRYPTION_KEY_ID        = "${aws_secretsmanager_secret.app.arn}:ENCRYPTION_KEY_ID::"

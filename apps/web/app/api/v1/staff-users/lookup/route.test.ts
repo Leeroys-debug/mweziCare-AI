@@ -1,22 +1,13 @@
 import { config } from "dotenv";
 import { eq } from "drizzle-orm";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
-import {
-  createDb,
-  hmacLookup,
-  EnvKeyProvider,
-  schema,
-  type Database,
-} from "@mwezicare/db";
+import { createDb, schema, type Database } from "@mwezicare/db";
 
 config({ path: "../../.env" }); // dotenv resolves relative to process.cwd(), i.e. apps/web
 
 const databaseUrl = process.env.DATABASE_URL;
 const db: Database | undefined = databaseUrl
   ? createDb(databaseUrl)
-  : undefined;
-const hmacKeyProvider = process.env.HMAC_LOOKUP_KEY
-  ? new EnvKeyProvider(process.env.HMAC_LOOKUP_KEY)
   : undefined;
 
 interface FakeUser {
@@ -25,7 +16,7 @@ interface FakeUser {
 }
 
 let currentUser: FakeUser | null = null;
-const rawPhone = "+254700000999";
+const testEmail = `staff-users-test-${Date.now()}@example.com`;
 let createdUserId: string;
 
 vi.mock("@/lib/rbac", () => ({
@@ -43,16 +34,13 @@ vi.mock("@/lib/rbac", () => ({
   }),
   logAccess: vi.fn(async () => undefined),
 }));
-vi.mock("@/lib/server-db", () => ({ db, hmacKeyProvider }));
+vi.mock("@/lib/server-db", () => ({ db }));
 
 describe.skipIf(!db)("/api/v1/staff-users/lookup — role enforcement", () => {
   beforeAll(async () => {
     const [user] = await db!
       .insert(schema.users)
-      .values({
-        phoneNumber: hmacLookup(rawPhone, hmacKeyProvider!),
-        email: `staff-users-test-${Date.now()}@phone.mwezicare.invalid`,
-      })
+      .values({ email: testEmail })
       .returning({ id: schema.users.id });
     createdUserId = user!.id;
   });
@@ -69,7 +57,7 @@ describe.skipIf(!db)("/api/v1/staff-users/lookup — role enforcement", () => {
         new Request("http://localhost/api/v1/staff-users/lookup", {
           method: "POST",
           headers: { origin: "http://localhost:3000" },
-          body: JSON.stringify({ phoneNumber: rawPhone }),
+          body: JSON.stringify({ email: testEmail }),
         }),
       );
       expect(response.status).toBe(403);
@@ -83,7 +71,7 @@ describe.skipIf(!db)("/api/v1/staff-users/lookup — role enforcement", () => {
       new Request("http://localhost/api/v1/staff-users/lookup", {
         method: "POST",
         headers: { origin: "http://localhost:3000" },
-        body: JSON.stringify({ phoneNumber: rawPhone }),
+        body: JSON.stringify({ email: testEmail }),
       }),
     );
     expect(response.status).toBe(200);
@@ -94,14 +82,14 @@ describe.skipIf(!db)("/api/v1/staff-users/lookup — role enforcement", () => {
     expect(body.user).not.toHaveProperty("phoneNumber");
   });
 
-  it("reports not found for an unregistered number", async () => {
+  it("reports not found for an unregistered email", async () => {
     currentUser = { id: "u-system_admin", role: "system_admin" };
     const { POST } = await import("./route");
     const response = await POST(
       new Request("http://localhost/api/v1/staff-users/lookup", {
         method: "POST",
         headers: { origin: "http://localhost:3000" },
-        body: JSON.stringify({ phoneNumber: "+254700000888" }),
+        body: JSON.stringify({ email: "unregistered-user@example.com" }),
       }),
     );
     const body = await response.json();

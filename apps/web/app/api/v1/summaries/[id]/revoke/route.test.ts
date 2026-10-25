@@ -25,12 +25,10 @@ describe.skipIf(!db)("POST /api/v1/summaries/:id/revoke", () => {
       .insert(schema.users)
       .values([
         {
-          phoneNumber: `revoke-test-a-${Date.now()}`,
-          email: `revoke-test-a-${Date.now()}@phone.mwezicare.invalid`,
+          email: `revoke-test-a-${Date.now()}@example.com`,
         },
         {
-          phoneNumber: `revoke-test-b-${Date.now()}`,
-          email: `revoke-test-b-${Date.now()}@phone.mwezicare.invalid`,
+          email: `revoke-test-b-${Date.now()}@example.com`,
         },
       ])
       .returning({ id: schema.users.id });

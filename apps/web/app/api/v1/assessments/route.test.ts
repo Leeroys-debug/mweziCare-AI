@@ -47,8 +47,7 @@ describe.skipIf(!db)("POST & GET /api/v1/assessments", () => {
     const [user] = await db!
       .insert(schema.users)
       .values({
-        phoneNumber: `assessments-test-${Date.now()}`,
-        email: `assessments-test-${Date.now()}@phone.mwezicare.invalid`,
+        email: `assessments-test-${Date.now()}@example.com`,
       })
       .returning({ id: schema.users.id });
     userId = user!.id;

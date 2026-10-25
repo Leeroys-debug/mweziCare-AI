@@ -1,22 +1,21 @@
 import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
-import { hmacLookup, schema } from "@mwezicare/db";
-import { phoneNumberSchema } from "@mwezicare/validation";
+import { schema } from "@mwezicare/db";
+import { emailSchema } from "@mwezicare/validation";
 import { z } from "zod";
 import { assertSameOrigin } from "@/lib/csrf";
 import { problem } from "@/lib/problem-details";
 import { logAccess, requireApiRole } from "@/lib/rbac";
-import { db, hmacKeyProvider } from "@/lib/server-db";
+import { db } from "@/lib/server-db";
 
-const lookupSchema = z.object({ phoneNumber: phoneNumberSchema });
+const lookupSchema = z.object({ email: emailSchema });
 
 /**
- * Looks up a user by phone-hash equality only (identity.users.phoneNumber
- * already stores the HMAC hash, never the raw number — see lib/auth.ts).
- * Returns only account/support fields: role, locale, verification status,
- * created date. Never health fields (symptom logs, assessments, chat,
- * profile) — "system admin ... cannot view health fields" (D2.5 spec).
- * Every lookup is logged, whether or not a match is found.
+ * Looks up a user by email equality. Returns only account/support fields:
+ * role, locale, verification status, created date. Never health fields
+ * (symptom logs, assessments, chat, profile) — "system admin ... cannot
+ * view health fields" (D2.5 spec). Every lookup is logged, whether or not
+ * a match is found.
  */
 export async function POST(request: Request) {
   const csrfError = assertSameOrigin(request);
@@ -28,19 +27,18 @@ export async function POST(request: Request) {
   const body = await request.json().catch(() => null);
   const parsed = lookupSchema.safeParse(body);
   if (!parsed.success)
-    return problem(400, "Invalid phone number", parsed.error.message);
+    return problem(400, "Invalid email", parsed.error.message);
 
-  const phoneHash = hmacLookup(parsed.data.phoneNumber, hmacKeyProvider);
   const [user] = await db
     .select({
       id: schema.users.id,
       role: schema.users.role,
       locale: schema.users.locale,
-      phoneNumberVerified: schema.users.phoneNumberVerified,
+      emailVerified: schema.users.emailVerified,
       createdAt: schema.users.createdAt,
     })
     .from(schema.users)
-    .where(eq(schema.users.phoneNumber, phoneHash));
+    .where(eq(schema.users.email, parsed.data.email));
 
   await logAccess(roleCheck.user.id, "user_lookup", "user", user?.id);
 

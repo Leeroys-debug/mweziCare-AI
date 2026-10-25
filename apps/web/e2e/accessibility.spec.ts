@@ -1,48 +1,23 @@
-import { readFile } from "node:fs/promises";
-import path from "node:path";
 import { config } from "dotenv";
 import { eq } from "drizzle-orm";
 import AxeBuilder from "@axe-core/playwright";
 import { test, expect, type Page } from "@playwright/test";
 import { createDb, schema } from "@mwezicare/db";
-import { OTP_CAPTURE_DIR } from "../playwright.config";
+import {
+  signUpAndOnboard as signUpAndOnboardShared,
+  uniqueTestEmail,
+} from "./helpers";
 
 config({ path: "../../.env" });
 
 const db = createDb(process.env.DATABASE_URL!);
 
-async function readCapturedOtp(e164Phone: string): Promise<string> {
-  const file = path.join(
-    OTP_CAPTURE_DIR,
-    `${encodeURIComponent(e164Phone)}.txt`,
-  );
-  for (let attempt = 0; attempt < 40; attempt++) {
-    try {
-      return (await readFile(file, "utf8")).trim();
-    } catch {
-      await new Promise((resolve) => setTimeout(resolve, 250));
-    }
-  }
-  throw new Error(`Timed out waiting for OTP capture file: ${file}`);
-}
-
-/** Signs up a fresh user via the real OTP flow and completes onboarding — the only way to get a session. */
 async function signUpAndOnboard(page: Page, county: string): Promise<void> {
-  const localPhone = `07${Date.now().toString().slice(-8)}`;
-  const e164Phone = `+254${localPhone.slice(1)}`;
-
-  await page.goto("/en/sign-in");
-  await page.getByLabel(/phone number/i).fill(localPhone);
-  await page.getByRole("button", { name: /send code/i }).click();
-  const code = await readCapturedOtp(e164Phone);
-  await page.getByLabel(/verification code/i).fill(code);
-  await page.getByRole("button", { name: /^verify$/i }).click();
-
-  await expect(page).toHaveURL(/\/en\/onboarding$/, { timeout: 20000 });
-  await page.getByLabel(/age band/i).selectOption("21-24");
-  await page.getByLabel(/county/i).fill(county);
-  await page.getByLabel(/location/i).check();
-  await page.getByRole("button", { name: /continue/i }).click();
+  await signUpAndOnboardShared(page, {
+    email: uniqueTestEmail("accessibility-e2e"),
+    county,
+    consents: { location: true },
+  });
   await expect(page).toHaveURL(/\/en\/quiz/, { timeout: 20000 });
 }
 

@@ -1,54 +1,28 @@
-import { readFile } from "node:fs/promises";
-import path from "node:path";
 import { config } from "dotenv";
 import { eq } from "drizzle-orm";
 import { test, expect } from "@playwright/test";
 import { createDb, schema, withUser } from "@mwezicare/db";
-import { OTP_CAPTURE_DIR } from "../playwright.config";
+import { signUpAndOnboard, uniqueTestEmail } from "./helpers";
 
 config({ path: "../../.env" });
 
 const db = createDb(process.env.DATABASE_URL!);
 const DRAFT_VERSION = 9001;
 
-async function readCapturedOtp(e164Phone: string): Promise<string> {
-  const file = path.join(
-    OTP_CAPTURE_DIR,
-    `${encodeURIComponent(e164Phone)}.txt`,
-  );
-  for (let attempt = 0; attempt < 40; attempt++) {
-    try {
-      return (await readFile(file, "utf8")).trim();
-    } catch {
-      await new Promise((resolve) => setTimeout(resolve, 250));
-    }
-  }
-  throw new Error(`Timed out waiting for OTP capture file: ${file}`);
-}
-
 test.describe("approving a draft ruleset changes the outcome POST /api/v1/assessments serves", () => {
   test("clinician approves a draft ruleset; the next assessment reflects it", async ({
     page,
   }) => {
-    const localPhone = `07${(Date.now() + 2).toString().slice(-8)}`;
-    const e164Phone = `+254${localPhone.slice(1)}`;
     const county = `Kiambu-ruleset-e2e-${Date.now()}`;
 
     // Sign up + onboard as a normal user first (the only way to create a
     // session via the UI), then elevate the role directly in Postgres —
     // there's no staff role-assignment UI yet.
-    await page.goto("/en/sign-in");
-    await page.getByLabel(/phone number/i).fill(localPhone);
-    await page.getByRole("button", { name: /send code/i }).click();
-    const code = await readCapturedOtp(e164Phone);
-    await page.getByLabel(/verification code/i).fill(code);
-    await page.getByRole("button", { name: /^verify$/i }).click();
-
-    await expect(page).toHaveURL(/\/en\/onboarding$/);
-    await page.getByLabel(/age band/i).selectOption("21-24");
-    await page.getByLabel(/county/i).fill(county);
-    await page.getByLabel(/location/i).check();
-    await page.getByRole("button", { name: /continue/i }).click();
+    await signUpAndOnboard(page, {
+      email: uniqueTestEmail("ruleset-e2e"),
+      county,
+      consents: { location: true },
+    });
     await expect(page).toHaveURL(/\/en\/track$/);
 
     const [profile] = await db

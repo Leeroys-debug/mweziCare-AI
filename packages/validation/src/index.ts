@@ -1,5 +1,5 @@
 export * from "./env";
-export * from "./phone";
+export * from "./credentials";
 export * from "./onboarding";
 export * from "./symptom-log";
 export * from "./facility";

@@ -9,14 +9,14 @@ interface LookupResult {
     id: string;
     role: string;
     locale: string;
-    phoneNumberVerified: boolean;
+    emailVerified: boolean;
     createdAt: string;
   };
 }
 
 export function UserLookupForm() {
   const t = useTranslations("StaffUsers");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
   const [state, setState] = useState<"idle" | "loading" | "error">("idle");
   const [result, setResult] = useState<LookupResult | null>(null);
 
@@ -28,7 +28,7 @@ export function UserLookupForm() {
       const response = await fetch("/api/v1/staff-users/lookup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phoneNumber }),
+        body: JSON.stringify({ email }),
       });
       if (!response.ok) {
         setState("error");
@@ -52,20 +52,21 @@ export function UserLookupForm() {
       </div>
 
       <form onSubmit={handleSubmit} className="flex gap-2">
-        <label className="sr-only" htmlFor="staff-user-phone">
-          {t("phoneLabel")}
+        <label className="sr-only" htmlFor="staff-user-email">
+          {t("emailLabel")}
         </label>
         <input
-          id="staff-user-phone"
-          value={phoneNumber}
-          onChange={(e) => setPhoneNumber(e.target.value)}
-          placeholder={t("phonePlaceholder")}
+          id="staff-user-email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder={t("emailPlaceholder")}
           className="h-11 flex-1 rounded-md border border-neutral-300 px-3 dark:border-neutral-700 dark:bg-neutral-900"
         />
         <button
           type="submit"
-          disabled={state === "loading" || !phoneNumber}
-          className="h-11 rounded-md bg-emerald-700 px-4 text-sm font-medium text-white hover:bg-emerald-800 disabled:opacity-50"
+          disabled={state === "loading" || !email}
+          className="h-11 rounded-md bg-brand-700 px-4 text-sm font-medium text-white hover:bg-brand-800 disabled:opacity-50"
         >
           {state === "loading" ? t("lookingUp") : t("lookupButton")}
         </button>
@@ -87,8 +88,8 @@ export function UserLookupForm() {
           <dd>{result.user.role}</dd>
           <dt className="font-medium">{t("locale")}</dt>
           <dd>{result.user.locale}</dd>
-          <dt className="font-medium">{t("phoneVerified")}</dt>
-          <dd>{result.user.phoneNumberVerified ? t("yes") : t("no")}</dd>
+          <dt className="font-medium">{t("emailVerified")}</dt>
+          <dd>{result.user.emailVerified ? t("yes") : t("no")}</dd>
           <dt className="font-medium">{t("createdAt")}</dt>
           <dd>{new Date(result.user.createdAt).toLocaleDateString()}</dd>
         </dl>

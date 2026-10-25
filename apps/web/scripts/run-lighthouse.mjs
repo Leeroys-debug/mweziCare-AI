@@ -1,15 +1,14 @@
 #!/usr/bin/env node
-// Builds a production bundle, starts it with the dev-only OTP capture
-// backdoor enabled (so lighthouse/auth.cjs can sign in), runs `lhci
-// autorun` against it, then tears the server down — all in Node so it
-// works the same on Windows/macOS/Linux and in CI (no shell-specific
-// `VAR=value command` syntax, which breaks on Windows).
+// Builds a production bundle, starts it, runs `lhci autorun` against it
+// (lighthouse/auth.cjs signs in via the real email+password sign-up form),
+// then tears the server down — all in Node so it works the same on
+// Windows/macOS/Linux and in CI (no shell-specific `VAR=value command`
+// syntax, which breaks on Windows).
 import { spawn } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const appRoot = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
-const otpCaptureDir = path.join(appRoot, ".lighthouse-otp-capture");
 const port = process.env.PORT ?? "3000";
 const baseUrl = `http://localhost:${port}`;
 
@@ -47,7 +46,7 @@ async function main() {
     cwd: appRoot,
     stdio: "inherit",
     shell: true,
-    env: { ...process.env, OTP_TEST_CAPTURE_DIR: otpCaptureDir, PORT: port },
+    env: { ...process.env, PORT: port },
   });
   server.on("error", (error) => {
     console.error("[lighthouse] Failed to start server", error);

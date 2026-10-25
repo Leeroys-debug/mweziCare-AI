@@ -58,7 +58,7 @@ export const symptomLogs = healthSchema.table(
     impact: jsonb("impact"),
     redFlags: jsonb("red_flags"),
     // Encrypted (AES-256-GCM, packages/db/crypto) — same pattern as
-    // identity.users.phone_enc. Never logged or sent to analytics.
+    // health.chat_messages.content_enc. Never logged or sent to analytics.
     notesEnc: text("notes_enc"),
     clientId: text("client_id").notNull(),
     syncedAt: timestamp("synced_at", { withTimezone: true }),

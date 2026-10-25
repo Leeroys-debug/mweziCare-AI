@@ -1,17 +1,13 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { phoneNumber } from "better-auth/plugins";
 import { nextCookies } from "better-auth/next-js";
-import { schema, encryptField } from "@mwezicare/db";
+import { schema } from "@mwezicare/db";
 import { loadServerEnv } from "@mwezicare/validation";
-import { db, encryptionKeyProvider } from "./server-db";
-import { createSmsSender } from "./sms";
-import { rawPhoneContext } from "./otp-context";
+import { db } from "./server-db";
 import { lazy } from "./lazy";
 
 function buildAuth() {
   const env = loadServerEnv();
-  const smsSender = createSmsSender();
 
   return betterAuth({
     secret: env.AUTH_SECRET,
@@ -36,9 +32,6 @@ function buildAuth() {
     },
     user: {
       additionalFields: {
-        // The real phone number, AES-256-GCM encrypted — never plaintext.
-        // Set in databaseHooks.user.create.before below, not client input.
-        phoneEnc: { type: "string", required: false, input: false },
         role: {
           type: "string",
           required: false,
@@ -48,47 +41,15 @@ function buildAuth() {
         locale: { type: "string", required: false, defaultValue: "en" },
       },
     },
-    databaseHooks: {
-      user: {
-        create: {
-          before: async (user) => {
-            const rawPhone = rawPhoneContext.getStore();
-            if (!rawPhone) return;
-            return {
-              data: {
-                ...user,
-                phoneEnc: encryptField(rawPhone, encryptionKeyProvider),
-              },
-            };
-          },
-        },
-      },
+    emailAndPassword: {
+      enabled: true,
+      // No email provider is wired up yet — see CLAUDE.md. Revisit once one
+      // is chosen; until then, gating sign-in on a verification email would
+      // lock everyone out.
+      requireEmailVerification: false,
+      minPasswordLength: 8,
     },
-    plugins: [
-      phoneNumber({
-        otpLength: 6,
-        expiresIn: 300, // 5 minutes (CLAUDE.md / architecture doc)
-        allowedAttempts: 3,
-        // `phoneNumber` here is never the raw number — our /api/v1/auth/otp/*
-        // routes pass the HMAC hash (hmacLookup) as the identifier Better
-        // Auth stores and threads through this callback. The raw number for
-        // SMS delivery comes from rawPhoneContext, set by that same route.
-        sendOTP: async ({ phoneNumber: hash, code }) => {
-          const rawPhone = rawPhoneContext.getStore();
-          if (!rawPhone) {
-            throw new Error(
-              `OTP requested for ${hash} without a raw phone number in context`,
-            );
-          }
-          await smsSender.sendOtp(rawPhone, code);
-        },
-        signUpOnVerification: {
-          getTempEmail: (hash) => `${hash}@phone.mwezicare.invalid`,
-          getTempName: () => "",
-        },
-      }),
-      nextCookies(),
-    ],
+    plugins: [nextCookies()],
   });
 }
 

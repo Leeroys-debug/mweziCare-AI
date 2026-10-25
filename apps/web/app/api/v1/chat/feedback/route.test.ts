@@ -36,8 +36,7 @@ describe.skipIf(!db)("POST /api/v1/chat/feedback", () => {
     const [user] = await db!
       .insert(schema.users)
       .values({
-        phoneNumber: `chat-feedback-test-${Date.now()}`,
-        email: `chat-feedback-test-${Date.now()}@phone.mwezicare.invalid`,
+        email: `chat-feedback-test-${Date.now()}@example.com`,
         locale: "en",
       })
       .returning({ id: schema.users.id });

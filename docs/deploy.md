@@ -68,8 +68,7 @@ in. Treat it as a reviewed starting point, not an apply-ready stack.
    ```
 2. **Provision AWS resources**: `cd infra/terraform && terraform init && terraform plan -var="web_image=..." -var="worker_image=..."` — review the plan, then `terraform apply` only with explicit sign-off (real, billable resources).
 3. **Populate secrets**: the Terraform output `app_secrets_arn` names a Secrets Manager secret Terraform
-   deliberately leaves empty — populate its JSON value with `AUTH_SECRET`, `AFRICASTALKING_USERNAME`,
-   `AFRICASTALKING_API_KEY`, `AFRICASTALKING_SENDER_ID`, `AI_GATEWAY_API_KEY`, `ENCRYPTION_KEYS`,
+   deliberately leaves empty — populate its JSON value with `AUTH_SECRET`, `AI_GATEWAY_API_KEY`, `ENCRYPTION_KEYS`,
    `ENCRYPTION_KEY_ID`, `HMAC_LOOKUP_KEY`, `ANALYTICS_KEY`, `SENTRY_DSN` via the AWS console or
    `aws secretsmanager put-secret-value` — never via Terraform (state/plan output must never contain
    real secrets).

@@ -2,7 +2,6 @@ import { config } from "dotenv";
 import { sql } from "drizzle-orm";
 import { draftRuleset } from "@mwezicare/rules-engine";
 import { createDb } from "./client";
-import { EnvKeyProvider, encryptField, hmacLookup } from "./crypto";
 import * as schema from "./schema";
 
 config({ path: "../../.env" });
@@ -40,21 +39,11 @@ const KIAMBU_SUB_COUNTIES = [
 
 async function main() {
   const databaseUrl = process.env.DATABASE_URL;
-  const encryptionKeys = process.env.ENCRYPTION_KEYS;
-  const encryptionKeyId = process.env.ENCRYPTION_KEY_ID;
-  const hmacKey = process.env.HMAC_LOOKUP_KEY;
-  if (!databaseUrl || !encryptionKeys || !encryptionKeyId || !hmacKey) {
-    throw new Error(
-      "DATABASE_URL, ENCRYPTION_KEYS, ENCRYPTION_KEY_ID and HMAC_LOOKUP_KEY are required to seed",
-    );
+  if (!databaseUrl) {
+    throw new Error("DATABASE_URL is required to seed");
   }
 
   const db = createDb(databaseUrl);
-  const keyProvider = new EnvKeyProvider(
-    JSON.parse(encryptionKeys) as Record<string, string>,
-    encryptionKeyId,
-  );
-  const hmacProvider = new EnvKeyProvider(hmacKey);
 
   console.log("Clearing previously seeded synthetic data...");
   // Safe to truncate unconditionally: this database only ever holds
@@ -76,21 +65,13 @@ async function main() {
   const userRows = await db
     .insert(schema.users)
     .values(
-      [1, 2, 3].map((n) => {
-        // Clearly-fake sequential numbers — synthetic test data only.
-        const phone = `+25470000000${n}`;
-        const phoneHash = hmacLookup(phone, hmacProvider);
-        return {
-          // Better Auth's phoneNumber field holds the hash, never the raw
-          // number — see packages/db/src/schema/identity.ts.
-          phoneNumber: phoneHash,
-          phoneNumberVerified: true,
-          phoneEnc: encryptField(phone, keyProvider),
-          email: `${phoneHash}@phone.mwezicare.invalid`,
-          role: "user" as const,
-          locale: n === 2 ? "sw" : "en",
-        };
-      }),
+      [1, 2, 3].map((n) => ({
+        // Clearly-fake synthetic test data only.
+        email: `seed-user-${n}@example.com`,
+        emailVerified: true,
+        role: "user" as const,
+        locale: n === 2 ? "sw" : "en",
+      })),
     )
     .returning({ id: schema.users.id });
 

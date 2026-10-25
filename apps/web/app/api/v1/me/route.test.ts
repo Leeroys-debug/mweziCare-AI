@@ -41,8 +41,7 @@ describe.skipIf(!db)("DELETE /api/v1/me", () => {
     const [user] = await db!
       .insert(schema.users)
       .values({
-        phoneNumber: `me-delete-test-${Date.now()}`,
-        email: `me-delete-test-${Date.now()}@phone.mwezicare.invalid`,
+        email: `me-delete-test-${Date.now()}@example.com`,
       })
       .returning({ id: schema.users.id });
     userId = user!.id;

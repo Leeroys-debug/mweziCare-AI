@@ -33,9 +33,7 @@ describe.skipIf(!db)("runReencrypt", () => {
     const [user] = await db!
       .insert(schema.users)
       .values({
-        phoneNumber: `reencrypt-test-${Date.now()}`,
-        email: `reencrypt-test-${Date.now()}@phone.mwezicare.invalid`,
-        phoneEnc: encryptField("+254700000111", oldProvider),
+        email: `reencrypt-test-${Date.now()}@example.com`,
       })
       .returning({ id: schema.users.id });
     userId = user!.id;
@@ -63,19 +61,12 @@ describe.skipIf(!db)("runReencrypt", () => {
     await db!.delete(schema.users).where(eq(schema.users.id, userId));
   });
 
-  it("re-writes phone/notes/chat ciphertext under the new current key, preserving plaintext", async () => {
+  it("re-writes notes/chat ciphertext under the new current key, preserving plaintext", async () => {
     const counts = await runReencrypt(db!, rotatedProvider);
     expect(counts).toEqual({
-      usersRewritten: 1,
       symptomLogsRewritten: 1,
       chatMessagesRewritten: 1,
     });
-
-    const [user] = await db!
-      .select()
-      .from(schema.users)
-      .where(eq(schema.users.id, userId));
-    expect(user?.phoneEnc?.split(".")[0]).toBe("2");
 
     const [log] = await db!
       .select()
@@ -93,7 +84,6 @@ describe.skipIf(!db)("runReencrypt", () => {
   it("is idempotent — a second run rewrites nothing", async () => {
     const counts = await runReencrypt(db!, rotatedProvider);
     expect(counts).toEqual({
-      usersRewritten: 0,
       symptomLogsRewritten: 0,
       chatMessagesRewritten: 0,
     });

@@ -12,14 +12,9 @@ import { identitySchema } from "./schemas";
 import { roleEnum, consentPurposeEnum } from "./enums";
 
 /**
- * Better Auth's phone-number plugin owns `phone_number`/`phone_number_verified`
- * (and the base `email`/`email_verified`/`name`/`image` columns it requires
- * even for phone-only auth — see apps/web/lib/auth.ts). Per CLAUDE.md's "no
- * plaintext phone numbers" rule, `phone_number` is never the raw number: our
- * auth routes pass it the HMAC lookup hash (packages/db/crypto hmacLookup),
- * and `email` holds a generated non-routable placeholder
- * (`<hash>@phone.mwezicare.invalid`), never a real address. The actual
- * phone number lives only in `phone_enc` (AES-256-GCM, packages/db/crypto).
+ * Better Auth's core user model (apps/web/lib/auth.ts, emailAndPassword
+ * provider) — `email` is the real, user-supplied sign-in identifier, and the
+ * hashed password lives on the `accounts` table below, never here.
  */
 export const users = identitySchema.table(
   "users",
@@ -27,11 +22,6 @@ export const users = identitySchema.table(
     id: uuid("id")
       .primaryKey()
       .default(sql`gen_random_uuid()`),
-    phoneNumber: text("phone_number").notNull(),
-    phoneNumberVerified: boolean("phone_number_verified")
-      .notNull()
-      .default(false),
-    phoneEnc: text("phone_enc"),
     email: text("email").notNull(),
     emailVerified: boolean("email_verified").notNull().default(false),
     name: text("name").notNull().default(""),
@@ -51,10 +41,7 @@ export const users = identitySchema.table(
       .notNull()
       .defaultNow(),
   },
-  (table) => [
-    uniqueIndex("users_phone_number_idx").on(table.phoneNumber),
-    uniqueIndex("users_email_idx").on(table.email),
-  ],
+  (table) => [uniqueIndex("users_email_idx").on(table.email)],
 );
 
 /** Age band, not date of birth — data minimisation (see architecture doc). */
@@ -108,10 +95,9 @@ export const consents = identitySchema.table(
 );
 
 /**
- * Postgres-backed token bucket for OTP request rate limiting — one row per
- * key (e.g. `otp:phone:<hash>` or `otp:ip:<hash>`). See packages/db's
- * consumeRateLimitToken() helper, used for both the per-phone-hash and
- * per-IP dimensions required by CLAUDE.md / the architecture doc.
+ * Postgres-backed token bucket for auth rate limiting — one row per key
+ * (e.g. `signin:email:<hash>` or `signin:ip:<hash>`). See packages/db's
+ * consumeRateLimitToken() helper.
  */
 export const rateLimitBuckets = identitySchema.table("rate_limit_buckets", {
   key: text("key").primaryKey(),
@@ -121,7 +107,7 @@ export const rateLimitBuckets = identitySchema.table("rate_limit_buckets", {
     .defaultNow(),
 });
 
-// --- Better Auth (phone OTP) ------------------------------------------
+// --- Better Auth (email + password) -----------------------------------
 // Drizzle-adapter-shaped tables for Better Auth's core "session", "account"
 // and "verification" models (apps/web/lib/auth.ts, provider: "pg",
 // usePlural: true). IDs are UUIDs — see `advanced.database.generateId` in
@@ -137,7 +123,7 @@ export const sessions = identitySchema.table(
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
     token: text("token").notNull(),
-    // OTP-authenticated sessions expire after 30 days idle (CLAUDE.md).
+    // Sessions expire after 30 days idle (CLAUDE.md).
     expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
     ipAddress: text("ip_address"),
     userAgent: text("user_agent"),
@@ -180,9 +166,9 @@ export const accounts = identitySchema.table("accounts", {
 });
 
 /**
- * OTP codes — expire 5 minutes after issue (CLAUDE.md / architecture doc).
- * `identifier` is the same opaque phone hash used for `users.phone_number`,
- * never the raw phone number.
+ * Email verification / password-reset tokens (unused until an email
+ * provider is wired up — emailAndPassword.requireEmailVerification is false
+ * for now, see apps/web/lib/auth.ts).
  */
 export const verifications = identitySchema.table("verifications", {
   id: uuid("id")

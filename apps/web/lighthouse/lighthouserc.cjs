@@ -24,8 +24,8 @@ module.exports = {
           downloadThroughputKbps: 1474.56,
           uploadThroughputKbps: 675,
         },
-        // Logs in via the real OTP flow first — /en/track sits behind
-        // requireUser() (see ./auth.cjs).
+        // Signs up via the real email+password flow first — /en/track sits
+        // behind requireUser() (see ./auth.cjs).
         puppeteerScript: "./lighthouse/auth.cjs",
       },
     },

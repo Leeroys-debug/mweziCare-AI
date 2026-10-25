@@ -108,8 +108,7 @@ describe.skipIf(!db)("/api/v1/staff-facilities — role enforcement", () => {
     const [verifier] = await db!
       .insert(schema.users)
       .values({
-        phoneNumber: `staff-verifier-test-${Date.now()}`,
-        email: `staff-verifier-test-${Date.now()}@phone.mwezicare.invalid`,
+        email: `staff-verifier-test-${Date.now()}@example.com`,
       })
       .returning({ id: schema.users.id });
     verifierId = verifier!.id;

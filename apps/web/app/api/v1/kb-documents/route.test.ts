@@ -99,8 +99,7 @@ describe.skipIf(!db)("/api/v1/kb-documents — role enforcement", () => {
     const [clinician] = await db!
       .insert(schema.users)
       .values({
-        phoneNumber: `kb-clinician-test-${Date.now()}`,
-        email: `kb-clinician-test-${Date.now()}@phone.mwezicare.invalid`,
+        email: `kb-clinician-test-${Date.now()}@example.com`,
       })
       .returning({ id: schema.users.id });
     clinicianId = clinician!.id;

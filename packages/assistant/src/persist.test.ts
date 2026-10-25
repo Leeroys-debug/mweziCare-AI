@@ -38,8 +38,7 @@ describe.skipIf(!db)(
       const [user] = await db!
         .insert(schema.users)
         .values({
-          phoneNumber: `assistant-persist-test-${Date.now()}`,
-          email: `assistant-persist-test-${Date.now()}@phone.mwezicare.invalid`,
+          email: `assistant-persist-test-${Date.now()}@example.com`,
           locale: "en",
         })
         .returning({ id: schema.users.id });
@@ -94,16 +93,14 @@ describe.skipIf(!db)(
       const [userA] = await db!
         .insert(schema.users)
         .values({
-          phoneNumber: `assistant-persist-a-${Date.now()}`,
-          email: `assistant-persist-a-${Date.now()}@phone.mwezicare.invalid`,
+          email: `assistant-persist-a-${Date.now()}@example.com`,
           locale: "en",
         })
         .returning({ id: schema.users.id });
       const [userB] = await db!
         .insert(schema.users)
         .values({
-          phoneNumber: `assistant-persist-b-${Date.now()}`,
-          email: `assistant-persist-b-${Date.now()}@phone.mwezicare.invalid`,
+          email: `assistant-persist-b-${Date.now()}@example.com`,
           locale: "en",
         })
         .returning({ id: schema.users.id });

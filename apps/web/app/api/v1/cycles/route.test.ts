@@ -22,8 +22,7 @@ describe.skipIf(!db)("GET /api/v1/cycles", () => {
     const [user] = await db!
       .insert(schema.users)
       .values({
-        phoneNumber: `cycles-test-${Date.now()}`,
-        email: `cycles-test-${Date.now()}@phone.mwezicare.invalid`,
+        email: `cycles-test-${Date.now()}@example.com`,
       })
       .returning({ id: schema.users.id });
     userId = user!.id;

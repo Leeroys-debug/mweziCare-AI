@@ -25,12 +25,10 @@ describe.skipIf(!db)("row-level security on health.symptom_logs", () => {
       .insert(schema.users)
       .values([
         {
-          phoneNumber: `rls-test-a-${Date.now()}`,
-          email: `rls-test-a-${Date.now()}@phone.mwezicare.invalid`,
+          email: `rls-test-a-${Date.now()}@example.com`,
         },
         {
-          phoneNumber: `rls-test-b-${Date.now()}`,
-          email: `rls-test-b-${Date.now()}@phone.mwezicare.invalid`,
+          email: `rls-test-b-${Date.now()}@example.com`,
         },
       ])
       .returning({ id: schema.users.id });
@@ -100,12 +98,10 @@ describe.skipIf(!db)(
         .insert(schema.users)
         .values([
           {
-            phoneNumber: `rls-assess-a-${Date.now()}`,
-            email: `rls-assess-a-${Date.now()}@phone.mwezicare.invalid`,
+            email: `rls-assess-a-${Date.now()}@example.com`,
           },
           {
-            phoneNumber: `rls-assess-b-${Date.now()}`,
-            email: `rls-assess-b-${Date.now()}@phone.mwezicare.invalid`,
+            email: `rls-assess-b-${Date.now()}@example.com`,
           },
         ])
         .returning({ id: schema.users.id });

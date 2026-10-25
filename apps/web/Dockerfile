@@ -28,8 +28,6 @@ FROM source AS build
 # these only need to exist, never be real.
 ENV DATABASE_URL=postgres://user:pass@localhost:5432/db \
     AUTH_SECRET=build-time-placeholder-not-for-real-use-000000000 \
-    AFRICASTALKING_USERNAME=placeholder \
-    AFRICASTALKING_API_KEY=placeholder \
     AI_GATEWAY_API_KEY=placeholder \
     ENCRYPTION_KEYS={"1":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="} \
     ENCRYPTION_KEY_ID=1 \

@@ -37,8 +37,7 @@ async function makeUser(suffix: string) {
   const [user] = await db!
     .insert(schema.users)
     .values({
-      phoneNumber: `retention-test-${suffix}-${Date.now()}`,
-      email: `retention-test-${suffix}-${Date.now()}@phone.mwezicare.invalid`,
+      email: `retention-test-${suffix}-${Date.now()}@example.com`,
     })
     .returning({ id: schema.users.id });
   userIds.push(user!.id);

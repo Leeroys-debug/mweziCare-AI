@@ -1,32 +1,13 @@
-import { readFile } from "node:fs/promises";
-import path from "node:path";
 import { config } from "dotenv";
 import { eq } from "drizzle-orm";
 import { test, expect } from "@playwright/test";
 import { createDb, schema } from "@mwezicare/db";
-import { OTP_CAPTURE_DIR } from "../playwright.config";
+import { signUpAndOnboard, uniqueTestEmail } from "./helpers";
 
 config({ path: "../../.env" });
 
 const db = createDb(process.env.DATABASE_URL!);
 
-async function readCapturedOtp(e164Phone: string): Promise<string> {
-  const file = path.join(
-    OTP_CAPTURE_DIR,
-    `${encodeURIComponent(e164Phone)}.txt`,
-  );
-  for (let attempt = 0; attempt < 40; attempt++) {
-    try {
-      return (await readFile(file, "utf8")).trim();
-    } catch {
-      await new Promise((resolve) => setTimeout(resolve, 250));
-    }
-  }
-  throw new Error(`Timed out waiting for OTP capture file: ${file}`);
-}
-
-// A county value unique to this test run identifies its rows in the DB
-// without needing to recompute the server-side phone HMAC client-side.
 function uniqueCounty() {
   return `Kiambu-e2e-${Date.now()}`;
 }
@@ -54,29 +35,17 @@ async function deletionRequestedAtForCounty(
   return user?.deletionRequestedAt ?? null;
 }
 
-test.describe("phone OTP sign-up, onboarding, roles and account deletion", () => {
+test.describe("email+password sign-up, onboarding, roles and account deletion", () => {
   test("full journey: sign up, consents recorded, /dashboard blocked, delete removes all rows", async ({
     page,
   }) => {
-    const localPhone = `07${Date.now().toString().slice(-8)}`;
-    const e164Phone = `+254${localPhone.slice(1)}`;
     const county = uniqueCounty();
 
-    await page.goto("/en/sign-in");
-    await page.getByLabel(/phone number/i).fill(localPhone);
-    await page.getByRole("button", { name: /send code/i }).click();
-
-    await expect(page.getByLabel(/verification code/i)).toBeVisible();
-    const code = await readCapturedOtp(e164Phone);
-    await page.getByLabel(/verification code/i).fill(code);
-    await page.getByRole("button", { name: /^verify$/i }).click();
-
-    // New user -> onboarding.
-    await expect(page).toHaveURL(/\/en\/onboarding$/);
-    await page.getByLabel(/age band/i).selectOption("21-24");
-    await page.getByLabel(/county/i).fill(county);
-    await page.getByLabel(/location/i).check();
-    await page.getByRole("button", { name: /continue/i }).click();
+    await signUpAndOnboard(page, {
+      email: uniqueTestEmail("auth-e2e"),
+      county,
+      consents: { location: true },
+    });
 
     // Onboarding complete -> lands in the app, bottom nav visible.
     await expect(page).toHaveURL(/\/en\/track$/);
@@ -119,15 +88,13 @@ test.describe("phone OTP sign-up, onboarding, roles and account deletion", () =>
   test("county input is rejected for under-18 age bands (guardian consent not built yet)", async ({
     page,
   }) => {
-    const localPhone = `07${(Date.now() + 1).toString().slice(-8)}`;
-    const e164Phone = `+254${localPhone.slice(1)}`;
-
-    await page.goto("/en/sign-in");
-    await page.getByLabel(/phone number/i).fill(localPhone);
-    await page.getByRole("button", { name: /send code/i }).click();
-    const code = await readCapturedOtp(e164Phone);
-    await page.getByLabel(/verification code/i).fill(code);
-    await page.getByRole("button", { name: /^verify$/i }).click();
+    await page.goto("/en/sign-up");
+    await page.getByLabel(/what should we call you/i).fill("E2E Test User");
+    await page
+      .getByLabel(/email address/i)
+      .fill(uniqueTestEmail("auth-e2e-minor"));
+    await page.getByLabel(/^password$/i).fill("e2e-test-password-1");
+    await page.getByRole("button", { name: /create account/i }).click();
 
     await expect(page).toHaveURL(/\/en\/onboarding$/);
     await page.getByLabel(/age band/i).selectOption("16-17");

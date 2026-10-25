@@ -3,9 +3,7 @@
 # way it actually ships, or as a starting point for a single-VM deployment.
 # Every secret below is a required `${VAR}` substitution (docker-compose
 # fails fast with ":?" if unset) — never hardcoded, unlike the dev-only
-# docker-compose.yml. No OTP_TEST_CAPTURE_DIR anywhere here: unset means
-# lib/sms.ts's createSmsSender() uses the real Africa's Talking sender, not
-# the dev console backdoor (see that file's own doc comment).
+# docker-compose.yml.
 #
 # [REVIEW REQUIRED] Written against this repo's actual Dockerfile/schema but
 # not yet run end to end (no Docker daemon in the environment this was
@@ -68,9 +66,6 @@ services:
     environment:
       <<: *app-env
       AUTH_SECRET: ${AUTH_SECRET:?set AUTH_SECRET}
-      AFRICASTALKING_USERNAME: ${AFRICASTALKING_USERNAME:?set AFRICASTALKING_USERNAME}
-      AFRICASTALKING_API_KEY: ${AFRICASTALKING_API_KEY:?set AFRICASTALKING_API_KEY}
-      AFRICASTALKING_SENDER_ID: ${AFRICASTALKING_SENDER_ID:-}
       AI_GATEWAY_API_KEY: ${AI_GATEWAY_API_KEY:?set AI_GATEWAY_API_KEY}
       ENCRYPTION_KEYS: ${ENCRYPTION_KEYS:?set ENCRYPTION_KEYS}
       ENCRYPTION_KEY_ID: ${ENCRYPTION_KEY_ID:?set ENCRYPTION_KEY_ID}

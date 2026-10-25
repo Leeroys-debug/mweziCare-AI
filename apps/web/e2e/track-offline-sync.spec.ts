@@ -1,29 +1,12 @@
-import { readFile } from "node:fs/promises";
-import path from "node:path";
 import { config } from "dotenv";
 import { eq } from "drizzle-orm";
 import { test, expect } from "@playwright/test";
 import { createDb, schema } from "@mwezicare/db";
-import { OTP_CAPTURE_DIR } from "../playwright.config";
+import { signUpAndOnboard, uniqueTestEmail } from "./helpers";
 
 config({ path: "../../.env" });
 
 const db = createDb(process.env.DATABASE_URL!);
-
-async function readCapturedOtp(e164Phone: string): Promise<string> {
-  const file = path.join(
-    OTP_CAPTURE_DIR,
-    `${encodeURIComponent(e164Phone)}.txt`,
-  );
-  for (let attempt = 0; attempt < 40; attempt++) {
-    try {
-      return (await readFile(file, "utf8")).trim();
-    } catch {
-      await new Promise((resolve) => setTimeout(resolve, 250));
-    }
-  }
-  throw new Error(`Timed out waiting for OTP capture file: ${file}`);
-}
 
 function uniqueCounty() {
   return `Kiambu-offline-e2e-${Date.now()}`;
@@ -54,25 +37,16 @@ test.describe("offline symptom log, synced once back online", () => {
     page,
     context,
   }) => {
-    const localPhone = `07${Date.now().toString().slice(-8)}`;
-    const e164Phone = `+254${localPhone.slice(1)}`;
     const county = uniqueCounty();
     const today = new Date().toISOString().slice(0, 10);
 
-    await page.goto("/en/sign-in");
-    await page.getByLabel(/phone number/i).fill(localPhone);
-    await page.getByRole("button", { name: /send code/i }).click();
-    const code = await readCapturedOtp(e164Phone);
-    await page.getByLabel(/verification code/i).fill(code);
-    await page.getByRole("button", { name: /^verify$/i }).click();
-
     // Generous timeout: a freshly-booted dev server JIT-compiles /onboarding
     // on first visit, which can take longer than Playwright's 5s default.
-    await expect(page).toHaveURL(/\/en\/onboarding$/, { timeout: 20000 });
-    await page.getByLabel(/age band/i).selectOption("21-24");
-    await page.getByLabel(/county/i).fill(county);
-    await page.getByLabel(/location/i).check();
-    await page.getByRole("button", { name: /continue/i }).click();
+    await signUpAndOnboard(page, {
+      email: uniqueTestEmail("track-offline-e2e"),
+      county,
+      consents: { location: true },
+    });
 
     await expect(page).toHaveURL(/\/en\/track$/, { timeout: 20000 });
 

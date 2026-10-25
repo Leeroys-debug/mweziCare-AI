@@ -38,8 +38,7 @@ describe("assessment pipeline (testcontainers)", () => {
     const [user] = await testDb.db
       .insert(schema.users)
       .values({
-        phoneNumber: `testcontainers-assessment-${Date.now()}`,
-        email: `testcontainers-assessment-${Date.now()}@phone.mwezicare.invalid`,
+        email: `testcontainers-assessment-${Date.now()}@example.com`,
       })
       .returning({ id: schema.users.id });
     userId = user!.id;
