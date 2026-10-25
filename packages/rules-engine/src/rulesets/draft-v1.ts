@@ -85,7 +85,11 @@ export const draftRuleset: Ruleset = {
         sw: "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Maumivu yamekuwa yakikuzuia shuleni, kazini, kulala au shughuli mara kadhaa katika mizunguko 3 iliyopita.",
       },
       clinicianNote:
-        "[CLINICAL REVIEW REQUIRED] Confirm the >=3-days-in-3-cycles threshold.",
+        "[CLINICAL REVIEW REQUIRED] Confirm the >=3-days-in-3-cycles threshold. " +
+        'Cf. NICE NG73 1.3.1 — "period-related pain (dysmenorrhoea) affecting ' +
+        'daily activities and quality of life" is listed as a symptom to ' +
+        "suspect endometriosis on; the specific 3-cycle/3-day count is this " +
+        "app's own placeholder, not NG73's, and still needs sign-off.",
     },
     {
       id: "assess_soon_worsening_cramps",
@@ -119,7 +123,9 @@ export const draftRuleset: Ruleset = {
         sw: "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Umekuwa na maumivu ya nyonga kati ya hedhi.",
       },
       clinicianNote:
-        "[CLINICAL REVIEW REQUIRED] Confirm any pain-day count vs. a minimum.",
+        "[CLINICAL REVIEW REQUIRED] Confirm any pain-day count vs. a minimum. " +
+        "Cf. NICE NG73 (Endometriosis: diagnosis and management) 1.3.1 — " +
+        "chronic pelvic pain is listed as a symptom to suspect endometriosis on.",
     },
     {
       id: "assess_soon_pain_with_bowel_or_urination",
@@ -136,7 +142,11 @@ export const draftRuleset: Ruleset = {
         sw: "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Umekuwa na maumivu wakati wa haja kubwa au haja ndogo.",
       },
       clinicianNote:
-        "[CLINICAL REVIEW REQUIRED] Confirm this should be assess_soon, not urgent.",
+        "[CLINICAL REVIEW REQUIRED] Confirm this should be assess_soon, not urgent. " +
+        'Cf. NICE NG73 1.3.1 — "period-related or cyclical gastrointestinal ' +
+        'symptoms, in particular, painful bowel movements" and "period-related ' +
+        "or cyclical urinary symptoms, in particular, blood in the urine or pain " +
+        'passing urine" are both listed as symptoms to suspect endometriosis on.',
     },
     {
       id: "assess_soon_heavy_or_prolonged_bleeding",
@@ -162,7 +172,12 @@ export const draftRuleset: Ruleset = {
         sw: "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Damu ya hedhi ya hivi karibuni imekuwa nyingi kupita kiasi au imedumu zaidi ya siku 7.",
       },
       clinicianNote:
-        "[CLINICAL REVIEW REQUIRED] Confirm the >=2-heavy-days and >=1-period->7-days thresholds.",
+        "[CLINICAL REVIEW REQUIRED] Confirm the >=2-heavy-days and >=1-period->7-days thresholds. " +
+        "Cf. NICE NG88 (Heavy menstrual bleeding: assessment and management) — " +
+        "NG88 deliberately defines HMB by impact on quality of life rather than a " +
+        "blood-loss volume/day-count threshold (1.1.1, 1.2.1); any specific day " +
+        "counts here are this app's own placeholder, not NG88's, and need a " +
+        "clinician's explicit sign-off, not just alignment with NG88's framing.",
     },
     {
       id: "assess_soon_repeated_bleeding_between_periods",
@@ -179,7 +194,10 @@ export const draftRuleset: Ruleset = {
         sw: "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Umekuwa na damu kati ya hedhi mara kadhaa.",
       },
       clinicianNote:
-        "[CLINICAL REVIEW REQUIRED] Confirm 'repeated' vs. a single occurrence.",
+        "[CLINICAL REVIEW REQUIRED] Confirm 'repeated' vs. a single occurrence. " +
+        "Cf. NICE NG88 1.2.1 and QS47 statement 1 — persistent intermenstrual " +
+        "bleeding is listed as a symptom that may suggest uterine cavity " +
+        "abnormality, histological abnormality, adenomyosis or fibroids.",
     },
     {
       id: "routine_baseline",

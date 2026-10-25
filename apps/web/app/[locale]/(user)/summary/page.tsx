@@ -17,6 +17,7 @@ interface CreateResponse {
   data: SummaryData;
   labels: SummaryPdfLabels;
   ageBand: string;
+  familyHistoryEndometriosis: boolean | null;
 }
 
 export default function SummaryPage() {
@@ -154,6 +155,7 @@ export default function SummaryPage() {
             labels={result.labels}
             displayLabel={displayLabel}
             ageBand={result.ageBand}
+            familyHistoryEndometriosis={result.familyHistoryEndometriosis}
             locale={locale}
           />
 

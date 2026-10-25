@@ -11,6 +11,10 @@ const labels: SummaryPdfLabels = {
   dateRangeLabel: "Date range",
   displayLabelFallback: "MweziCare user",
   ageBandLabel: "Age band",
+  familyHistoryLabel: "Family history of endometriosis",
+  familyHistoryYes: "Yes",
+  familyHistoryNo: "No",
+  familyHistoryNotAnswered: "Not answered",
   cyclesTitle: "Cycles",
   cycleStartColumn: "Start",
   periodLengthColumn: "Period length",
@@ -92,6 +96,7 @@ describe("renderSummaryPdf", () => {
     const meta: SummaryPdfMeta = {
       displayLabel: "A.N.",
       ageBand: "21-24",
+      familyHistoryEndometriosis: true,
       locale: "en",
       labels,
     };
@@ -116,7 +121,12 @@ describe("renderSummaryPdf", () => {
       missedWorkDays: 0,
       assessment: null,
     };
-    const meta: SummaryPdfMeta = { ageBand: "18-20", locale: "sw", labels };
+    const meta: SummaryPdfMeta = {
+      ageBand: "18-20",
+      familyHistoryEndometriosis: null,
+      locale: "sw",
+      labels,
+    };
     const buffer = await renderSummaryPdf(emptyData, meta);
     expect(buffer.subarray(0, 5).toString("utf8")).toBe("%PDF-");
   });

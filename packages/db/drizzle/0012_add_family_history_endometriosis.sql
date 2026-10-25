@@ -1,0 +1,1 @@
+ALTER TABLE "identity"."profiles" ADD COLUMN "family_history_endometriosis" boolean;

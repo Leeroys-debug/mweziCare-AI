@@ -1,7 +1,14 @@
 @import "tailwindcss";
 @source "../../../packages/ui/src";
 
+/* App is light-themed only — redefine Tailwind's `dark:` variant to require
+   an explicit `.dark` class (never applied anywhere) instead of following
+   `prefers-color-scheme`, so every existing `dark:` utility across the app
+   simply never matches, without having to touch each one individually. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
+  color-scheme: light;
   --background: #ffffff;
   --foreground: #171717;
 
@@ -38,13 +45,6 @@
   --color-brand-950: var(--color-brand-950);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {

@@ -80,6 +80,7 @@ export async function POST(request: Request) {
   const pdfBuffer = await renderSummaryPdf(summaryData, {
     displayLabel: parsed.data.displayLabel,
     ageBand: profile.ageBand,
+    familyHistoryEndometriosis: profile.familyHistoryEndometriosis,
     locale,
     labels,
   });
@@ -126,5 +127,6 @@ export async function POST(request: Request) {
     data: summaryData,
     labels,
     ageBand: profile.ageBand,
+    familyHistoryEndometriosis: profile.familyHistoryEndometriosis,
   });
 }

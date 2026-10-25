@@ -3,7 +3,7 @@ import path from "node:path";
 import { config } from "dotenv";
 import { createDb, EnvKeyProvider } from "@mwezicare/db";
 import { loadServerEnv } from "@mwezicare/validation";
-import { GatewayEmbeddingProvider } from "../src/kb/embeddings";
+import { createEmbeddingProvider } from "../src/kb/embeddings";
 import { GatewayClassifier } from "../src/safety/classify";
 import { GatewaySafetyChecker } from "../src/postfilter";
 import { runAssistantPipeline } from "../src/pipeline";
@@ -30,7 +30,10 @@ async function main() {
   const deps = {
     db,
     classifier: new GatewayClassifier(env.ASSISTANT_CHAT_MODEL),
-    embeddings: new GatewayEmbeddingProvider(env.ASSISTANT_EMBEDDING_MODEL),
+    embeddings: createEmbeddingProvider({
+      googleApiKeyConfigured: !!env.GOOGLE_GENERATIVE_AI_API_KEY,
+      gatewayModel: env.ASSISTANT_EMBEDDING_MODEL,
+    }),
     safetyChecker: new GatewaySafetyChecker(env.ASSISTANT_CHAT_MODEL),
     keyProvider,
     chatModel: env.ASSISTANT_CHAT_MODEL,

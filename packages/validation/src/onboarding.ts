@@ -12,6 +12,9 @@ export const MINOR_AGE_BANDS = new Set<string>(["13-15", "16-17"]);
 export const onboardingSchema = z.object({
   ageBand: ageBandSchema,
   county: z.string().trim().min(1).max(100),
+  // Capture-only — see packages/db/src/schema/identity.ts's comment.
+  // Optional/nullable: "prefer not to say" is a valid, first-class answer.
+  familyHistoryEndometriosis: z.boolean().nullable().optional(),
   consents: z.object({
     tracking: z.literal(true),
     location: z.boolean(),

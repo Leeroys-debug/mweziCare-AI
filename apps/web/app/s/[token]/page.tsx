@@ -93,6 +93,7 @@ export default async function SharedSummaryPage({
         data={data}
         labels={labels}
         ageBand={profile?.ageBand ?? "unknown"}
+        familyHistoryEndometriosis={profile?.familyHistoryEndometriosis ?? null}
         locale={locale}
       />
       <Button asChild size="lg">

@@ -1,7 +1,7 @@
 import { config } from "dotenv";
 import { createDb } from "@mwezicare/db";
 import { loadServerEnv } from "@mwezicare/validation";
-import { GatewayEmbeddingProvider } from "../src/kb/embeddings";
+import { createEmbeddingProvider } from "../src/kb/embeddings";
 import { ingestKnowledgeBase } from "../src/kb/ingest";
 
 config({ path: "../../.env" }); // dotenv resolves relative to process.cwd(), i.e. packages/assistant
@@ -9,9 +9,10 @@ config({ path: "../../.env" }); // dotenv resolves relative to process.cwd(), i.
 async function main() {
   const env = loadServerEnv();
   const db = createDb(env.DATABASE_URL);
-  const embeddings = new GatewayEmbeddingProvider(
-    env.ASSISTANT_EMBEDDING_MODEL,
-  );
+  const embeddings = createEmbeddingProvider({
+    googleApiKeyConfigured: !!env.GOOGLE_GENERATIVE_AI_API_KEY,
+    gatewayModel: env.ASSISTANT_EMBEDDING_MODEL,
+  });
 
   const includeDrafts = process.env.ASSISTANT_INCLUDE_DRAFTS === "1";
   const result = await ingestKnowledgeBase(db, embeddings, { includeDrafts });

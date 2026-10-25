@@ -21,7 +21,7 @@ export async function POST(request: Request) {
   if (!parsed.success) {
     return problem(400, "Invalid profile data", parsed.error.message);
   }
-  const { ageBand, county, consents } = parsed.data;
+  const { ageBand, county, familyHistoryEndometriosis, consents } = parsed.data;
 
   // [LEGAL REVIEW REQUIRED] No guardian-consent flow exists yet — block
   // onboarding outright for under-18 age bands rather than let tracking
@@ -36,10 +36,21 @@ export async function POST(request: Request) {
 
   await db
     .insert(schema.profiles)
-    .values({ userId: user.id, ageBand, county, consentVersion: 1 })
+    .values({
+      userId: user.id,
+      ageBand,
+      county,
+      familyHistoryEndometriosis: familyHistoryEndometriosis ?? null,
+      consentVersion: 1,
+    })
     .onConflictDoUpdate({
       target: schema.profiles.userId,
-      set: { ageBand, county, updatedAt: new Date() },
+      set: {
+        ageBand,
+        county,
+        familyHistoryEndometriosis: familyHistoryEndometriosis ?? null,
+        updatedAt: new Date(),
+      },
     });
 
   const grantedPurposes = (

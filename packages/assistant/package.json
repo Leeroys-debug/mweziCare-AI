@@ -21,6 +21,7 @@
     "@mwezicare/validation": "workspace:*",
     "ai": "^7.0.148",
     "@ai-sdk/gateway": "^4.0.121",
+    "@ai-sdk/google": "^4.0.104",
     "drizzle-orm": "^0.45.4",
     "zod": "^3.24.0"
   },

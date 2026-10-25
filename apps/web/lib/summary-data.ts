@@ -32,6 +32,8 @@ export function parsePeriodToRange(
 export interface LoadedSummary {
   data: SummaryData;
   ageBand: string;
+  /** Capture-only context (never fed into triage) — null means not answered. */
+  familyHistoryEndometriosis: boolean | null;
 }
 
 /** Recomputes a user's SummaryData for a stored period — shared by the create route and the public/preview views. */
@@ -68,5 +70,6 @@ export async function loadSummaryDataForUser(
   return {
     data: buildSummaryData(logs, cycles, assessment, range),
     ageBand: profile?.ageBand ?? "unknown",
+    familyHistoryEndometriosis: profile?.familyHistoryEndometriosis ?? null,
   };
 }

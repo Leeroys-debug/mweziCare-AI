@@ -17,7 +17,18 @@ export interface SummaryViewProps {
   labels: SummaryPdfLabels;
   displayLabel?: string;
   ageBand: string;
+  /** Capture-only context (CLAUDE.md: never a triage input) — null means not answered. */
+  familyHistoryEndometriosis: boolean | null;
   locale: string;
+}
+
+function familyHistoryText(
+  value: boolean | null,
+  labels: SummaryPdfLabels,
+): string {
+  if (value === true) return labels.familyHistoryYes;
+  if (value === false) return labels.familyHistoryNo;
+  return labels.familyHistoryNotAnswered;
 }
 
 /**
@@ -32,6 +43,7 @@ export function SummaryView({
   labels,
   displayLabel,
   ageBand,
+  familyHistoryEndometriosis,
   locale,
 }: SummaryViewProps) {
   return (
@@ -41,6 +53,10 @@ export function SummaryView({
         <p className="text-sm text-neutral-600 dark:text-neutral-400">
           {displayLabel || labels.displayLabelFallback} · {labels.ageBandLabel}:{" "}
           {ageBand} · {labels.dateRangeLabel}: {data.from} – {data.to}
+        </p>
+        <p className="text-sm text-neutral-600 dark:text-neutral-400">
+          {labels.familyHistoryLabel}:{" "}
+          {familyHistoryText(familyHistoryEndometriosis, labels)}
         </p>
       </div>
 

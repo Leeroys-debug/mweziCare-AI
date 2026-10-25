@@ -16,6 +16,10 @@ export interface SummaryPdfLabels {
   dateRangeLabel: string;
   displayLabelFallback: string;
   ageBandLabel: string;
+  familyHistoryLabel: string;
+  familyHistoryYes: string;
+  familyHistoryNo: string;
+  familyHistoryNotAnswered: string;
   cyclesTitle: string;
   cycleStartColumn: string;
   periodLengthColumn: string;
@@ -39,6 +43,8 @@ export interface SummaryPdfLabels {
 export interface SummaryPdfMeta {
   displayLabel?: string;
   ageBand: string;
+  /** Capture-only context (CLAUDE.md: never a triage input) — null means not answered. */
+  familyHistoryEndometriosis: boolean | null;
   locale: string;
   labels: SummaryPdfLabels;
 }
@@ -138,6 +144,15 @@ function PainChart({
   );
 }
 
+function familyHistoryText(
+  value: boolean | null,
+  labels: SummaryPdfLabels,
+): string {
+  if (value === true) return labels.familyHistoryYes;
+  if (value === false) return labels.familyHistoryNo;
+  return labels.familyHistoryNotAnswered;
+}
+
 function SummaryDocument({
   data,
   meta,
@@ -155,6 +170,10 @@ function SummaryDocument({
           {meta.displayLabel || labels.displayLabelFallback} ·{" "}
           {labels.ageBandLabel}: {meta.ageBand} · {labels.dateRangeLabel}:{" "}
           {data.from} – {data.to}
+        </Text>
+        <Text style={styles.subtitle}>
+          {labels.familyHistoryLabel}:{" "}
+          {familyHistoryText(meta.familyHistoryEndometriosis, labels)}
         </Text>
 
         <View style={styles.section}>

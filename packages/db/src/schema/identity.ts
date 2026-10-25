@@ -64,6 +64,13 @@ export const profiles = identitySchema.table("profiles", {
     .references(() => users.id, { onDelete: "cascade" }),
   ageBand: text("age_band").notNull(),
   county: text("county"),
+  // Capture-only context for the clinician summary (CLAUDE.md: urgency is
+  // the rules engine's job alone) — never read by packages/rules-engine or
+  // packages/triage. NICE NG73 1.3.2 notes a first-degree relative's history
+  // increases the likelihood of endometriosis, but doesn't specify a
+  // weighting, so this stays informational rather than feeding a rule.
+  // null = not answered, true/false = answered.
+  familyHistoryEndometriosis: boolean("family_history_endometriosis"),
   consentVersion: integer("consent_version").notNull().default(1),
   // [LEGAL REVIEW REQUIRED] guardian-consent flow for under-18 users — see
   // CLAUDE.md and the "Compliance items to confirm with counsel" section.

@@ -28,6 +28,11 @@ export const serverEnvSchema = z.object({
     .string()
     .min(1)
     .default("openai/text-embedding-3-small"),
+  // Optional: when set, embeddings (query- and ingest-time) go straight to
+  // Google's Generative AI API instead of through AI Gateway — Gateway has
+  // no free-tier embedding model, Google's does. Chat generation still goes
+  // through AI Gateway/ASSISTANT_CHAT_MODEL either way.
+  GOOGLE_GENERATIVE_AI_API_KEY: z.string().min(1).optional(),
 
   // Envelope-encryption keys for field-level encryption (packages/db/crypto),
   // supporting key rotation (F1 spec): a JSON object of keyId -> base64

@@ -1,6 +1,6 @@
 import { createDb } from "@mwezicare/db";
 import {
-  GatewayEmbeddingProvider,
+  createEmbeddingProvider,
   reingestDocumentChunks,
 } from "@mwezicare/assistant";
 import { loadServerEnv } from "@mwezicare/validation";
@@ -23,9 +23,10 @@ export interface KbIngestJobData {
 export async function runKbIngest(data: KbIngestJobData): Promise<void> {
   const env = loadServerEnv();
   const db = createDb(env.DATABASE_URL);
-  const embeddings = new GatewayEmbeddingProvider(
-    env.ASSISTANT_EMBEDDING_MODEL,
-  );
+  const embeddings = createEmbeddingProvider({
+    googleApiKeyConfigured: !!env.GOOGLE_GENERATIVE_AI_API_KEY,
+    gatewayModel: env.ASSISTANT_EMBEDDING_MODEL,
+  });
 
   const result = await reingestDocumentChunks(db, embeddings, data.documentId);
   console.log(

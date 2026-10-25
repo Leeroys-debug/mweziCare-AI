@@ -1,9 +1,9 @@
 import { and, asc, eq } from "drizzle-orm";
 import {
   GatewayClassifier,
-  GatewayEmbeddingProvider,
   GatewaySafetyChecker,
   clearSession,
+  createEmbeddingProvider,
   runAssistantPipeline,
 } from "@mwezicare/assistant";
 import {
@@ -106,7 +106,10 @@ export async function POST(request: Request) {
   const deps = {
     db,
     classifier: new GatewayClassifier(env.ASSISTANT_CHAT_MODEL),
-    embeddings: new GatewayEmbeddingProvider(env.ASSISTANT_EMBEDDING_MODEL),
+    embeddings: createEmbeddingProvider({
+      googleApiKeyConfigured: !!env.GOOGLE_GENERATIVE_AI_API_KEY,
+      gatewayModel: env.ASSISTANT_EMBEDDING_MODEL,
+    }),
     safetyChecker: new GatewaySafetyChecker(env.ASSISTANT_CHAT_MODEL),
     keyProvider: encryptionKeyProvider,
     chatModel: env.ASSISTANT_CHAT_MODEL,

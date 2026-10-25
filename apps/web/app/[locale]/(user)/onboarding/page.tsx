@@ -13,6 +13,9 @@ export default function OnboardingPage() {
   const router = useRouter();
   const [ageBand, setAgeBand] = useState("");
   const [county, setCounty] = useState("");
+  const [familyHistory, setFamilyHistory] = useState<"yes" | "no" | "unsure">(
+    "unsure",
+  );
   const [consentLocation, setConsentLocation] = useState(false);
   const [consentResearch, setConsentResearch] = useState(false);
   const [consentSharing, setConsentSharing] = useState(false);
@@ -33,6 +36,8 @@ export default function OnboardingPage() {
         body: JSON.stringify({
           ageBand,
           county,
+          familyHistoryEndometriosis:
+            familyHistory === "unsure" ? null : familyHistory === "yes",
           consents: {
             tracking: true,
             location: consentLocation,
@@ -99,6 +104,34 @@ export default function OnboardingPage() {
               className="h-12 rounded-md border border-neutral-300 px-3 text-base dark:border-neutral-700 dark:bg-neutral-900"
             />
           </label>
+
+          <fieldset className="flex flex-col gap-2">
+            <legend className="text-sm font-medium">
+              {t("familyHistoryLabel")}
+            </legend>
+            <p className="text-xs text-neutral-500 dark:text-neutral-400">
+              {t("familyHistoryHint")}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {(["yes", "no", "unsure"] as const).map((option) => (
+                <label
+                  key={option}
+                  className="flex items-center gap-1.5 text-sm"
+                >
+                  <input
+                    type="radio"
+                    name="familyHistory"
+                    value={option}
+                    checked={familyHistory === option}
+                    onChange={() => setFamilyHistory(option)}
+                  />
+                  {t(
+                    `familyHistory${option === "yes" ? "Yes" : option === "no" ? "No" : "Unsure"}`,
+                  )}
+                </label>
+              ))}
+            </div>
+          </fieldset>
 
           <fieldset className="flex flex-col gap-3">
             <legend className="text-sm font-semibold">
