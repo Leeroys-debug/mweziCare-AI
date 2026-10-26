@@ -12,6 +12,7 @@ import {
   MINOR_AGE_BANDS,
   bleedingLevelSchema,
   painLocationSchema,
+  painTimingSchema,
   type SymptomLogInput,
 } from "@mwezicare/validation";
 import { Button, Chip, PainSlider } from "@mwezicare/ui";
@@ -20,6 +21,7 @@ import { offlineDb } from "@/lib/offline-db";
 import { saveLog } from "@/lib/sync-engine";
 
 const PAIN_LOCATIONS = painLocationSchema.options;
+const PAIN_TIMINGS = painTimingSchema.options;
 const BLEEDING_LEVELS = bleedingLevelSchema.options;
 
 const SYMPTOM_ICONS = {
@@ -35,6 +37,8 @@ const formSchema = z.object({
   bleedingLevel: bleedingLevelSchema.nullable(),
   painScore: z.number().int().min(0).max(10),
   painLocations: z.array(painLocationSchema),
+  painTiming: z.array(painTimingSchema),
+  painPersistsDespiteRelief: z.boolean(),
   fatigue: z.boolean(),
   nausea: z.boolean(),
   painWithBowelMovements: z.boolean(),
@@ -56,6 +60,8 @@ const DEFAULT_VALUES: FormValues = {
   bleedingLevel: null,
   painScore: 0,
   painLocations: [],
+  painTiming: [],
+  painPersistsDespiteRelief: false,
   fatigue: false,
   nausea: false,
   painWithBowelMovements: false,
@@ -120,6 +126,9 @@ export function DailyLogForm({ date, onSaved, onUrgent }: DailyLogFormProps) {
           painScore: existing.painScore ?? 0,
           painLocations: (existing.painLocations ??
             []) as FormValues["painLocations"],
+          painTiming: (existing.painTiming ?? []) as FormValues["painTiming"],
+          painPersistsDespiteRelief:
+            existing.painPersistsDespiteRelief ?? false,
           fatigue: existing.symptoms.fatigue ?? false,
           nausea: existing.symptoms.nausea ?? false,
           painWithBowelMovements:
@@ -157,6 +166,17 @@ export function DailyLogForm({ date, onSaved, onUrgent }: DailyLogFormProps) {
     );
   }
 
+  const painTiming = watch("painTiming");
+  function toggleTiming(timing: (typeof PAIN_TIMINGS)[number]) {
+    setValue(
+      "painTiming",
+      painTiming.includes(timing)
+        ? painTiming.filter((t) => t !== timing)
+        : [...painTiming, timing],
+      { shouldDirty: true },
+    );
+  }
+
   async function onSubmit(values: FormValues) {
     if (!clientId) return;
     setSaveState("saving");
@@ -168,6 +188,8 @@ export function DailyLogForm({ date, onSaved, onUrgent }: DailyLogFormProps) {
       bleedingLevel: values.bleedingLevel,
       painScore: values.painScore,
       painLocations: values.painLocations,
+      painTiming: values.painTiming,
+      painPersistsDespiteRelief: values.painPersistsDespiteRelief,
       symptoms: {
         fatigue: values.fatigue,
         nausea: values.nausea,
@@ -276,6 +298,36 @@ export function DailyLogForm({ date, onSaved, onUrgent }: DailyLogFormProps) {
           ))}
         </div>
       </fieldset>
+
+      <fieldset className="flex flex-col gap-2">
+        <legend className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+          {t("painTimingLabel")}
+        </legend>
+        <div className="flex flex-wrap gap-2">
+          {PAIN_TIMINGS.map((timing) => (
+            <Chip
+              key={timing}
+              selected={painTiming.includes(timing)}
+              onClick={() => toggleTiming(timing)}
+            >
+              {t(`painTiming.${timing}`)}
+            </Chip>
+          ))}
+        </div>
+      </fieldset>
+
+      <Controller
+        control={control}
+        name="painPersistsDespiteRelief"
+        render={({ field }) => (
+          <Chip
+            selected={field.value}
+            onClick={() => field.onChange(!field.value)}
+          >
+            {t("painPersistsDespiteRelief")}
+          </Chip>
+        )}
+      />
 
       <fieldset className="flex flex-col gap-2">
         <legend className="text-sm font-medium text-neutral-700 dark:text-neutral-300">

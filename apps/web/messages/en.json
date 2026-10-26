@@ -63,6 +63,14 @@
       "legs": "Legs",
       "other": "Other"
     },
+    "painTimingLabel": "When does the pain happen?",
+    "painTiming": {
+      "before_period": "Before my period starts",
+      "during_period": "During my period",
+      "after_period": "After my period ends",
+      "between_periods": "Other times between periods"
+    },
+    "painPersistsDespiteRelief": "Pain persists despite heat or usual pain relief",
     "symptomsLabel": "Symptoms",
     "symptom": {
       "fatigue": "Fatigue",

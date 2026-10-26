@@ -63,6 +63,14 @@
       "legs": "Miguu",
       "other": "Pengine"
     },
+    "painTimingLabel": "Maumivu hutokea lini?",
+    "painTiming": {
+      "before_period": "Kabla ya hedhi kuanza",
+      "during_period": "Wakati wa hedhi",
+      "after_period": "Baada ya hedhi kuisha",
+      "between_periods": "Nyakati nyingine kati ya hedhi"
+    },
+    "painPersistsDespiteRelief": "Maumivu yanaendelea licha ya joto au dawa za kawaida za maumivu",
     "symptomsLabel": "Dalili",
     "symptom": {
       "fatigue": "Uchovu",

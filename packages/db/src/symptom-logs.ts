@@ -13,6 +13,8 @@ export interface SymptomLogInput {
   bleedingLevel?: BleedingLevel | null;
   painScore?: number | null;
   painLocations: string[];
+  painTiming?: string[];
+  painPersistsDespiteRelief?: boolean | null;
   symptoms: Record<string, boolean>;
   impact: Record<string, boolean>;
   redFlags: Record<string, boolean>;
@@ -29,6 +31,8 @@ export interface SymptomLogRecord {
   bleedingLevel: BleedingLevel | null;
   painScore: number | null;
   painLocations: string[];
+  painTiming: string[];
+  painPersistsDespiteRelief: boolean | null;
   symptoms: Record<string, boolean>;
   impact: Record<string, boolean>;
   redFlags: Record<string, boolean>;
@@ -58,6 +62,8 @@ function toRecord(
     bleedingLevel: row.bleedingLevel,
     painScore: row.painScore,
     painLocations: row.painLocations ?? [],
+    painTiming: row.painTiming ?? [],
+    painPersistsDespiteRelief: row.painPersistsDespiteRelief,
     symptoms: (row.symptoms as Record<string, boolean>) ?? {},
     impact: (row.impact as Record<string, boolean>) ?? {},
     redFlags: (row.redFlags as Record<string, boolean>) ?? {},
@@ -113,6 +119,8 @@ export async function upsertSymptomLog(
         bleedingLevel: log.bleedingLevel ?? null,
         painScore: log.painScore ?? null,
         painLocations: log.painLocations,
+        painTiming: log.painTiming ?? [],
+        painPersistsDespiteRelief: log.painPersistsDespiteRelief ?? null,
         symptoms: log.symptoms,
         impact: log.impact,
         redFlags: log.redFlags,
@@ -153,6 +161,8 @@ export async function upsertSymptomLog(
       bleedingLevel: log.bleedingLevel ?? null,
       painScore: log.painScore ?? null,
       painLocations: log.painLocations,
+      painTiming: log.painTiming ?? [],
+      painPersistsDespiteRelief: log.painPersistsDespiteRelief ?? null,
       symptoms: log.symptoms,
       impact: log.impact,
       redFlags: log.redFlags,

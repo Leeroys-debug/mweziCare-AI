@@ -179,9 +179,8 @@ export function LogCalendar({ onUrgent }: LogCalendarProps) {
                 <span
                   aria-hidden="true"
                   className={cn(
-                    "rounded-full px-1 text-[9px] font-bold leading-tight",
+                    "rounded-full px-1 text-[9px] font-bold leading-tight text-white",
                     badgeClass,
-                    isPeriodDay ? "bg-white/90 text-neutral-900" : "text-white",
                   )}
                 >
                   {painScore}

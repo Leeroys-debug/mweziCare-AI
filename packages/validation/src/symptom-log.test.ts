@@ -13,6 +13,7 @@ function validLog(): SymptomLogInput {
     bleedingLevel: "medium" as const,
     painScore: 5,
     painLocations: ["lower_abdomen" as const],
+    painTiming: [],
     symptoms: {
       fatigue: true,
       nausea: false,
@@ -84,6 +85,38 @@ describe("symptomLogSchema", () => {
       painLocations: ["head"],
     });
     expect(result.success).toBe(false);
+  });
+
+  it("defaults painTiming to an empty array when omitted", () => {
+    const { painTiming: _omitted, ...logWithoutTiming } = validLog();
+    const result = symptomLogSchema.safeParse(logWithoutTiming);
+    expect(result.success && result.data.painTiming).toEqual([]);
+  });
+
+  it("accepts a well-formed painTiming value", () => {
+    const result = symptomLogSchema.safeParse({
+      ...validLog(),
+      painTiming: ["before_period", "between_periods"],
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects an unknown painTiming value", () => {
+    const result = symptomLogSchema.safeParse({
+      ...validLog(),
+      painTiming: ["mid_cycle"],
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("accepts painPersistsDespiteRelief as true, false, null or omitted", () => {
+    for (const value of [true, false, null, undefined]) {
+      const result = symptomLogSchema.safeParse({
+        ...validLog(),
+        painPersistsDespiteRelief: value,
+      });
+      expect(result.success).toBe(true);
+    }
   });
 });
 

@@ -19,6 +19,24 @@ export const painLocationSchema = z.enum([
 ]);
 export type PainLocation = z.infer<typeof painLocationSchema>;
 
+/**
+ * When pain occurs relative to the period — capture-only context for the
+ * user's own record and the clinician summary, never read by
+ * packages/rules-engine or packages/triage. Mirrors the "when pain occurs"
+ * row of the normal-menstruation-vs-endometriosis educational comparison:
+ * typical pain starts just before/at bleeding and improves within days,
+ * while a pattern of pain before/after/between periods is listed as a
+ * possible-endometriosis sign worth a clinician's attention — this field
+ * only records which the user experienced, it never scores or flags it.
+ */
+export const painTimingSchema = z.enum([
+  "before_period",
+  "during_period",
+  "after_period",
+  "between_periods",
+]);
+export type PainTiming = z.infer<typeof painTimingSchema>;
+
 export const symptomFlagsSchema = z.object({
   fatigue: z.boolean(),
   nausea: z.boolean(),
@@ -60,6 +78,9 @@ export const symptomLogSchema = z.object({
   bleedingLevel: bleedingLevelSchema.nullish(),
   painScore: z.number().int().min(0).max(10).nullish(),
   painLocations: z.array(painLocationSchema).default([]),
+  painTiming: z.array(painTimingSchema).default([]),
+  /** Capture-only — see painTimingSchema's doc comment. Null = not indicated. */
+  painPersistsDespiteRelief: z.boolean().nullish(),
   symptoms: symptomFlagsSchema,
   impact: impactFlagsSchema,
   redFlags: redFlagsSchema,

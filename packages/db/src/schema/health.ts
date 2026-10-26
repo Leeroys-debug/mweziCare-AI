@@ -55,6 +55,10 @@ export const symptomLogs = healthSchema.table(
     bleedingLevel: bleedingLevelEnum("bleeding_level"),
     painScore: integer("pain_score"),
     painLocations: text("pain_locations").array(),
+    // Capture-only context (never read by packages/rules-engine or
+    // packages/triage) — see packages/validation's painTimingSchema.
+    painTiming: text("pain_timing").array(),
+    painPersistsDespiteRelief: boolean("pain_persists_despite_relief"),
     symptoms: jsonb("symptoms"),
     impact: jsonb("impact"),
     redFlags: jsonb("red_flags"),
