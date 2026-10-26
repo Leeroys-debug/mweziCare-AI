@@ -127,6 +127,28 @@ describe("extractFeatures", () => {
     expect(features.painTrendSlope_last3 as number).toBeGreaterThan(0);
   });
 
+  it("computes cycle-length variability as the spread between the shortest and longest completed cycle in the window", () => {
+    const logs: TriageLog[] = [
+      log({ logDate: "2026-01-01", periodDay: true }), // -> 28-day cycle
+      log({ logDate: "2026-01-29", periodDay: true }), // -> 35-day cycle
+      log({ logDate: "2026-03-05", periodDay: true }), // -> 26-day cycle
+      log({ logDate: "2026-03-31", periodDay: true }), // ongoing (no next period)
+    ];
+    const features = extractFeatures(logs, deriveCycles(logs));
+    // last3 window sees the 35-day and 26-day completed cycles (the ongoing
+    // 4th cycle has no length yet) -> spread of 9 days.
+    expect(features.cycleLengthVariabilityDays_last3).toBe(9);
+  });
+
+  it("reports 0 cycle-length variability with fewer than 2 completed cycles", () => {
+    const logs: TriageLog[] = [
+      log({ logDate: "2026-01-01", periodDay: true }),
+      log({ logDate: "2026-01-29", periodDay: true }), // ongoing, no next period
+    ];
+    const features = extractFeatures(logs, deriveCycles(logs));
+    expect(features.cycleLengthVariabilityDays_last3).toBe(0);
+  });
+
   it("produces both _last3 and _last6 variants", () => {
     const features = extractFeatures([], []);
     expect(features).toHaveProperty("cyclesWithMaxPainGte7_last3");

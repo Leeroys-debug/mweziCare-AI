@@ -16,7 +16,7 @@ import type { Ruleset } from "../dsl";
  *   missedSchoolOrWorkOrSleepOrActivityDays, painTrendSlope,
  *   painDaysOutsideMenstruation, anyPainWithBowelOrUrination,
  *   heavyOrVeryHeavyBleedingDays, periodsLongerThan7Days,
- *   bleedingBetweenPeriods.
+ *   bleedingBetweenPeriods, cycleLengthVariabilityDays.
  */
 export const draftRuleset: Ruleset = {
   version: 1,
@@ -198,6 +198,25 @@ export const draftRuleset: Ruleset = {
         "Cf. NICE NG88 1.2.1 and QS47 statement 1 — persistent intermenstrual " +
         "bleeding is listed as a symptom that may suggest uterine cavity " +
         "abnormality, histological abnormality, adenomyosis or fibroids.",
+    },
+    {
+      id: "assess_soon_irregular_cycle_timing",
+      version: 1,
+      priority: 44,
+      outcome: "assess_soon",
+      conditions: {
+        feature: "cycleLengthVariabilityDays_last6",
+        operator: "gte",
+        value: 9,
+      },
+      reason: {
+        en: "[CLINICAL REVIEW REQUIRED] The gap between your periods has varied noticeably over your recent cycles.",
+        sw: "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Muda kati ya hedhi zako umebadilika kwa kiasi kikubwa katika mizunguko yako ya hivi karibuni.",
+      },
+      clinicianNote:
+        "[CLINICAL REVIEW REQUIRED] Confirm the >=9-day variability-across-6-cycles threshold, and whether fewer than 2 completed cycles in the window should suppress this rule entirely rather than default to 0 variability (see packages/triage/src/features.ts). " +
+        "Cf. the UNICEF Femtech proposal's educational-triage table — 'occasional changes in cycle timing' is listed with lighter-touch guidance ('record changes; recommend assessment if they persist or are concerning') than the other assess_soon rows; " +
+        "this rule's threshold and priority (lowest among assess_soon rules) are this app's own placeholder operationalization of that guidance, not from a cited clinical source.",
     },
     {
       id: "routine_baseline",

@@ -15,10 +15,6 @@ export function FacilityList({
     f.services.some((s) => s.serviceCode === "GYN" && s.status === "verified"),
   );
 
-  if (results.length === 0) {
-    return <p className="text-sm text-neutral-500">{t("noResults")}</p>;
-  }
-
   return (
     <div className="flex flex-col gap-3">
       {!hasVerifiedGyn && (
@@ -26,9 +22,17 @@ export function FacilityList({
           {t("noVerifiedFallback")}
         </div>
       )}
-      {results.map((facility) => (
-        <FacilityCard key={facility.id} facility={facility} outcome={outcome} />
-      ))}
+      {results.length === 0 ? (
+        <p className="text-sm text-neutral-500">{t("noResults")}</p>
+      ) : (
+        results.map((facility) => (
+          <FacilityCard
+            key={facility.id}
+            facility={facility}
+            outcome={outcome}
+          />
+        ))
+      )}
     </div>
   );
 }

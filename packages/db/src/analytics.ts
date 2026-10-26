@@ -101,6 +101,7 @@ export const DASHBOARD_VIEWS = {
   knowledge_score_change: "analytics.mv_knowledge_score_change",
   language_split: "analytics.mv_language_split",
   referral_follow_up_rate: "analytics.mv_referral_follow_up_rate",
+  time_to_care_seeking: "analytics.mv_time_to_care_seeking",
 } as const;
 export type DashboardViewName = keyof typeof DASHBOARD_VIEWS;
 

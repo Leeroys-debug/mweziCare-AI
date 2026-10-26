@@ -239,7 +239,8 @@
       "activeUsers": "Active users (latest week)",
       "logsPerActiveUser": "Logs per active user",
       "urgentShare": "Urgent assessments",
-      "referrals": "Referrals recorded"
+      "referrals": "Referrals recorded",
+      "daysToCareSeeking": "Avg. days to care-seeking"
     },
     "charts": {
       "activeUsersTrend": "Weekly active users",
@@ -399,7 +400,16 @@
     "firedRules": "Fired rules",
     "none": "—",
     "viewFeatures": "View features",
-    "noSamples": "No assessments recorded yet."
+    "noSamples": "No assessments recorded yet.",
+    "escalationReview": "Escalation review",
+    "verdictLabel": {
+      "appropriate": "Appropriate",
+      "inappropriate": "Inappropriate",
+      "uncertain": "Uncertain"
+    },
+    "submitReview": "Mark as…",
+    "reviewSaved": "Saved",
+    "reviewError": "Couldn't save — try again."
   },
   "StaffUsers": {
     "title": "Users",

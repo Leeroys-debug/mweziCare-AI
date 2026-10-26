@@ -37,6 +37,7 @@ const VIEWS: DashboardViewName[] = [
   "knowledge_score_change",
   "language_split",
   "referral_follow_up_rate",
+  "time_to_care_seeking",
 ];
 
 function isoDaysAgo(days: number): string {
@@ -88,6 +89,7 @@ export function DashboardView() {
   const outcomeRows = data.outcome_distribution ?? [];
   const referralRows = data.referrals_per_outcome ?? [];
   const languageRows = data.language_split ?? [];
+  const timeToCareRows = data.time_to_care_seeking ?? [];
 
   const activeUsersTrend = sumByWeek(activeUsersRows, "active_users");
   const outcomeSnapshot = groupedForLatestWeek(
@@ -107,6 +109,10 @@ export function DashboardView() {
     "logs_per_active_user",
   );
   const latestReferrals = totalForLatestWeek(referralRows, "referral_count");
+  const latestDaysToCareSeeking = averageForLatestWeek(
+    timeToCareRows,
+    "avg_days_to_care_seeking",
+  );
   const urgentCount =
     outcomeSnapshot.find((o) => o.group === "urgent")?.value ?? 0;
   const totalOutcomes = outcomeSnapshot.reduce((sum, o) => sum + o.value, 0);
@@ -182,6 +188,10 @@ export function DashboardView() {
         />
         <KpiTile label={t("kpis.urgentShare")} value={`${urgentShare}%`} />
         <KpiTile label={t("kpis.referrals")} value={String(latestReferrals)} />
+        <KpiTile
+          label={t("kpis.daysToCareSeeking")}
+          value={latestDaysToCareSeeking.toFixed(1)}
+        />
       </div>
 
       <ActiveUsersTrendChart data={activeUsersTrend} />

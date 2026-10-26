@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { CaseReviewActions } from "@/components/staff/case-samples/case-review-actions";
 import { listCaseSamples } from "@/lib/case-samples";
 import { requireRole } from "@/lib/rbac";
 import { db } from "@/lib/server-db";
@@ -31,12 +32,13 @@ export default async function CaseSamplesPage() {
               <th className="py-2">{t("county")}</th>
               <th className="py-2">{t("outcome")}</th>
               <th className="py-2">{t("firedRules")}</th>
+              <th className="py-2">{t("escalationReview")}</th>
             </tr>
           </thead>
           <tbody>
-            {samples.map((sample, i) => (
+            {samples.map((sample) => (
               <tr
-                key={i}
+                key={sample.id}
                 className="border-b border-neutral-100 align-top dark:border-neutral-900"
               >
                 <td className="py-2">
@@ -66,6 +68,16 @@ export default async function CaseSamplesPage() {
                         {JSON.stringify(sample.features, null, 2)}
                       </pre>
                     </details>
+                  )}
+                </td>
+                <td className="py-2">
+                  {sample.outcome === "routine" ? (
+                    t("none")
+                  ) : (
+                    <CaseReviewActions
+                      assessmentId={sample.id}
+                      initialVerdict={sample.review?.verdict ?? null}
+                    />
                   )}
                 </td>
               </tr>

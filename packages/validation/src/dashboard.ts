@@ -9,6 +9,7 @@ export const dashboardViewNameSchema = z.enum([
   "knowledge_score_change",
   "language_split",
   "referral_follow_up_rate",
+  "time_to_care_seeking",
 ]);
 
 export const dashboardQuerySchema = z.object({

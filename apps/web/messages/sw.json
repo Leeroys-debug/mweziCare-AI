@@ -239,7 +239,8 @@
       "activeUsers": "Watumiaji hai (wiki ya hivi karibuni)",
       "logsPerActiveUser": "Rekodi kwa kila mtumiaji hai",
       "urgentShare": "Tathmini za dharura",
-      "referrals": "Rufaa zilizorekodiwa"
+      "referrals": "Rufaa zilizorekodiwa",
+      "daysToCareSeeking": "Wastani wa siku kutafuta huduma"
     },
     "charts": {
       "activeUsersTrend": "Watumiaji hai kwa wiki",
@@ -399,7 +400,16 @@
     "firedRules": "Kanuni zilizotekelezwa",
     "none": "—",
     "viewFeatures": "Angalia vipengele",
-    "noSamples": "Bado hakuna tathmini zilizorekodiwa."
+    "noSamples": "Bado hakuna tathmini zilizorekodiwa.",
+    "escalationReview": "Ukaguzi wa dharura",
+    "verdictLabel": {
+      "appropriate": "Ilifaa",
+      "inappropriate": "Haikufaa",
+      "uncertain": "Haina uhakika"
+    },
+    "submitReview": "Weka alama…",
+    "reviewSaved": "Imehifadhiwa",
+    "reviewError": "Imeshindwa kuhifadhi — jaribu tena."
   },
   "StaffUsers": {
     "title": "Watumiaji",

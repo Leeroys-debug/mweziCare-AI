@@ -191,4 +191,21 @@ describe("evaluate", () => {
     const result = evaluate(draftRuleset, {});
     expect(result.outcome).toBe("routine");
   });
+
+  it("the real draft ruleset flags assess_soon for noticeably variable cycle timing alone", () => {
+    const result = evaluate(draftRuleset, {
+      cycleLengthVariabilityDays_last6: 9,
+    });
+    expect(result.outcome).toBe("assess_soon");
+    expect(result.firedRules.map((r) => r.id)).toEqual([
+      "assess_soon_irregular_cycle_timing",
+    ]);
+  });
+
+  it("the real draft ruleset does not flag cycle timing below the variability threshold", () => {
+    const result = evaluate(draftRuleset, {
+      cycleLengthVariabilityDays_last6: 8,
+    });
+    expect(result.outcome).toBe("routine");
+  });
 });

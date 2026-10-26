@@ -14,6 +14,7 @@ import {
 import { healthSchema } from "./schemas";
 import {
   bleedingLevelEnum,
+  escalationVerdictEnum,
   quizPromptKindEnum,
   triageOutcomeEnum,
 } from "./enums";
@@ -108,6 +109,41 @@ export const assessments = healthSchema.table("assessments", {
     .notNull()
     .defaultNow(),
 });
+
+/**
+ * Clinician adjudication of an assess_soon/urgent assessment's
+ * appropriateness, for the "safety of urgent escalations" pilot metric
+ * (UNICEF Femtech proposal §10). Deliberately a separate append-only table
+ * rather than a column on `assessments` — that table is documented and
+ * RLS-protected as an immutable audit record; a review is a distinct event
+ * that references it, and a clinician can review the same assessment more
+ * than once if needed (the staff console reads the latest row per
+ * assessment). No RLS of its own: it carries no symptom content, only an
+ * opaque assessment id and a verdict, and access is role-checked in the
+ * API handler (clinician-only) per CLAUDE.md.
+ */
+export const assessmentReviews = healthSchema.table(
+  "assessment_reviews",
+  {
+    id: uuid("id")
+      .primaryKey()
+      .default(sql`gen_random_uuid()`),
+    assessmentId: uuid("assessment_id")
+      .notNull()
+      .references(() => assessments.id, { onDelete: "cascade" }),
+    reviewedBy: uuid("reviewed_by")
+      .notNull()
+      .references(() => users.id),
+    verdict: escalationVerdictEnum("verdict").notNull(),
+    note: text("note"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [
+    index("assessment_reviews_assessment_idx").on(table.assessmentId),
+  ],
+);
 
 export const chatSessions = healthSchema.table("chat_sessions", {
   id: uuid("id")

@@ -56,3 +56,9 @@ export const quizPromptKindEnum = healthSchema.enum("quiz_prompt_kind", [
   "onboarding",
   "day30",
 ]);
+
+export const escalationVerdictEnum = healthSchema.enum("escalation_verdict", [
+  "appropriate",
+  "inappropriate",
+  "uncertain",
+]);

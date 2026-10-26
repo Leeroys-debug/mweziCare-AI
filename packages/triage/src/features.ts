@@ -53,6 +53,7 @@ function windowFeatures(
       periodsLongerThan7Days: 0,
       bleedingBetweenPeriods: false,
       painTrendSlope: 0,
+      cycleLengthVariabilityDays: 0,
     };
   }
 
@@ -107,6 +108,18 @@ function windowFeatures(
     .map((log, i) => ({ x: i, y: log.painScore! }));
   const painTrendSlope = linearRegressionSlope(painPoints);
 
+  // Spread between the shortest and longest *completed* cycle in this
+  // window — needs at least 2 completed cycles to mean anything, else 0
+  // (an ongoing/most-recent cycle always has cycleLengthDays: null, see
+  // packages/triage/src/cycles.ts).
+  const completedCycleLengths = windowCycles
+    .map((c) => c.cycleLengthDays)
+    .filter((length): length is number => length !== null);
+  const cycleLengthVariabilityDays =
+    completedCycleLengths.length >= 2
+      ? Math.max(...completedCycleLengths) - Math.min(...completedCycleLengths)
+      : 0;
+
   return {
     cyclesWithMaxPainGte7,
     missedSchoolOrWorkOrSleepOrActivityDays,
@@ -116,6 +129,7 @@ function windowFeatures(
     periodsLongerThan7Days,
     bleedingBetweenPeriods,
     painTrendSlope,
+    cycleLengthVariabilityDays,
   };
 }
 
@@ -151,6 +165,8 @@ export function extractFeatures(
     bleedingBetweenPeriods_last6: last6.bleedingBetweenPeriods,
     painTrendSlope_last3: last3.painTrendSlope,
     painTrendSlope_last6: last6.painTrendSlope,
+    cycleLengthVariabilityDays_last3: last3.cycleLengthVariabilityDays,
+    cycleLengthVariabilityDays_last6: last6.cycleLengthVariabilityDays,
   };
 }
 
