@@ -25,8 +25,17 @@
       "periodLabel": "Period",
       "cycleLabel": "Cycle day",
       "day": "Day {day}",
-      "weekLabel": "This week"
+      "weekLabel": "This week",
+      "periodInDays": "Period in {days, plural, one {# day} other {# days}}",
+      "periodDueToday": "Period due today"
     },
+    "quickActions": {
+      "logPeriod": "Log period",
+      "periodLogged": "Period logged",
+      "logSymptoms": "Symptoms",
+      "ask": "Ask"
+    },
+    "learnCarouselTitle": "For you",
     "placeholder": "Your symptom log will appear here.",
     "viewSwitcherLabel": "Choose a view",
     "todayTab": "Today",
@@ -171,7 +180,7 @@
     "loadingHistory": "Loading your conversation…",
     "starterQuestionsTitle": "Try asking",
     "starterQuestions": {
-      "q1": "What foods help with period cramps?",
+      "q1": "What self-care tips can help with period cramps?",
       "q2": "What's a normal cycle length?",
       "q3": "When should I see a clinician about my pain?",
       "q4": "What should I expect at my first gynaecology visit?"

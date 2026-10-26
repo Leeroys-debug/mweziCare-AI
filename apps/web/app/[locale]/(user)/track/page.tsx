@@ -1,14 +1,17 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@mwezicare/ui";
 import { DailyLogForm } from "@/components/track/daily-log-form";
 import { LogCalendar } from "@/components/track/log-calendar";
+import { LearnCarousel } from "@/components/track/learn-carousel";
+import { QuickActions } from "@/components/track/quick-actions";
 import { UrgentCareOverlay } from "@/components/urgent-care-overlay";
 import { Day30QuizBanner } from "@/components/quiz/day30-banner";
 import { trackClientEvent } from "@/lib/analytics-client";
+import { toggleTodayPeriod } from "@/lib/quick-log";
 
 interface Cycle {
   startDate: string;
@@ -20,6 +23,14 @@ interface Cycle {
 interface CyclesResponse {
   cycles: Cycle[];
   nextPeriodEstimate: { date: string; isEstimate: true } | null;
+}
+
+function daysUntil(dateIso: string): number {
+  const today = todayIso();
+  const ms =
+    new Date(`${dateIso}T00:00:00.000Z`).getTime() -
+    new Date(`${today}T00:00:00.000Z`).getTime();
+  return Math.round(ms / (24 * 60 * 60 * 1000));
 }
 
 interface WeekLog {
@@ -70,8 +81,11 @@ function useCycleDayHero(cyclesData: CyclesResponse | undefined) {
 
 export default function TrackPage() {
   const t = useTranslations("Track");
+  const queryClient = useQueryClient();
   const [view, setView] = useState<"today" | "calendar">("today");
   const [showUrgent, setShowUrgent] = useState(false);
+  const [togglingPeriod, setTogglingPeriod] = useState(false);
+  const formAnchorRef = useRef<HTMLDivElement>(null);
   const today = todayIso();
   const week = useMemo(() => weekDates(today), [today]);
 
@@ -108,20 +122,35 @@ export default function TrackPage() {
     if (showUrgent) void trackClientEvent("urgent_screen_shown", {});
   }, [showUrgent]);
 
+  const isTodayPeriodDay = periodDatesThisWeek.has(today);
+  const daysToNextPeriod = cyclesData?.nextPeriodEstimate
+    ? Math.max(0, daysUntil(cyclesData.nextPeriodEstimate.date))
+    : null;
+
+  async function handleLogPeriod() {
+    setTogglingPeriod(true);
+    try {
+      await toggleTodayPeriod(today);
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["logs"] }),
+        queryClient.invalidateQueries({ queryKey: ["cycles"] }),
+      ]);
+    } finally {
+      setTogglingPeriod(false);
+    }
+  }
+
+  function handleLogSymptoms() {
+    setView("today");
+    formAnchorRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
+
   return (
     <div className="flex flex-col gap-4">
-      <div className="-mx-4 -mt-4 flex flex-col gap-4 bg-gradient-to-b from-brand-100 to-transparent px-4 pb-4 pt-6 dark:from-brand-950">
-        {hero && (
-          <div className="text-center">
-            <p className="text-sm font-medium text-brand-700 dark:text-brand-300">
-              {hero.isPeriodDay ? t("hero.periodLabel") : t("hero.cycleLabel")}
-            </p>
-            <p className="text-4xl font-bold text-brand-900 dark:text-brand-100">
-              {t("hero.day", { day: hero.dayNumber })}
-            </p>
-          </div>
-        )}
-
+      <div className="-mx-4 -mt-4 flex flex-col gap-5 bg-gradient-to-b from-brand-100 to-transparent px-4 pb-5 pt-6 dark:from-brand-950">
         <div
           className="flex justify-between gap-1"
           role="group"
@@ -160,42 +189,76 @@ export default function TrackPage() {
             );
           })}
         </div>
+
+        {hero && (hero.isPeriodDay || daysToNextPeriod != null) && (
+          <div className="text-center">
+            {hero.isPeriodDay ? (
+              <>
+                <p className="text-sm font-medium text-brand-700 dark:text-brand-300">
+                  {t("hero.periodLabel")}
+                </p>
+                <p className="text-4xl font-bold text-brand-900 dark:text-brand-100">
+                  {t("hero.day", { day: hero.dayNumber })}
+                </p>
+              </>
+            ) : (
+              daysToNextPeriod != null && (
+                <p className="text-4xl font-bold text-brand-900 dark:text-brand-100">
+                  {daysToNextPeriod === 0
+                    ? t("hero.periodDueToday")
+                    : t("hero.periodInDays", { days: daysToNextPeriod })}
+                </p>
+              )
+            )}
+          </div>
+        )}
+
+        <QuickActions
+          isPeriodDay={isTodayPeriodDay}
+          periodActionDisabled={togglingPeriod}
+          onLogPeriod={() => void handleLogPeriod()}
+          onLogSymptoms={handleLogSymptoms}
+        />
       </div>
 
-      <h1 className="text-2xl font-semibold">{t("title")}</h1>
+      <LearnCarousel />
 
-      <Day30QuizBanner />
+      <div ref={formAnchorRef} className="flex flex-col gap-4 scroll-mt-4">
+        <h1 className="text-2xl font-semibold">{t("title")}</h1>
 
-      <div
-        role="tablist"
-        aria-label={t("viewSwitcherLabel")}
-        className="grid grid-cols-2 gap-1 rounded-lg bg-neutral-100 p-1 dark:bg-neutral-900"
-      >
-        <Button
-          type="button"
-          role="tab"
-          aria-selected={view === "today"}
-          variant={view === "today" ? "default" : "ghost"}
-          onClick={() => setView("today")}
+        <Day30QuizBanner />
+
+        <div
+          role="tablist"
+          aria-label={t("viewSwitcherLabel")}
+          className="grid grid-cols-2 gap-1 rounded-lg bg-neutral-100 p-1 dark:bg-neutral-900"
         >
-          {t("todayTab")}
-        </Button>
-        <Button
-          type="button"
-          role="tab"
-          aria-selected={view === "calendar"}
-          variant={view === "calendar" ? "default" : "ghost"}
-          onClick={() => setView("calendar")}
-        >
-          {t("calendarTab")}
-        </Button>
+          <Button
+            type="button"
+            role="tab"
+            aria-selected={view === "today"}
+            variant={view === "today" ? "default" : "ghost"}
+            onClick={() => setView("today")}
+          >
+            {t("todayTab")}
+          </Button>
+          <Button
+            type="button"
+            role="tab"
+            aria-selected={view === "calendar"}
+            variant={view === "calendar" ? "default" : "ghost"}
+            onClick={() => setView("calendar")}
+          >
+            {t("calendarTab")}
+          </Button>
+        </div>
+
+        {view === "today" ? (
+          <DailyLogForm date={today} onUrgent={() => setShowUrgent(true)} />
+        ) : (
+          <LogCalendar onUrgent={() => setShowUrgent(true)} />
+        )}
       </div>
-
-      {view === "today" ? (
-        <DailyLogForm date={today} onUrgent={() => setShowUrgent(true)} />
-      ) : (
-        <LogCalendar onUrgent={() => setShowUrgent(true)} />
-      )}
 
       {showUrgent && (
         <UrgentCareOverlay onAcknowledge={() => setShowUrgent(false)} />

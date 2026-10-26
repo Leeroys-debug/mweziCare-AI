@@ -25,8 +25,17 @@
       "periodLabel": "Hedhi",
       "cycleLabel": "Siku ya mzunguko",
       "day": "Siku {day}",
-      "weekLabel": "Wiki hii"
+      "weekLabel": "Wiki hii",
+      "periodInDays": "Hedhi baada ya siku {days}",
+      "periodDueToday": "Hedhi inatarajiwa leo"
     },
+    "quickActions": {
+      "logPeriod": "Rekodi hedhi",
+      "periodLogged": "Hedhi imerekodiwa",
+      "logSymptoms": "Dalili",
+      "ask": "Uliza"
+    },
+    "learnCarouselTitle": "Kwa ajili yako",
     "placeholder": "Rekodi yako ya dalili itaonekana hapa.",
     "viewSwitcherLabel": "Chagua mwonekano",
     "todayTab": "Leo",
@@ -171,7 +180,7 @@
     "loadingHistory": "Inapakia mazungumzo yako…",
     "starterQuestionsTitle": "Jaribu kuuliza",
     "starterQuestions": {
-      "q1": "Vyakula gani husaidia na maumivu ya hedhi?",
+      "q1": "Ni njia gani za kujitunza zinaweza kusaidia na maumivu ya hedhi?",
       "q2": "Mzunguko wa kawaida una urefu gani?",
       "q3": "Ni lini ninapaswa kumwona mtaalamu wa afya kuhusu maumivu yangu?",
       "q4": "Nitegemee nini katika ziara yangu ya kwanza ya daktari wa wanawake?"
