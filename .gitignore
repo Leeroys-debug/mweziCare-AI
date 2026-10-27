@@ -23,3 +23,10 @@ evals/
 apps/web/.agents/
 apps/web/.claude/
 apps/web/skills-lock.json
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfplan
+infra/terraform-ec2-demo/*.pub
+.vercel

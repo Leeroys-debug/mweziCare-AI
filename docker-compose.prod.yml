@@ -9,6 +9,32 @@
 # not yet run end to end (no Docker daemon in the environment this was
 # built in) — see docs/deploy.md's verification note before relying on it.
 
+# Shared by web and worker — both call loadServerEnv(), which validates the
+# full serverEnvSchema, so both need every one of these (a previous version
+# of this file aliased worker's environment straight to migrate's
+# DATABASE_URL-only block instead of merging this anchor, so the worker only
+# ever saw DATABASE_URL and loadServerEnv() failed fast on everything else —
+# merge with `<<: *app-env`, never alias with `environment: *app-env`).
+x-app-env: &app-env
+  DATABASE_URL: postgres://${POSTGRES_USER:?set POSTGRES_USER}:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:?set POSTGRES_DB}
+  AUTH_SECRET: ${AUTH_SECRET:?set AUTH_SECRET}
+  AI_GATEWAY_API_KEY: ${AI_GATEWAY_API_KEY:?set AI_GATEWAY_API_KEY}
+  ENCRYPTION_KEYS: ${ENCRYPTION_KEYS:?set ENCRYPTION_KEYS}
+  ENCRYPTION_KEY_ID: ${ENCRYPTION_KEY_ID:?set ENCRYPTION_KEY_ID}
+  HMAC_LOOKUP_KEY: ${HMAC_LOOKUP_KEY:?set HMAC_LOOKUP_KEY}
+  ANALYTICS_KEY: ${ANALYTICS_KEY:?set ANALYTICS_KEY}
+  SENTRY_DSN: ${SENTRY_DSN:-}
+  SENTRY_ENVIRONMENT: ${SENTRY_ENVIRONMENT:-production}
+  S3_ENDPOINT: http://garage:3900
+  S3_ACCESS_KEY: ${S3_ACCESS_KEY:?set S3_ACCESS_KEY}
+  S3_SECRET_KEY: ${S3_SECRET_KEY:?set S3_SECRET_KEY}
+  S3_BUCKET: ${S3_BUCKET:-mwezicare-summaries}
+  S3_REGION: ${S3_REGION:-garage}
+  CHAT_RETENTION_DAYS: ${CHAT_RETENTION_DAYS:-90}
+  SHARE_LINK_RETENTION_DAYS: ${SHARE_LINK_RETENTION_DAYS:-7}
+  ACCOUNT_PURGE_DAYS: ${ACCOUNT_PURGE_DAYS:-30}
+  AUDIT_RETENTION_DAYS: ${AUDIT_RETENTION_DAYS:-365}
+
 services:
   postgres:
     build:
@@ -51,7 +77,7 @@ services:
       context: .
       dockerfile: apps/web/Dockerfile
       target: migrate
-    environment: &app-env
+    environment:
       DATABASE_URL: postgres://${POSTGRES_USER:?set POSTGRES_USER}:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:?set POSTGRES_DB}
     depends_on:
       postgres:
@@ -65,25 +91,10 @@ services:
       target: web
     environment:
       <<: *app-env
-      AUTH_SECRET: ${AUTH_SECRET:?set AUTH_SECRET}
-      AI_GATEWAY_API_KEY: ${AI_GATEWAY_API_KEY:?set AI_GATEWAY_API_KEY}
-      ENCRYPTION_KEYS: ${ENCRYPTION_KEYS:?set ENCRYPTION_KEYS}
-      ENCRYPTION_KEY_ID: ${ENCRYPTION_KEY_ID:?set ENCRYPTION_KEY_ID}
-      HMAC_LOOKUP_KEY: ${HMAC_LOOKUP_KEY:?set HMAC_LOOKUP_KEY}
-      ANALYTICS_KEY: ${ANALYTICS_KEY:?set ANALYTICS_KEY}
-      SENTRY_DSN: ${SENTRY_DSN:-}
-      SENTRY_ENVIRONMENT: ${SENTRY_ENVIRONMENT:-production}
-      S3_ENDPOINT: http://garage:3900
-      S3_ACCESS_KEY: ${S3_ACCESS_KEY:?set S3_ACCESS_KEY}
-      S3_SECRET_KEY: ${S3_SECRET_KEY:?set S3_SECRET_KEY}
-      S3_BUCKET: ${S3_BUCKET:-mwezicare-summaries}
-      S3_REGION: ${S3_REGION:-garage}
+      # Client-bundle vars (NEXT_PUBLIC_*) — web-only, the worker never
+      # serves a browser bundle and loadServerEnv() doesn't require them.
       NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:?set NEXT_PUBLIC_APP_URL}
       NEXT_PUBLIC_SENTRY_DSN: ${NEXT_PUBLIC_SENTRY_DSN:-}
-      CHAT_RETENTION_DAYS: ${CHAT_RETENTION_DAYS:-90}
-      SHARE_LINK_RETENTION_DAYS: ${SHARE_LINK_RETENTION_DAYS:-7}
-      ACCOUNT_PURGE_DAYS: ${ACCOUNT_PURGE_DAYS:-30}
-      AUDIT_RETENTION_DAYS: ${AUDIT_RETENTION_DAYS:-365}
     ports:
       - "3000:3000"
     depends_on:
@@ -100,7 +111,8 @@ services:
       context: .
       dockerfile: apps/web/Dockerfile
       target: worker
-    environment: *app-env
+    environment:
+      <<: *app-env
     depends_on:
       postgres:
         condition: service_healthy
