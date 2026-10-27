@@ -5,7 +5,7 @@ import {
   startTestDatabase,
   type TestDatabase,
 } from "@mwezicare/db/testcontainers-setup";
-import { geoSearch } from "./geo-search";
+import { areaSearch, geoSearch } from "./geo-search";
 
 // A cold build of infra/postgres/Dockerfile pulls the full PostGIS/GDAL
 // dependency chain (dozens of packages) over apt — comfortably over 3
@@ -59,13 +59,22 @@ describe("geoSearch (testcontainers)", () => {
       { facilityId: nearId, serviceCode: "GYN", status: "verified" },
       { facilityId: midId, serviceCode: "GYN", status: "listed" },
     ]);
+
+    // Mixed-case county/name on purpose — areaSearch must match these
+    // regardless of how the caller capitalises their query.
+    await db.insert(schema.facilities).values({
+      kmhflCode: "TC-AREA-KIAMBU",
+      name: "Thika Road Test Clinic",
+      county: "Kiambu",
+      geom: nairobiCbd,
+    });
   }, CONTAINER_TIMEOUT_MS);
 
   afterAll(async () => {
     if (db)
       await db
         .delete(schema.facilities)
-        .where(like(schema.facilities.kmhflCode, "TC-GEO-%"));
+        .where(like(schema.facilities.kmhflCode, "TC-%"));
     await testDb?.stop();
   }, CONTAINER_TIMEOUT_MS);
 
@@ -113,5 +122,25 @@ describe("geoSearch (testcontainers)", () => {
       .map((r) => r.kmhflCode)
       .filter((c) => c.startsWith("TC-GEO-"));
     expect(codes).toEqual(["TC-GEO-NEAR"]);
+  });
+
+  it("areaSearch matches a county regardless of casing or surrounding whitespace", async () => {
+    for (const county of ["Kiambu", "kiambu", "KIAMBU", " Kiambu  "]) {
+      const results = await areaSearch(db, { county });
+      expect(
+        results.map((r) => r.kmhflCode),
+        `county=${JSON.stringify(county)}`,
+      ).toContain("TC-AREA-KIAMBU");
+    }
+  });
+
+  it("areaSearch returns nothing for a county with no facilities", async () => {
+    const results = await areaSearch(db, { county: "Nowhereshire" });
+    expect(results).toHaveLength(0);
+  });
+
+  it("areaSearch's free-text name query is case-insensitive", async () => {
+    const results = await areaSearch(db, { q: "thika road" });
+    expect(results.map((r) => r.kmhflCode)).toContain("TC-AREA-KIAMBU");
   });
 });

@@ -113,6 +113,13 @@
       "when": 1793026607765,
       "tag": "0015_symptom_log_pain_timing",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1793035200000,
+      "tag": "0016_facility_name_lower_trgm_idx",
+      "breakpoints": true
     }
   ]
 }

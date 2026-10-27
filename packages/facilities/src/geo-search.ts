@@ -124,12 +124,17 @@ export async function areaSearch(
   params: AreaSearchParams,
 ): Promise<FacilityResult[]> {
   const limit = params.limit ?? 20;
+  // Case/whitespace-insensitive — a real user typing "kiambu" or "KIAMBU "
+  // should match the same rows as "Kiambu" (exact byte-for-byte matching
+  // was silently returning zero results for anything but the stored casing).
   const countyFilter = params.county
-    ? sql`and f.county = ${params.county}`
+    ? sql`and lower(f.county) = lower(${params.county.trim()})`
     : sql``;
-  const nameFilter = params.q ? sql`and f.name % ${params.q}` : sql``;
+  const nameFilter = params.q
+    ? sql`and lower(f.name) % lower(${params.q})`
+    : sql``;
   const orderBy = params.q
-    ? sql`similarity(f.name, ${params.q}) desc`
+    ? sql`similarity(lower(f.name), lower(${params.q})) desc`
     : sql`f.name asc`;
 
   const rows = (await db.execute(sql`
