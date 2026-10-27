@@ -34,7 +34,7 @@
     "@testing-library/react": "^16.1.0",
     "@testing-library/jest-dom": "^6.6.3",
     "jsdom": "^25.0.1",
-    "next": "16.4.2",
+    "next": "16.4.3",
     "react-dom": "^19"
   }
 }
