@@ -19,3 +19,7 @@ apps/web/public/sw.js.map
 apps/web/public/swe-worker-*.js
 apps/web/.lighthouseci/
 evals/
+.env*
+apps/web/.agents/
+apps/web/.claude/
+apps/web/skills-lock.json

@@ -80,7 +80,12 @@ export const serverEnvSchema = z.object({
   KMHFL_API_BASE_URL: z.string().url().optional(),
   KMHFL_API_KEY: z.string().min(1).optional(),
 
-  // S3-compatible object storage for clinician-summary PDFs (MinIO in dev).
+  // S3-compatible object storage for clinician-summary PDFs (Garage/MinIO in
+  // dev, real S3 on the AWS/Docker deployment). Required there, but NOT on
+  // Vercel, which has no generic S3 endpoint — it uses Vercel Blob via
+  // BLOB_READ_WRITE_TOKEN (auto-injected by the platform) instead; see
+  // apps/web/lib/object-storage.ts's VERCEL branch. loadServerEnv() below
+  // relaxes these to optional when process.env.VERCEL is set.
   S3_ENDPOINT: z.string().url(),
   S3_ACCESS_KEY: z.string().min(1),
   S3_SECRET_KEY: z.string().min(1),
@@ -127,7 +132,19 @@ export function loadServerEnv(
     Object.entries(source).filter(([, value]) => value !== ""),
   );
 
-  const parsed = serverEnvSchema.safeParse(sanitized);
+  // On Vercel, object storage is Vercel Blob (BLOB_READ_WRITE_TOKEN), not
+  // the generic S3 vars below — relax those from required to optional so
+  // a Vercel deploy doesn't fail boot over env vars it will never read.
+  const schema = sanitized.VERCEL
+    ? serverEnvSchema.extend({
+        S3_ENDPOINT: z.string().url().optional(),
+        S3_ACCESS_KEY: z.string().min(1).optional(),
+        S3_SECRET_KEY: z.string().min(1).optional(),
+        S3_BUCKET: z.string().min(1).optional(),
+      })
+    : serverEnvSchema;
+
+  const parsed = schema.safeParse(sanitized);
   if (!parsed.success) {
     const issues = parsed.error.issues
       .map((issue) => `  - ${issue.path.join(".")}: ${issue.message}`)
@@ -135,6 +152,9 @@ export function loadServerEnv(
     throw new Error(`Invalid environment variables:\n${issues}`);
   }
 
-  cachedServerEnv = parsed.data;
-  return parsed.data;
+  // On Vercel the S3_* fields are genuinely absent (optional in `schema`
+  // above), but object-storage.ts's VERCEL branch never reads them — this
+  // cast only widens back to the base (non-Vercel) required shape.
+  cachedServerEnv = parsed.data as ServerEnv;
+  return cachedServerEnv;
 }
