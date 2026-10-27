@@ -268,8 +268,8 @@ importers:
         specifier: ^4.0.0
         version: 4.4.6
       dexie-react-hooks:
-        specifier: ^1.1.7
-        version: 1.1.7(@types/react@19.3.0)(dexie@4.4.6)(react@19.3.0)
+        specifier: ^4.4.0
+        version: 4.4.0(dexie@4.4.6)(react@19.3.0)
       drizzle-orm:
         specifier: ^0.45.4
         version: 0.45.4(@opentelemetry/api@1.10.0)(kysely@0.29.7)(pg@8.23.1)(postgres@3.4.9)
@@ -4169,11 +4169,10 @@ packages:
   devtools-protocol@0.0.1696802:
     resolution: {integrity: sha512-FO5/SENfvc2K8wRnWQflKcwuoTH4dBkXCWTQ9ebIWtuX8JM5+ZvCotaEmkfh21pO7TvIKGTM3hG4xFiq9WTwmg==}
 
-  dexie-react-hooks@1.1.7:
-    resolution: {integrity: sha512-Lwv5W0Hk+uOW3kGnsU9GZoR1er1B7WQ5DSdonoNG+focTNeJbHW6vi6nBoX534VKI3/uwHebYzSw1fwY6a7mTw==}
+  dexie-react-hooks@4.4.0:
+    resolution: {integrity: sha512-ObLXBS5+4BJU8vtSvBx6b9fY6zZYgniAtwxzjCHsUQadgbqYN6935X2/1TWw4Rf2N1aZV1io5/ziox4vKuxABA==}
     peerDependencies:
-      '@types/react': '>=16'
-      dexie: ^3.2 || ^4.0.1-alpha
+      dexie: '>=4.2.0-alpha.1 <5.0.0'
       react: '>=16'
 
   dexie@4.4.6:
@@ -10489,9 +10488,8 @@ snapshots:
 
   devtools-protocol@0.0.1696802: {}
 
-  dexie-react-hooks@1.1.7(@types/react@19.3.0)(dexie@4.4.6)(react@19.3.0):
+  dexie-react-hooks@4.4.0(dexie@4.4.6)(react@19.3.0):
     dependencies:
-      '@types/react': 19.3.0
       dexie: 4.4.6
       react: 19.3.0
 
