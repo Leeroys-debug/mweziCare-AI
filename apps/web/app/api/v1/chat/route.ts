@@ -113,6 +113,7 @@ export async function POST(request: Request) {
     safetyChecker: new GatewaySafetyChecker(env.ASSISTANT_CHAT_MODEL),
     keyProvider: encryptionKeyProvider,
     chatModel: env.ASSISTANT_CHAT_MODEL,
+    includeDraftsInRetrieval: env.ASSISTANT_INCLUDE_DRAFTS,
   };
 
   const stream = new ReadableStream({

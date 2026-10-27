@@ -30,6 +30,19 @@ export const serverEnvSchema = z.object({
   // through AI Gateway/ASSISTANT_CHAT_MODEL either way.
   GOOGLE_GENERATIVE_AI_API_KEY: z.string().min(1).optional(),
 
+  // Demo/dev-only escape hatch: when set, the Ask tab's retrieval also
+  // considers status:"draft" kb_documents (never on by default — CLAUDE.md
+  // bars unreviewed clinical content from shipping as final). Every source
+  // chip and Learn page already renders a visible DRAFT badge regardless of
+  // this flag (see apps/web/components/assistant/source-chips.tsx and
+  // app/[locale]/(public)/learn/[slug]/page.tsx) — this only controls
+  // whether draft articles are retrievable at all. Mirrors kb/ingest.ts's
+  // own ASSISTANT_INCLUDE_DRAFTS flag for seeding drafts into the DB.
+  ASSISTANT_INCLUDE_DRAFTS: z
+    .string()
+    .optional()
+    .transform((v) => v === "1"),
+
   // Envelope-encryption keys for field-level encryption (packages/db/crypto),
   // supporting key rotation (F1 spec): a JSON object of keyId -> base64
   // 32-byte key (e.g. {"1":"<base64>"}), kept small — only the key(s) a
