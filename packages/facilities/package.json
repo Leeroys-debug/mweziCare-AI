@@ -17,7 +17,7 @@
   "dependencies": {
     "@mwezicare/db": "workspace:*",
     "@mwezicare/validation": "workspace:*",
-    "csv-parse": "^5.6.0",
+    "csv-parse": "^7.0.3",
     "drizzle-orm": "^0.45.4",
     "zod": "^3.24.0"
   },
