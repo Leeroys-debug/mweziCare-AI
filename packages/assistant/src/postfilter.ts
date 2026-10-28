@@ -7,7 +7,20 @@ export interface PostFilterResult {
 }
 
 const DIAGNOSTIC_PATTERNS = [
-  /\byou (have|'ve got)\b/i,
+  // "you have X" / "you've got X" as a direct, unhedged claim. Excludes the
+  // immediate lead-ins that turn this into advisory or negated text instead
+  // of a diagnostic assertion — "if/whether(-or-not) you have X" (conditional,
+  // e.g. "If you have endometriosis and are trying to conceive..."), "...
+  // mean/that you have X" (negated, e.g. "doesn't mean you have it", "never
+  // tells you that you have endometriosis") — plus the "have to" idiom
+  // ("something you have to live with" isn't a medical claim at all). Content
+  // written for this app leans on exactly these hedges (CLAUDE.md: never
+  // state or imply a diagnosis), so the original unqualified pattern flagged
+  // much of it as a false positive — see postfilter.test.ts for the fixture
+  // pairs this was tuned against. Also fixes a real miss: "you've got" never
+  // matched at all before, since "you" and "'ve" have no space between them
+  // in a genuine contraction.
+  /(?<!\bif\s)(?<!\bwhether\s)(?<!\bwhether or not\s)(?<!\bmean\s)(?<!\bthat\s)\byou(?:\s+have(?!\s+to\b)|'ve\s+got)\b/i,
   /\byou('re| are) (definitely|certainly)\b/i,
   /\bdefinitely (normal|not normal|a sign of|have)\b/i,
   /\bthis (means|confirms) you (have|are)\b/i,
