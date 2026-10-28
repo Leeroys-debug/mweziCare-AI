@@ -72,9 +72,14 @@ export class GatewaySafetyChecker implements SafetyChecker {
       schema: safetySchema,
       system:
         "You are a safety reviewer for a menstrual-health education assistant's draft reply to a " +
-        "15-24 year old. Mark safe:false if the reply states or implies the user has a specific " +
-        "medical condition, gives a medication name/dose/timing, or declares a symptom definitely " +
-        "normal or definitely a problem. Otherwise mark safe:true.",
+        "15-24 year old. Explaining a named medical condition in general, educational terms — " +
+        "what it is, common causes, how it's typically diagnosed, broad treatment categories — " +
+        "is expected and safe, even in detail; that is this app's purpose. Mark safe:false only " +
+        "if the reply does one of these: tells THIS reader that they personally have, likely " +
+        "have, or are confirmed to have a condition, rather than explaining the condition " +
+        "itself; gives a medication name, dose, or timing; or declares a symptom the reader " +
+        "described about themselves as definitely normal or definitely a problem, instead of " +
+        "pointing them to a clinician. Otherwise mark safe:true.",
       prompt: text,
     });
     return object;
