@@ -46,6 +46,13 @@ ENV NODE_ENV=production PORT=3000 HOSTNAME=0.0.0.0
 COPY --from=build /app/apps/web/.next/standalone ./
 COPY --from=build /app/apps/web/.next/static ./apps/web/.next/static
 COPY --from=build /app/apps/web/public ./apps/web/public
+# packages/assistant's safety/fixed-responses.ts reads content/{locale}/safety/*.md
+# straight off disk at request time (defaultContentRoot() resolves to /app/content
+# here) — Next.js's standalone trace only follows its own module graph, so this
+# runtime-only file read is invisible to it and must be copied explicitly. Without
+# it, the urgent/self-harm/out-of-scope/no-reliable-information fixed responses
+# 500 instead of returning their safe fallback text.
+COPY --from=build /app/content ./content
 EXPOSE 3000
 CMD ["node", "apps/web/server.js"]
 
