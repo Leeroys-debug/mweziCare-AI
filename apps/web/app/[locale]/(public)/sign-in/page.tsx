@@ -19,7 +19,7 @@ export default function SignInPage() {
     setError(null);
     setPending(true);
     try {
-      const { error: signInError } = await authClient.signIn.email({
+      const { data, error: signInError } = await authClient.signIn.email({
         email,
         password,
       });
@@ -27,7 +27,15 @@ export default function SignInPage() {
         setError(t("errorGeneric"));
         return;
       }
-      router.push("/track");
+      const staffRoles = [
+        "clinician",
+        "verifier",
+        "programme_admin",
+        "system_admin",
+      ];
+      router.push(
+        staffRoles.includes(data.user.role ?? "user") ? "/dashboard" : "/track",
+      );
       router.refresh();
     } catch {
       setError(t("errorGeneric"));
