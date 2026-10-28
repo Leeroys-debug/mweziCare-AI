@@ -203,9 +203,7 @@ export function ChatThread() {
         <p className="text-sm text-neutral-500">{t("loadingHistory")}</p>
       ) : (
         <div className="flex flex-col gap-4">
-          {messages.length === 0 && (
-            <StarterQuestions onSelect={(q) => void sendMessage(q)} />
-          )}
+          <StarterQuestions onSelect={(q) => void sendMessage(q)} />
 
           {messages.map((message, i) => (
             <div
