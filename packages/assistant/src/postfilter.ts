@@ -3,7 +3,7 @@ import { z } from "zod";
 
 export interface PostFilterResult {
   safe: boolean;
-  reason?: string;
+  reason?: string | null;
 }
 
 const DIAGNOSTIC_PATTERNS = [
@@ -39,9 +39,15 @@ export interface SafetyChecker {
   check(text: string): Promise<PostFilterResult>;
 }
 
+// `reason` is nullable, not optional: OpenAI's structured-output strict
+// mode requires every property to appear in the schema's `required` array,
+// which Vercel AI SDK can't do for a plain `.optional()` Zod field —
+// generateObject then fails with "'required' is ... missing 'reason'."
+// Nullable keeps the field present (as `null`) while still being "no reason
+// given," which pipeline.ts's `?? "unsafe"` already handles the same way.
 const safetySchema = z.object({
   safe: z.boolean(),
-  reason: z.string().optional(),
+  reason: z.string().nullable(),
 });
 
 export class GatewaySafetyChecker implements SafetyChecker {
