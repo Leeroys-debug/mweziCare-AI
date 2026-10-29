@@ -133,12 +133,21 @@
     "daysUntilLabel": "In {days} days",
     "dueTodayLabel": "Due today",
     "estimateLabel": "estimate",
-    "painChartTitle": "Pain per cycle (last 6 cycles)",
+    "rangeLabel": "Date range",
+    "rangeOption": "Last {n} cycles",
+    "painChartTitle": "Pain per cycle (last {n} cycles)",
     "maxPain": "Highest pain",
     "avgPain": "Average pain",
-    "impactChartTitle": "Days with activity impact per cycle (last 6 cycles)",
+    "impactChartTitle": "Days with activity impact per cycle (last {n} cycles)",
     "impactDays": "Impact days",
     "noDataYet": "Keep tracking — charts will appear once you have logged a few cycles.",
+    "tapHint": "Tap a point on a chart, or a date below, to see that cycle's day-by-day log.",
+    "cycleDetail": {
+      "title": "Cycle starting {date}",
+      "close": "Close",
+      "noLogs": "No logs recorded for this cycle.",
+      "periodDay": "Period day"
+    },
     "assessment": {
       "unavailable": "Your personalized guidance isn't available yet. Keep tracking — we'll let you know as soon as it's ready.",
       "nextStep": {

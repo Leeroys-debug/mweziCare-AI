@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -14,7 +15,9 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { Button } from "@mwezicare/ui";
+import { X } from "lucide-react";
+import { cycleDateRange, logsInRange, type Cycle } from "@mwezicare/triage";
+import { Button, Chip } from "@mwezicare/ui";
 import { Link } from "@/i18n/navigation";
 import { OfflineBanner } from "@/components/offline-banner";
 
@@ -25,10 +28,28 @@ interface ChartPoint {
   impactDays: number;
 }
 
+interface DayLog {
+  logDate: string;
+  periodDay: boolean;
+  bleedingLevel: string | null;
+  painScore: number | null;
+  symptoms: Record<string, boolean>;
+  impact: Record<string, boolean>;
+  redFlags: Record<string, boolean>;
+}
+
 interface CyclesResponse {
-  cycles: unknown[];
+  cycles: Cycle[];
   nextPeriodEstimate: { date: string; isEstimate: true } | null;
   chartData: ChartPoint[];
+  logs: DayLog[];
+}
+
+const RANGE_OPTIONS = [3, 6, 12] as const;
+
+/** What Recharts' container onClick hands the handler — just the piece we need. */
+interface ChartClickState {
+  activeLabel?: string;
 }
 
 type TriageOutcome = "routine" | "assess_soon" | "urgent";
@@ -143,14 +164,109 @@ function AssessmentCard({
   );
 }
 
+function CycleDetailPanel({
+  cycleStartDate,
+  dayLogs,
+  onClose,
+  t,
+  trackT,
+}: {
+  cycleStartDate: string;
+  dayLogs: DayLog[];
+  onClose: () => void;
+  t: (key: string, values?: Record<string, string | number>) => string;
+  trackT: (key: string) => string;
+}) {
+  return (
+    <section className="flex flex-col gap-3 rounded-lg border border-brand-300 bg-brand-50 p-4 dark:border-brand-800 dark:bg-brand-950">
+      <div className="flex items-center justify-between gap-2">
+        <h3 className="font-semibold text-brand-900 dark:text-brand-100">
+          {t("cycleDetail.title", { date: cycleStartDate })}
+        </h3>
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label={t("cycleDetail.close")}
+          className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-brand-700 hover:bg-brand-100 dark:text-brand-300 dark:hover:bg-brand-900"
+        >
+          <X size={18} />
+        </button>
+      </div>
+
+      {dayLogs.length === 0 ? (
+        <p className="text-sm text-neutral-600 dark:text-neutral-400">
+          {t("cycleDetail.noLogs")}
+        </p>
+      ) : (
+        <ul className="flex flex-col gap-2">
+          {dayLogs.map((log) => {
+            const symptoms = Object.entries(log.symptoms).filter(
+              ([, on]) => on,
+            );
+            const impacts = Object.entries(log.impact).filter(([, on]) => on);
+            return (
+              <li
+                key={log.logDate}
+                className="rounded-md border border-neutral-200 bg-white p-3 dark:border-neutral-800 dark:bg-neutral-900"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-sm font-medium">{log.logDate}</span>
+                  {log.periodDay && (
+                    <span className="rounded-full bg-brand-200 px-2 py-0.5 text-xs font-medium text-brand-900 dark:bg-brand-900 dark:text-brand-100">
+                      {t("cycleDetail.periodDay")}
+                    </span>
+                  )}
+                </div>
+                <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">
+                  {log.painScore != null && (
+                    <>
+                      {trackT("painScoreLabel.title")}: {log.painScore}/10
+                    </>
+                  )}
+                  {log.bleedingLevel && (
+                    <>
+                      {" · "}
+                      {trackT("bleedingLevelLabel")}:{" "}
+                      {trackT(`bleedingLevel.${log.bleedingLevel}`)}
+                    </>
+                  )}
+                </p>
+                {symptoms.length > 0 && (
+                  <p className="mt-1 text-xs text-neutral-700 dark:text-neutral-300">
+                    {symptoms
+                      .map(([key]) => trackT(`symptom.${key}`))
+                      .join(", ")}
+                  </p>
+                )}
+                {impacts.length > 0 && (
+                  <p className="mt-1 text-xs text-amber-700 dark:text-amber-400">
+                    {impacts.map(([key]) => trackT(`impact.${key}`)).join(", ")}
+                  </p>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </section>
+  );
+}
+
 export default function InsightsPage() {
   const t = useTranslations("Insights");
+  const trackT = useTranslations("Track");
   const locale = useLocale() as "en" | "sw";
 
+  const [rangeCycles, setRangeCycles] =
+    useState<(typeof RANGE_OPTIONS)[number]>(6);
+  const [selectedCycleStart, setSelectedCycleStart] = useState<string | null>(
+    null,
+  );
+
   const { data: cyclesData } = useQuery({
-    queryKey: ["cycles"],
+    queryKey: ["cycles", rangeCycles],
     queryFn: async (): Promise<CyclesResponse> => {
-      const response = await fetch("/api/v1/cycles");
+      const response = await fetch(`/api/v1/cycles?cycles=${rangeCycles}`);
       if (!response.ok) throw new Error("Failed to load cycles");
       return response.json() as Promise<CyclesResponse>;
     },
@@ -166,6 +282,27 @@ export default function InsightsPage() {
   });
 
   const chartData = cyclesData?.chartData ?? [];
+  const cycles = cyclesData?.cycles ?? [];
+  const logs = cyclesData?.logs ?? [];
+
+  const selectedCycleIndex = cycles.findIndex(
+    (c) => c.startDate === selectedCycleStart,
+  );
+  const selectedDayLogs =
+    selectedCycleIndex >= 0
+      ? logsInRange(
+          logs,
+          cycleDateRange(
+            cycles,
+            selectedCycleIndex,
+            new Date().toISOString().slice(0, 10),
+          ),
+        )
+      : [];
+
+  function handleChartClick(state: ChartClickState) {
+    if (state.activeLabel) setSelectedCycleStart(state.activeLabel);
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -176,60 +313,145 @@ export default function InsightsPage() {
 
       <AssessmentCard data={assessmentData} locale={locale} t={t} />
 
+      <div
+        role="group"
+        aria-label={t("rangeLabel")}
+        className="flex flex-wrap gap-2"
+      >
+        {RANGE_OPTIONS.map((option) => (
+          <Chip
+            key={option}
+            selected={rangeCycles === option}
+            onClick={() => setRangeCycles(option)}
+          >
+            {t("rangeOption", { n: option })}
+          </Chip>
+        ))}
+      </div>
+
+      {chartData.length > 0 && (
+        <p className="text-xs text-neutral-500 dark:text-neutral-400">
+          {t("tapHint")}
+        </p>
+      )}
+
       <section className="flex flex-col gap-2">
-        <h2 className="text-sm font-semibold">{t("painChartTitle")}</h2>
+        <h2 className="text-sm font-semibold">
+          {t("painChartTitle", { n: rangeCycles })}
+        </h2>
         {chartData.length === 0 ? (
           <p className="text-sm text-neutral-500">{t("noDataYet")}</p>
         ) : (
-          <ResponsiveContainer width="100%" height={220}>
-            <LineChart data={chartData} margin={{ bottom: 8 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" />
-              <XAxis dataKey="cycleStartDate" tick={{ fontSize: 10 }} />
-              <YAxis domain={[0, 10]} tick={{ fontSize: 10 }} />
-              <Tooltip />
-              <Legend wrapperStyle={{ fontSize: 12 }} />
-              <Line
-                type="monotone"
-                dataKey="maxPainScore"
-                name={t("maxPain")}
-                stroke={MAX_PAIN_COLOR}
-                strokeWidth={2}
-                dot={{ r: 3 }}
-              />
-              <Line
-                type="monotone"
-                dataKey="avgPainScore"
-                name={t("avgPain")}
-                stroke={AVG_PAIN_COLOR}
-                strokeWidth={2}
-                dot={{ r: 3 }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
+          <>
+            <ResponsiveContainer width="100%" height={220}>
+              <LineChart
+                data={chartData}
+                margin={{ bottom: 8 }}
+                onClick={handleChartClick}
+                className="cursor-pointer"
+              >
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" />
+                <XAxis dataKey="cycleStartDate" tick={{ fontSize: 10 }} />
+                <YAxis domain={[0, 10]} tick={{ fontSize: 10 }} />
+                <Tooltip />
+                <Legend wrapperStyle={{ fontSize: 12 }} />
+                <Line
+                  type="monotone"
+                  dataKey="maxPainScore"
+                  name={t("maxPain")}
+                  stroke={MAX_PAIN_COLOR}
+                  strokeWidth={2}
+                  dot={{ r: 3 }}
+                  activeDot={{ r: 5 }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="avgPainScore"
+                  name={t("avgPain")}
+                  stroke={AVG_PAIN_COLOR}
+                  strokeWidth={2}
+                  dot={{ r: 3 }}
+                  activeDot={{ r: 5 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+            <CycleDateChips
+              points={chartData}
+              selected={selectedCycleStart}
+              onSelect={setSelectedCycleStart}
+            />
+          </>
         )}
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-sm font-semibold">{t("impactChartTitle")}</h2>
+        <h2 className="text-sm font-semibold">
+          {t("impactChartTitle", { n: rangeCycles })}
+        </h2>
         {chartData.length === 0 ? (
           <p className="text-sm text-neutral-500">{t("noDataYet")}</p>
         ) : (
-          <ResponsiveContainer width="100%" height={200}>
-            <BarChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" />
-              <XAxis dataKey="cycleStartDate" tick={{ fontSize: 10 }} />
-              <YAxis allowDecimals={false} tick={{ fontSize: 10 }} />
-              <Tooltip />
-              <Bar
-                dataKey="impactDays"
-                name={t("impactDays")}
-                fill={IMPACT_COLOR}
-                radius={[4, 4, 0, 0]}
-              />
-            </BarChart>
-          </ResponsiveContainer>
+          <>
+            <ResponsiveContainer width="100%" height={200}>
+              <BarChart
+                data={chartData}
+                onClick={handleChartClick}
+                className="cursor-pointer"
+              >
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" />
+                <XAxis dataKey="cycleStartDate" tick={{ fontSize: 10 }} />
+                <YAxis allowDecimals={false} tick={{ fontSize: 10 }} />
+                <Tooltip />
+                <Bar
+                  dataKey="impactDays"
+                  name={t("impactDays")}
+                  fill={IMPACT_COLOR}
+                  radius={[4, 4, 0, 0]}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+            <CycleDateChips
+              points={chartData}
+              selected={selectedCycleStart}
+              onSelect={setSelectedCycleStart}
+            />
+          </>
         )}
       </section>
+
+      {selectedCycleStart && (
+        <CycleDetailPanel
+          cycleStartDate={selectedCycleStart}
+          dayLogs={selectedDayLogs}
+          onClose={() => setSelectedCycleStart(null)}
+          t={t}
+          trackT={trackT}
+        />
+      )}
+    </div>
+  );
+}
+
+function CycleDateChips({
+  points,
+  selected,
+  onSelect,
+}: {
+  points: ChartPoint[];
+  selected: string | null;
+  onSelect: (cycleStartDate: string) => void;
+}) {
+  return (
+    <div className="flex flex-wrap gap-2">
+      {points.map((point) => (
+        <Chip
+          key={point.cycleStartDate}
+          selected={selected === point.cycleStartDate}
+          onClick={() => onSelect(point.cycleStartDate)}
+        >
+          {point.cycleStartDate}
+        </Chip>
+      ))}
     </div>
   );
 }

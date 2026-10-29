@@ -133,12 +133,21 @@
     "daysUntilLabel": "Baada ya siku {days}",
     "dueTodayLabel": "Inatarajiwa leo",
     "estimateLabel": "makadirio",
-    "painChartTitle": "Maumivu kwa kila mzunguko (mizunguko 6 iliyopita)",
+    "rangeLabel": "Kipindi cha tarehe",
+    "rangeOption": "Mizunguko {n} iliyopita",
+    "painChartTitle": "Maumivu kwa kila mzunguko (mizunguko {n} iliyopita)",
     "maxPain": "Maumivu ya juu zaidi",
     "avgPain": "Wastani wa maumivu",
-    "impactChartTitle": "Siku zenye athari kwa shughuli kwa kila mzunguko (mizunguko 6 iliyopita)",
+    "impactChartTitle": "Siku zenye athari kwa shughuli kwa kila mzunguko (mizunguko {n} iliyopita)",
     "impactDays": "Siku za athari",
     "noDataYet": "Endelea kufuatilia — chati zitaonekana ukishafuatilia mizunguko kadhaa.",
+    "tapHint": "Bonyeza sehemu kwenye chati, au tarehe hapa chini, kuona kumbukumbu za kila siku za mzunguko huo.",
+    "cycleDetail": {
+      "title": "Mzunguko ulioanza {date}",
+      "close": "Funga",
+      "noLogs": "Hakuna kumbukumbu zilizorekodiwa kwa mzunguko huu.",
+      "periodDay": "Siku ya hedhi"
+    },
     "assessment": {
       "unavailable": "Mwongozo wako binafsi bado haujapatikana. Endelea kufuatilia — tutakujulisha mara utakapokuwa tayari.",
       "nextStep": {

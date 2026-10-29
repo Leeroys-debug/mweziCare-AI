@@ -8,18 +8,19 @@ export interface CycleChartPoint {
   impactDays: number;
 }
 
-/** Per-cycle chart data for the Insights page, last 6 cycles. Kept in packages/triage so the route/page stay thin (CLAUDE.md). */
+/** Per-cycle chart data for the Insights page, last `limit` cycles (default 6). Kept in packages/triage so the route/page stay thin (CLAUDE.md). */
 export function summarizeCyclesForCharts(
   logs: TriageLog[],
   cycles: Cycle[],
+  limit = 6,
 ): CycleChartPoint[] {
   const sortedLogs = [...logs].sort((a, b) => (a.logDate < b.logDate ? -1 : 1));
   const windowEnd = sortedLogs.at(-1)?.logDate;
   if (!windowEnd) return [];
 
-  const last6 = cycles.slice(-6);
+  const recentCycles = cycles.slice(-limit);
 
-  return last6.map((cycle) => {
+  return recentCycles.map((cycle) => {
     const index = cycles.indexOf(cycle);
     const range = cycleDateRange(cycles, index, windowEnd);
     const logsInCycle = logsInRange(sortedLogs, range);

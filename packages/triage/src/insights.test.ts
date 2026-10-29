@@ -54,4 +54,16 @@ describe("summarizeCyclesForCharts", () => {
     const chart = summarizeCyclesForCharts(spaced, cycles);
     expect(chart).toHaveLength(6);
   });
+
+  it("respects a custom limit", () => {
+    const spaced: TriageLog[] = Array.from({ length: 8 }, (_, i) => {
+      const date = new Date(Date.UTC(2026, 0, 1 + i * 28))
+        .toISOString()
+        .slice(0, 10);
+      return log({ logDate: date, periodDay: true, painScore: i });
+    });
+    const cycles = deriveCycles(spaced);
+    expect(summarizeCyclesForCharts(spaced, cycles, 3)).toHaveLength(3);
+    expect(summarizeCyclesForCharts(spaced, cycles, 12)).toHaveLength(8);
+  });
 });
