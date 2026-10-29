@@ -20,9 +20,9 @@ function QuickAction({
 )) {
   const circle = (
     <span
-      className={`flex h-14 w-14 items-center justify-center rounded-full ${
+      className={`flex h-14 w-14 items-center justify-center rounded-full shadow-sm transition-all duration-150 hover:shadow-md ${
         active
-          ? "bg-brand-600 text-white"
+          ? "bg-brand-600 text-white shadow-md"
           : "bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300"
       }`}
       aria-hidden="true"
@@ -41,7 +41,7 @@ function QuickAction({
   );
 
   const className =
-    "flex min-w-[64px] flex-col items-center gap-1.5 rounded-lg p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 disabled:opacity-50";
+    "flex min-w-[64px] flex-col items-center gap-1.5 rounded-lg p-1 motion-safe:active:scale-95 transition-transform duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 disabled:opacity-50 disabled:motion-safe:active:scale-100";
 
   if ("href" in rest && rest.href) {
     return (

@@ -4,7 +4,7 @@ import { useState } from "react";
 import dynamic from "next/dynamic";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
-import { Button } from "@mwezicare/ui";
+import { Button, Skeleton } from "@mwezicare/ui";
 import { FacilityList } from "@/components/care/facility-list";
 import { LocationConsent } from "@/components/care/location-consent";
 import { UrgentCareBanner } from "@/components/care/urgent-banner";
@@ -139,7 +139,11 @@ export default function CarePage() {
           </div>
 
           {isFetching ? (
-            <p className="text-sm text-neutral-500">{t("searching")}</p>
+            <div className="flex flex-col gap-3">
+              {[0, 1, 2].map((i) => (
+                <Skeleton key={i} className="h-24" />
+              ))}
+            </div>
           ) : view === "list" ? (
             <FacilityList
               results={searchData?.results ?? []}

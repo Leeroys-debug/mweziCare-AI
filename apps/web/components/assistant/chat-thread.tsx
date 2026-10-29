@@ -210,13 +210,28 @@ export function ChatThread() {
               key={i}
               className={
                 message.role === "user"
-                  ? "ml-8 rounded-lg bg-emerald-700 px-4 py-2 text-white"
-                  : "mr-8 flex flex-col gap-2 rounded-lg bg-neutral-100 px-4 py-2 dark:bg-neutral-900"
+                  ? "ml-8 rounded-lg bg-emerald-700 px-4 py-2 text-white shadow-sm"
+                  : "mr-8 flex flex-col gap-2 rounded-lg bg-neutral-100 px-4 py-2 shadow-sm dark:bg-neutral-900"
               }
             >
-              <p className="whitespace-pre-wrap text-base">
-                {message.content || (message.pending ? t("sending") : "")}
-              </p>
+              {message.pending && !message.content ? (
+                <span
+                  className="flex items-center gap-1 py-1"
+                  aria-label={t("sending")}
+                >
+                  {[0, 1, 2].map((dotIndex) => (
+                    <span
+                      key={dotIndex}
+                      className="h-2 w-2 rounded-full bg-neutral-400 motion-safe:animate-bounce dark:bg-neutral-600"
+                      style={{ animationDelay: `${dotIndex * 0.15}s` }}
+                    />
+                  ))}
+                </span>
+              ) : (
+                <p className="whitespace-pre-wrap text-base">
+                  {message.content}
+                </p>
+              )}
               {message.role === "assistant" && !message.pending && (
                 <>
                   {message.sources && message.sources.length > 0 && (
@@ -241,12 +256,12 @@ export function ChatThread() {
           onChange={(e) => setInput(e.target.value)}
           placeholder={t("inputPlaceholder")}
           disabled={isSending}
-          className="h-11 flex-1 rounded-md border border-neutral-300 px-3 dark:border-neutral-700 dark:bg-neutral-900"
+          className="h-11 flex-1 rounded-md border border-neutral-300 px-3 transition-shadow focus:shadow-md dark:border-neutral-700 dark:bg-neutral-900"
         />
         <button
           type="submit"
           disabled={isSending || !input.trim()}
-          className="h-11 rounded-md bg-emerald-700 px-4 text-sm font-medium text-white hover:bg-emerald-800 disabled:opacity-50"
+          className="h-11 rounded-md bg-emerald-700 px-4 text-sm font-medium text-white shadow-sm transition-all duration-150 hover:bg-emerald-800 hover:shadow-md motion-safe:active:scale-95 disabled:opacity-50 disabled:motion-safe:active:scale-100"
         >
           {isSending ? t("sending") : t("send")}
         </button>

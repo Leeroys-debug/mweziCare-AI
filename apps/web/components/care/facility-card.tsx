@@ -90,7 +90,7 @@ export function FacilityCard({
     <div
       data-testid="facility-card"
       data-facility-id={facility.id}
-      className="flex flex-col gap-2 rounded-lg border border-neutral-200 p-4 dark:border-neutral-800"
+      className="flex flex-col gap-2 rounded-lg border border-neutral-200 p-4 shadow-sm transition-shadow hover:shadow-md dark:border-neutral-800"
     >
       <div className="flex items-start justify-between gap-2">
         <div>

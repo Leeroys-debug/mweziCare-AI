@@ -45,7 +45,7 @@ export function LearnCarousel() {
           <Link
             key={article.slug}
             href={`/learn/${article.slug}`}
-            className={`flex min-h-[112px] w-36 shrink-0 snap-start flex-col justify-between rounded-xl p-3 ${CARD_TINTS[i % CARD_TINTS.length]}`}
+            className={`flex min-h-[112px] w-36 shrink-0 snap-start flex-col justify-between rounded-xl p-3 shadow-sm transition-all duration-150 hover:shadow-md motion-safe:hover:-translate-y-0.5 motion-safe:active:scale-95 ${CARD_TINTS[i % CARD_TINTS.length]}`}
           >
             <BookOpen
               size={18}

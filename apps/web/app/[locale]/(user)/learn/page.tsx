@@ -34,7 +34,7 @@ export default async function LearnPage() {
             <li key={article.slug}>
               <Link
                 href={`/learn/${article.slug}`}
-                className="block min-h-[44px] rounded-lg border border-neutral-200 px-4 py-3 text-base font-medium hover:bg-emerald-50 dark:border-neutral-800 dark:hover:bg-neutral-900"
+                className="block min-h-[44px] rounded-lg border border-neutral-200 px-4 py-3 text-base font-medium shadow-sm transition-all duration-150 hover:bg-emerald-50 hover:shadow-md motion-safe:active:scale-[0.98] dark:border-neutral-800 dark:hover:bg-neutral-900"
               >
                 {article.title}
               </Link>

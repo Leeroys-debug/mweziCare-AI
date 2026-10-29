@@ -77,7 +77,7 @@ export function MeAccount({ consents }: { consents: ConsentRow[] }) {
             key={purpose}
             data-testid="consent-row"
             data-purpose={purpose}
-            className="flex items-center justify-between gap-3 rounded-md border border-neutral-200 p-3 text-sm dark:border-neutral-800"
+            className="flex items-center justify-between gap-3 rounded-md border border-neutral-200 p-3 text-sm shadow-sm transition-shadow hover:shadow-md dark:border-neutral-800"
           >
             <div>
               <div className="font-medium capitalize">{purpose}</div>
@@ -120,7 +120,7 @@ export function MeAccount({ consents }: { consents: ConsentRow[] }) {
         </Button>
       </section>
 
-      <section className="flex flex-col gap-2 rounded-md border border-red-200 p-4 dark:border-red-900">
+      <section className="flex flex-col gap-2 rounded-md border border-red-200 p-4 shadow-sm dark:border-red-900">
         <h2 className="text-lg font-semibold text-red-700 dark:text-red-400">
           {t("deleteTitle")}
         </h2>

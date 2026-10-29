@@ -17,7 +17,7 @@ import {
 } from "recharts";
 import { X } from "lucide-react";
 import { cycleDateRange, logsInRange, type Cycle } from "@mwezicare/triage";
-import { Button, Chip } from "@mwezicare/ui";
+import { Button, Chip, Skeleton } from "@mwezicare/ui";
 import { Link } from "@/i18n/navigation";
 import { OfflineBanner } from "@/components/offline-banner";
 
@@ -118,13 +118,16 @@ const OUTCOME_TONE: Record<TriageOutcome, string> = {
 
 function AssessmentCard({
   data,
+  isLoading,
   locale,
   t,
 }: {
   data: AssessmentsResponse | undefined;
+  isLoading: boolean;
   locale: "en" | "sw";
   t: (key: string) => string;
 }) {
+  if (isLoading) return <Skeleton className="h-20" />;
   if (!data) return null;
 
   if (!data.available || !data.assessment) {
@@ -263,7 +266,7 @@ export default function InsightsPage() {
     null,
   );
 
-  const { data: cyclesData } = useQuery({
+  const { data: cyclesData, isLoading: cyclesLoading } = useQuery({
     queryKey: ["cycles", rangeCycles],
     queryFn: async (): Promise<CyclesResponse> => {
       const response = await fetch(`/api/v1/cycles?cycles=${rangeCycles}`);
@@ -272,7 +275,7 @@ export default function InsightsPage() {
     },
   });
 
-  const { data: assessmentData } = useQuery({
+  const { data: assessmentData, isLoading: assessmentLoading } = useQuery({
     queryKey: ["assessments"],
     queryFn: async (): Promise<AssessmentsResponse> => {
       const response = await fetch("/api/v1/assessments");
@@ -311,7 +314,12 @@ export default function InsightsPage() {
       <h1 className="text-2xl font-semibold">{t("title")}</h1>
       <OfflineBanner />
 
-      <AssessmentCard data={assessmentData} locale={locale} t={t} />
+      <AssessmentCard
+        data={assessmentData}
+        isLoading={assessmentLoading}
+        locale={locale}
+        t={t}
+      />
 
       <div
         role="group"
@@ -339,7 +347,9 @@ export default function InsightsPage() {
         <h2 className="text-sm font-semibold">
           {t("painChartTitle", { n: rangeCycles })}
         </h2>
-        {chartData.length === 0 ? (
+        {cyclesLoading ? (
+          <Skeleton className="h-[220px]" />
+        ) : chartData.length === 0 ? (
           <p className="text-sm text-neutral-500">{t("noDataYet")}</p>
         ) : (
           <>
@@ -388,7 +398,9 @@ export default function InsightsPage() {
         <h2 className="text-sm font-semibold">
           {t("impactChartTitle", { n: rangeCycles })}
         </h2>
-        {chartData.length === 0 ? (
+        {cyclesLoading ? (
+          <Skeleton className="h-[200px]" />
+        ) : chartData.length === 0 ? (
           <p className="text-sm text-neutral-500">{t("noDataYet")}</p>
         ) : (
           <>
