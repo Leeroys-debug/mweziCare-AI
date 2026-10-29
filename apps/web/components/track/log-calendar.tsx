@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -15,8 +15,54 @@ interface CalendarLog {
   painScore: number | null;
 }
 
+interface Cycle {
+  startDate: string;
+  endDate: string;
+  periodLengthDays: number;
+  cycleLengthDays: number | null;
+}
+
+interface CyclesResponse {
+  cycles: Cycle[];
+  nextPeriodEstimate: { date: string; isEstimate: true } | null;
+}
+
+/** Furthest a swipe/arrow can move past the current month — predictions only reach one period out. */
+const MAX_FORWARD_OFFSET = 1;
+/** Horizontal drag distance (px) that counts as a swipe rather than a tap or vertical scroll. */
+const SWIPE_THRESHOLD_PX = 50;
+
 function toIsoDate(date: Date): string {
   return date.toISOString().slice(0, 10);
+}
+
+function addDaysIso(iso: string, days: number): string {
+  const date = new Date(`${iso}T00:00:00.000Z`);
+  date.setUTCDate(date.getUTCDate() + days);
+  return date.toISOString().slice(0, 10);
+}
+
+/**
+ * Last estimated period, shaded as a range the same way Flo shows predicted
+ * days (dotted ring, not a solid fill) — display only, derived entirely from
+ * already-computed cycle data, never a new clinical inference.
+ */
+function predictedPeriodRange(
+  cycles: Cycle[],
+  estimate: { date: string } | null | undefined,
+): { from: string; to: string } | null {
+  if (!estimate) return null;
+  const recentLengths = cycles
+    .map((c) => c.periodLengthDays)
+    .filter((n): n is number => n != null)
+    .slice(-3);
+  const avgLength =
+    recentLengths.length > 0
+      ? Math.round(
+          recentLengths.reduce((sum, n) => sum + n, 0) / recentLengths.length,
+        )
+      : 5;
+  return { from: estimate.date, to: addDaysIso(estimate.date, avgLength - 1) };
 }
 
 /** Small pain-severity badge color — a secondary signal, kept separate from the period-day fill so the two don't visually compete on the same cell. */
@@ -66,6 +112,21 @@ export function LogCalendar({ onUrgent }: LogCalendarProps) {
     },
   });
 
+  // Shared cache key with the Track/Insights pages — reuses their fetch
+  // when already in the query cache instead of duplicating the request.
+  const { data: cyclesData } = useQuery({
+    queryKey: ["cycles"],
+    queryFn: async (): Promise<CyclesResponse> => {
+      const response = await fetch("/api/v1/cycles");
+      if (!response.ok) throw new Error("Failed to load cycles");
+      return response.json() as Promise<CyclesResponse>;
+    },
+  });
+  const predictedRange = predictedPeriodRange(
+    cyclesData?.cycles ?? [],
+    cyclesData?.nextPeriodEstimate,
+  );
+
   // Offline-first: local (possibly not-yet-synced) logs take precedence over
   // the server's view for the same date, so a log saved while offline shows
   // up on the calendar immediately, not just after it syncs.
@@ -109,6 +170,29 @@ export function LogCalendar({ onUrgent }: LogCalendarProps) {
     void queryClient.invalidateQueries({ queryKey: ["logs"] });
   }
 
+  function goToPreviousMonth() {
+    setMonthOffset((m) => m - 1);
+  }
+  function goToNextMonth() {
+    setMonthOffset((m) => Math.min(MAX_FORWARD_OFFSET, m + 1));
+  }
+
+  const swipeStart = useRef<{ x: number; y: number } | null>(null);
+  function handlePointerDown(event: React.PointerEvent) {
+    swipeStart.current = { x: event.clientX, y: event.clientY };
+  }
+  function handlePointerUp(event: React.PointerEvent) {
+    const start = swipeStart.current;
+    swipeStart.current = null;
+    if (!start) return;
+    const dx = event.clientX - start.x;
+    const dy = event.clientY - start.y;
+    if (Math.abs(dx) < SWIPE_THRESHOLD_PX || Math.abs(dx) < Math.abs(dy) * 1.5)
+      return;
+    if (dx < 0) goToNextMonth();
+    else goToPreviousMonth();
+  }
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
@@ -116,18 +200,30 @@ export function LogCalendar({ onUrgent }: LogCalendarProps) {
           type="button"
           variant="outline"
           size="sm"
-          onClick={() => setMonthOffset((m) => m - 1)}
+          onClick={goToPreviousMonth}
           aria-label={t("previousMonth")}
         >
           ‹
         </Button>
-        <span className="text-sm font-semibold">{monthLabel}</span>
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-semibold">{monthLabel}</span>
+          {monthOffset !== 0 && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => setMonthOffset(0)}
+            >
+              {t("jumpToToday")}
+            </Button>
+          )}
+        </div>
         <Button
           type="button"
           variant="outline"
           size="sm"
-          onClick={() => setMonthOffset((m) => Math.min(0, m + 1))}
-          disabled={monthOffset === 0}
+          onClick={goToNextMonth}
+          disabled={monthOffset === MAX_FORWARD_OFFSET}
           aria-label={t("nextMonth")}
         >
           ›
@@ -140,7 +236,11 @@ export function LogCalendar({ onUrgent }: LogCalendarProps) {
         ))}
       </div>
 
-      <div className="grid grid-cols-7 gap-1">
+      <div
+        className="grid touch-pan-y grid-cols-7 gap-1"
+        onPointerDown={handlePointerDown}
+        onPointerUp={handlePointerUp}
+      >
         {cells.map((date, i) => {
           if (date == null) return <div key={`blank-${i}`} />;
 
@@ -149,9 +249,15 @@ export function LogCalendar({ onUrgent }: LogCalendarProps) {
           const painScore = log?.painScore ?? null;
           const badgeClass = painBadgeClass(painScore);
           const isToday = date === toIsoDate(today);
+          const isPredictedPeriod =
+            !isPeriodDay &&
+            !!predictedRange &&
+            date >= predictedRange.from &&
+            date <= predictedRange.to;
 
           const srParts = [date];
           if (isPeriodDay) srParts.push(t("periodDay"));
+          else if (isPredictedPeriod) srParts.push(t("predictedPeriodDay"));
           if (painScore)
             srParts.push(`${t("painScoreLabel.title")} ${painScore}`);
 
@@ -162,10 +268,12 @@ export function LogCalendar({ onUrgent }: LogCalendarProps) {
               onClick={() => setSelectedDate(date)}
               aria-label={srParts.join(" — ")}
               className={cn(
-                "relative flex min-h-[44px] flex-col items-center justify-center gap-0.5 rounded-full text-xs font-medium",
+                "relative flex min-h-[44px] flex-col items-center justify-center gap-0.5 rounded-full text-xs font-medium transition-colors active:scale-95",
                 isPeriodDay
                   ? "bg-brand-600 text-white"
                   : "text-neutral-900 dark:text-neutral-100",
+                isPredictedPeriod &&
+                  "border-2 border-dotted border-brand-500 dark:border-brand-400",
                 isToday &&
                   !isPeriodDay &&
                   "border-2 border-dashed border-brand-600",
@@ -198,6 +306,13 @@ export function LogCalendar({ onUrgent }: LogCalendarProps) {
             aria-hidden="true"
           />
           {t("legend.periodDay")}
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span
+            className="h-3 w-3 rounded-full border-2 border-dotted border-brand-500 dark:border-brand-400"
+            aria-hidden="true"
+          />
+          {t("legend.predictedPeriod")}
         </span>
         <span className="flex items-center gap-1.5">
           <span

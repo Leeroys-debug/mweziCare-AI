@@ -112,8 +112,11 @@
     "legend": {
       "periodDay": "Siku ya hedhi",
       "today": "Leo",
-      "painLogged": "Maumivu yameandikwa"
+      "painLogged": "Maumivu yameandikwa",
+      "predictedPeriod": "Hedhi inayotarajiwa"
     },
+    "predictedPeriodDay": "Siku ya hedhi inayotarajiwa",
+    "jumpToToday": "Leo",
     "close": "Funga",
     "urgentOverlay": {
       "title": "Tafuta huduma ya dharura sasa",
