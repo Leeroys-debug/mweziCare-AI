@@ -2,6 +2,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { asc, eq, and } from "drizzle-orm";
 import { schema } from "@mwezicare/db";
 import { db } from "@/lib/server-db";
+import { AskLearnSwitch } from "@/components/ask-learn-switch";
 import { Link } from "@/i18n/navigation";
 
 export default async function LearnPage() {
@@ -21,6 +22,7 @@ export default async function LearnPage() {
 
   return (
     <div className="flex flex-col gap-4">
+      <AskLearnSwitch />
       <h1 className="text-2xl font-semibold">{t("title")}</h1>
       {articles.length === 0 ? (
         <p className="text-neutral-600 dark:text-neutral-400">

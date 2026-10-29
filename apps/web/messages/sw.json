@@ -642,5 +642,10 @@
       "noDataLabel": "Hakuna data kwa kipindi hiki",
       "footer": "Imetengenezwa kutoka kwa data uliyoripoti mwenyewe. Si utambuzi."
     }
+  },
+  "AskLearnSwitch": {
+    "label": "Uliza au Jifunze",
+    "ask": "Uliza",
+    "learn": "Jifunze"
   }
 }

@@ -642,5 +642,10 @@
       "noDataLabel": "No data for this range",
       "footer": "Generated from self-reported app data. Not a diagnosis."
     }
+  },
+  "AskLearnSwitch": {
+    "label": "Ask or Learn",
+    "ask": "Ask",
+    "learn": "Learn"
   }
 }

@@ -37,18 +37,15 @@ async function expectNoSeriousViolations(page: Page, label: string) {
 }
 
 test.describe("accessibility — no serious/critical axe violations on main pages", () => {
-  test("public pages: landing, sign-in, learn", async ({ page }) => {
+  test("public pages: landing, sign-in", async ({ page }) => {
     await page.goto("/en");
     await expectNoSeriousViolations(page, "landing (/en)");
 
     await page.goto("/en/sign-in");
     await expectNoSeriousViolations(page, "/en/sign-in");
-
-    await page.goto("/en/learn");
-    await expectNoSeriousViolations(page, "/en/learn");
   });
 
-  test("authenticated user pages: track, insights, assistant, care, me", async ({
+  test("authenticated user pages: track, insights, assistant, learn, care, me", async ({
     page,
   }) => {
     const county = `Kiambu-axe-e2e-${Date.now()}`;
@@ -62,6 +59,9 @@ test.describe("accessibility — no serious/critical axe violations on main page
 
     await page.goto("/en/assistant");
     await expectNoSeriousViolations(page, "/en/assistant");
+
+    await page.goto("/en/learn");
+    await expectNoSeriousViolations(page, "/en/learn");
 
     await page.goto("/en/care");
     await expectNoSeriousViolations(page, "/en/care");

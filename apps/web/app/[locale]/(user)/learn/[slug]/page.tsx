@@ -3,6 +3,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { schema } from "@mwezicare/db";
 import { db } from "@/lib/server-db";
+import { AskLearnSwitch } from "@/components/ask-learn-switch";
 import { Link } from "@/i18n/navigation";
 
 export default async function LearnArticlePage({
@@ -30,6 +31,8 @@ export default async function LearnArticlePage({
 
   return (
     <div className="flex flex-col gap-4">
+      <AskLearnSwitch />
+
       <Link href="/learn" className="text-sm font-medium text-emerald-700">
         {t("backToList")}
       </Link>
