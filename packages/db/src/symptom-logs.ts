@@ -202,6 +202,20 @@ export async function listSymptomLogs(
   return rows.map((row) => toRecord(row, keyProvider));
 }
 
+/** All of a user's logs, decrypting notes — for the user's own full data export, not bounded by a date range like listSymptomLogs. */
+export async function listAllSymptomLogs(
+  tx: Tx,
+  userId: string,
+  keyProvider: KeyProvider,
+): Promise<SymptomLogRecord[]> {
+  const rows = await tx
+    .select()
+    .from(schema.symptomLogs)
+    .where(eq(schema.symptomLogs.userId, userId))
+    .orderBy(schema.symptomLogs.logDate);
+  return rows.map((row) => toRecord(row, keyProvider));
+}
+
 /**
  * All of a user's logs shaped for @mwezicare/triage (cycle detection,
  * feature extraction) — no notes/decryption needed for triage, so this
