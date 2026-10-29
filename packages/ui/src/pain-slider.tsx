@@ -112,9 +112,9 @@ export function PainSlider({
               tabIndex={selected ? 0 : -1}
               onClick={() => onChange(i)}
               className={cn(
-                "flex h-11 w-11 shrink-0 items-center justify-center rounded-full border text-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-700 focus-visible:ring-offset-2",
+                "flex h-11 w-11 shrink-0 items-center justify-center rounded-full border text-xl transition-all duration-150 motion-safe:active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-700 focus-visible:ring-offset-2",
                 selected
-                  ? "border-brand-700 bg-brand-700"
+                  ? "border-brand-700 bg-brand-700 shadow-sm motion-safe:scale-110"
                   : "border-neutral-300 bg-white hover:bg-brand-50 dark:border-neutral-700 dark:bg-neutral-900",
               )}
             >

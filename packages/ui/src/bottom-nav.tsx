@@ -27,13 +27,21 @@ export function BottomNav({ items, ariaLabel }: BottomNavProps) {
               href={item.href}
               aria-current={item.active ? "page" : undefined}
               className={cn(
-                "flex min-h-[56px] flex-col items-center justify-center gap-1 px-1 py-2 text-xs font-medium",
+                "flex min-h-[56px] flex-col items-center justify-center gap-1 px-1 py-2 text-xs font-medium transition-colors duration-150 motion-safe:active:scale-95",
                 item.active
                   ? "text-brand-700 dark:text-brand-400"
-                  : "text-neutral-500 dark:text-neutral-400",
+                  : "text-neutral-500 hover:text-brand-600 dark:text-neutral-400",
               )}
             >
-              <span aria-hidden="true">{item.icon}</span>
+              <span
+                aria-hidden="true"
+                className={cn(
+                  "flex h-7 w-11 items-center justify-center rounded-full transition-colors duration-150",
+                  item.active && "bg-brand-100 dark:bg-brand-950",
+                )}
+              >
+                {item.icon}
+              </span>
               <span>{item.label}</span>
             </Link>
           </li>

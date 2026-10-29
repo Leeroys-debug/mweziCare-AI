@@ -3,13 +3,18 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "./lib/utils";
 
+// motion-safe: gates the scale/shadow feedback behind prefers-reduced-motion
+// (WCAG 2.2 AA — CLAUDE.md); color/shadow transitions alone have no
+// vestibular impact so those stay ungated.
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all duration-150 motion-safe:active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 disabled:motion-safe:active:scale-100",
   {
     variants: {
       variant: {
-        default: "bg-brand-700 text-white hover:bg-brand-800",
-        outline: "border border-brand-700 text-brand-700 hover:bg-brand-50",
+        default:
+          "bg-brand-700 text-white shadow-sm hover:bg-brand-800 hover:shadow-md",
+        outline:
+          "border border-brand-700 text-brand-700 hover:bg-brand-50 hover:shadow-sm",
         ghost: "hover:bg-brand-50 text-brand-900",
       },
       size: {
