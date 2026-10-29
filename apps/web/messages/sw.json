@@ -117,6 +117,11 @@
     },
     "predictedPeriodDay": "Siku ya hedhi inayotarajiwa",
     "jumpToToday": "Leo",
+    "calendarDayStatus": {
+      "periodDay": "Siku ya hedhi",
+      "notPeriodDay": "Siyo siku ya hedhi"
+    },
+    "logDetailsButton": "Andika dalili za siku hii",
     "close": "Funga",
     "urgentOverlay": {
       "title": "Tafuta huduma ya dharura sasa",

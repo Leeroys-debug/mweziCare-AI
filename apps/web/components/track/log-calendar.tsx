@@ -5,8 +5,10 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
+import { X } from "lucide-react";
 import { Button, cn } from "@mwezicare/ui";
 import { offlineDb } from "@/lib/offline-db";
+import { togglePeriodForDate } from "@/lib/quick-log";
 import { DailyLogForm } from "./daily-log-form";
 
 interface CalendarLog {
@@ -83,6 +85,8 @@ export function LogCalendar({ onUrgent }: LogCalendarProps) {
   const today = useMemo(() => new Date(), []);
   const [monthOffset, setMonthOffset] = useState(0); // 0 = current month, negative = past
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [togglingDate, setTogglingDate] = useState<string | null>(null);
 
   const viewedMonth = new Date(
     today.getFullYear(),
@@ -166,7 +170,7 @@ export function LogCalendar({ onUrgent }: LogCalendarProps) {
   });
 
   function closeSheet() {
-    setSelectedDate(null);
+    setDialogOpen(false);
     void queryClient.invalidateQueries({ queryKey: ["logs"] });
   }
 
@@ -177,20 +181,50 @@ export function LogCalendar({ onUrgent }: LogCalendarProps) {
     setMonthOffset((m) => Math.min(MAX_FORWARD_OFFSET, m + 1));
   }
 
-  const swipeStart = useRef<{ x: number; y: number } | null>(null);
+  /** Tapping a day marks/unmarks it as a period day directly — no form needed for the common case. "Log more" in the strip below opens the full form for pain/symptoms/notes on that date. */
+  async function handleDayTap(date: string) {
+    setSelectedDate(date);
+    setTogglingDate(date);
+    try {
+      await togglePeriodForDate(date);
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["logs"] }),
+        queryClient.invalidateQueries({ queryKey: ["cycles"] }),
+      ]);
+    } finally {
+      setTogglingDate((current) => (current === date ? null : current));
+    }
+  }
+
+  // Pointer-based swipe: pointerId is tracked so a second finger/pointer
+  // mid-gesture can't corrupt the first's delta, and pointercancel (the
+  // browser taking the gesture over, e.g. a system edge-swipe) clears the
+  // ref instead of leaving a stale start point for the next gesture.
+  const swipeStart = useRef<{ x: number; y: number; pointerId: number } | null>(
+    null,
+  );
   function handlePointerDown(event: React.PointerEvent) {
-    swipeStart.current = { x: event.clientX, y: event.clientY };
+    swipeStart.current = {
+      x: event.clientX,
+      y: event.clientY,
+      pointerId: event.pointerId,
+    };
   }
   function handlePointerUp(event: React.PointerEvent) {
     const start = swipeStart.current;
+    if (!start || start.pointerId !== event.pointerId) return;
     swipeStart.current = null;
-    if (!start) return;
     const dx = event.clientX - start.x;
     const dy = event.clientY - start.y;
     if (Math.abs(dx) < SWIPE_THRESHOLD_PX || Math.abs(dx) < Math.abs(dy) * 1.5)
       return;
     if (dx < 0) goToNextMonth();
     else goToPreviousMonth();
+  }
+  function handlePointerCancel(event: React.PointerEvent) {
+    if (swipeStart.current?.pointerId === event.pointerId) {
+      swipeStart.current = null;
+    }
   }
 
   return (
@@ -238,8 +272,10 @@ export function LogCalendar({ onUrgent }: LogCalendarProps) {
 
       <div
         className="grid touch-pan-y grid-cols-7 gap-1"
+        style={{ touchAction: "pan-y" }}
         onPointerDown={handlePointerDown}
         onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerCancel}
       >
         {cells.map((date, i) => {
           if (date == null) return <div key={`blank-${i}`} />;
@@ -265,10 +301,12 @@ export function LogCalendar({ onUrgent }: LogCalendarProps) {
             <button
               key={date}
               type="button"
-              onClick={() => setSelectedDate(date)}
+              onClick={() => void handleDayTap(date)}
+              disabled={togglingDate === date}
               aria-label={srParts.join(" — ")}
               className={cn(
-                "relative flex min-h-[44px] flex-col items-center justify-center gap-0.5 rounded-full text-xs font-medium transition-colors active:scale-95",
+                "relative flex min-h-[44px] flex-col items-center justify-center gap-0.5 rounded-full text-xs font-medium transition-all active:scale-95",
+                togglingDate === date && "opacity-50",
                 isPeriodDay
                   ? "bg-brand-600 text-white"
                   : "text-neutral-900 dark:text-neutral-100",
@@ -280,6 +318,8 @@ export function LogCalendar({ onUrgent }: LogCalendarProps) {
                 isToday &&
                   isPeriodDay &&
                   "ring-2 ring-brand-900 dark:ring-brand-200",
+                selectedDate === date &&
+                  "ring-2 ring-offset-2 ring-brand-700 dark:ring-brand-300",
               )}
             >
               <span aria-hidden="true">{Number(date.slice(-2))}</span>
@@ -298,6 +338,39 @@ export function LogCalendar({ onUrgent }: LogCalendarProps) {
           );
         })}
       </div>
+
+      {selectedDate && (
+        <div className="flex items-center justify-between gap-2 rounded-lg border border-brand-300 bg-brand-50 p-3 dark:border-brand-800 dark:bg-brand-950">
+          <div>
+            <p className="text-sm font-semibold text-brand-900 dark:text-brand-100">
+              {selectedDate}
+            </p>
+            <p className="text-xs text-brand-700 dark:text-brand-300">
+              {logsByDate.get(selectedDate)?.periodDay
+                ? t("calendarDayStatus.periodDay")
+                : t("calendarDayStatus.notPeriodDay")}
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              onClick={() => setDialogOpen(true)}
+            >
+              {t("logDetailsButton")}
+            </Button>
+            <button
+              type="button"
+              aria-label={t("close")}
+              onClick={() => setSelectedDate(null)}
+              className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-brand-700 hover:bg-brand-100 dark:text-brand-300 dark:hover:bg-brand-900"
+            >
+              <X size={18} />
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-neutral-600 dark:text-neutral-400">
         <span className="flex items-center gap-1.5">
@@ -331,7 +404,7 @@ export function LogCalendar({ onUrgent }: LogCalendarProps) {
       </div>
 
       <Dialog.Root
-        open={selectedDate != null}
+        open={dialogOpen}
         onOpenChange={(open) => !open && closeSheet()}
       >
         <Dialog.Portal>

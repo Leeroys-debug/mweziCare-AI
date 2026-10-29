@@ -11,7 +11,7 @@ import { QuickActions } from "@/components/track/quick-actions";
 import { UrgentCareOverlay } from "@/components/urgent-care-overlay";
 import { Day30QuizBanner } from "@/components/quiz/day30-banner";
 import { trackClientEvent } from "@/lib/analytics-client";
-import { toggleTodayPeriod } from "@/lib/quick-log";
+import { togglePeriodForDate } from "@/lib/quick-log";
 
 interface Cycle {
   startDate: string;
@@ -130,7 +130,7 @@ export default function TrackPage() {
   async function handleLogPeriod() {
     setTogglingPeriod(true);
     try {
-      await toggleTodayPeriod(today);
+      await togglePeriodForDate(today);
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ["logs"] }),
         queryClient.invalidateQueries({ queryKey: ["cycles"] }),

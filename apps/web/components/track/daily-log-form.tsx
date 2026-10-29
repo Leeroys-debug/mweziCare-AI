@@ -231,18 +231,11 @@ export function DailyLogForm({ date, onSaved, onUrgent }: DailyLogFormProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
-      <Controller
-        control={control}
-        name="periodDay"
-        render={({ field }) => (
-          <Chip
-            selected={field.value}
-            onClick={() => field.onChange(!field.value)}
-          >
-            {t("periodDay")}
-          </Chip>
-        )}
-      />
+      {/* periodDay itself is marked via the calendar's tap-to-log and the
+          Track hero's quick action, not here — this form carries whatever
+          value is already on record for the date (see DEFAULT_VALUES/reset
+          above) through to onSubmit unchanged, it just isn't user-editable
+          from this screen, to avoid a second, redundant control. */}
 
       <fieldset className="flex flex-col gap-2">
         <legend className="text-sm font-medium text-neutral-700 dark:text-neutral-300">

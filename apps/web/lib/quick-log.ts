@@ -21,15 +21,16 @@ const EMPTY_RED_FLAGS = {
 };
 
 /**
- * One-tap period-day toggle for the Track page's quick actions — preserves
- * every other field already logged for today (reads the existing offline
- * record first), or starts from safe all-false/null defaults when today has
- * no log yet. Returns the new periodDay value.
+ * One-tap period-day toggle for any date — the Track page's quick action
+ * (today) and the calendar's tap-to-log (any date) both use this. Preserves
+ * every other field already logged for that date (reads the existing
+ * offline record first), or starts from safe all-false/null defaults when
+ * that date has no log yet. Returns the new periodDay value.
  */
-export async function toggleTodayPeriod(todayIso: string): Promise<boolean> {
+export async function togglePeriodForDate(dateIso: string): Promise<boolean> {
   const existing = await offlineDb.logs
     .where("logDate")
-    .equals(todayIso)
+    .equals(dateIso)
     .first();
   const nextPeriodDay = !(existing?.periodDay ?? false);
 
@@ -41,7 +42,7 @@ export async function toggleTodayPeriod(todayIso: string): Promise<boolean> {
       }
     : {
         clientId: crypto.randomUUID(),
-        logDate: todayIso,
+        logDate: dateIso,
         periodDay: nextPeriodDay,
         bleedingLevel: null,
         painScore: null,
