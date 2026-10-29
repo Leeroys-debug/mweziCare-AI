@@ -60,7 +60,7 @@ describe.skipIf(!db)("GET /api/v1/cycles", () => {
 
   it("derives cycles, a next-period estimate, and per-cycle chart data from the user's own logs", async () => {
     const { GET } = await import("./route");
-    const response = await GET();
+    const response = await GET(new Request("http://localhost/api/v1/cycles"));
     const body = await response.json();
 
     expect(response.status).toBe(200);
@@ -74,5 +74,20 @@ describe.skipIf(!db)("GET /api/v1/cycles", () => {
       isEstimate: true,
     });
     expect(body.chartData.length).toBeGreaterThan(0);
+    expect(body.logs.length).toBe(3);
+  });
+
+  it("honours a valid ?cycles= limit and falls back to the default otherwise", async () => {
+    const { GET } = await import("./route");
+
+    const limited = await GET(
+      new Request("http://localhost/api/v1/cycles?cycles=1"),
+    );
+    expect((await limited.json()).chartData).toHaveLength(1);
+
+    const invalid = await GET(
+      new Request("http://localhost/api/v1/cycles?cycles=not-a-number"),
+    );
+    expect((await invalid.json()).chartData).toHaveLength(2);
   });
 });
