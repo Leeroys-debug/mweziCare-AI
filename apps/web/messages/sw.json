@@ -109,6 +109,8 @@
     "notesPlaceholder": "Kitu kingine chochote unachotaka kukumbuka kuhusu leo",
     "saving": "Inahifadhi…",
     "save": "Hifadhi",
+    "loadError": "Imeshindwa kupakia siku hii",
+    "saveError": "Imeshindwa kuhifadhi",
     "previousMonth": "Mwezi uliopita",
     "nextMonth": "Mwezi ujao",
     "weekdayAbbrev": ["Jpi", "Jtt", "Jnn", "Jtn", "Alh", "Ijm", "Jmo"],

@@ -109,6 +109,8 @@
     "notesPlaceholder": "Anything else you want to remember about today",
     "saving": "Saving…",
     "save": "Save",
+    "loadError": "Couldn't load this day",
+    "saveError": "Couldn't save",
     "previousMonth": "Previous month",
     "nextMonth": "Next month",
     "weekdayAbbrev": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],

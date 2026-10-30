@@ -113,6 +113,8 @@ export function DailyLogForm({ date, onSaved, onUrgent }: DailyLogFormProps) {
   const [saveState, setSaveState] = useState<"idle" | "saving" | "saved">(
     "idle",
   );
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [saveError, setSaveError] = useState<string | null>(null);
   const { control, handleSubmit, reset, watch, setValue } = useForm<FormValues>(
     {
       resolver: zodResolver(formSchema),
@@ -123,11 +125,22 @@ export function DailyLogForm({ date, onSaved, onUrgent }: DailyLogFormProps) {
   useEffect(() => {
     let active = true;
     setSaveState("idle");
+    setLoadError(null);
     void (async () => {
-      const existing = await offlineDb.logs
-        .where("logDate")
-        .equals(date)
-        .first();
+      let existing;
+      try {
+        existing = await offlineDb.logs.where("logDate").equals(date).first();
+      } catch (err) {
+        if (!active) return;
+        // IndexedDB can genuinely be unavailable (private browsing, some
+        // mobile browser settings) — without this, that failure was
+        // silent: clientId never got set, so Save stayed permanently
+        // disabled with nothing on screen explaining why.
+        setLoadError(
+          err instanceof Error ? err.message : "Failed to load this day's log",
+        );
+        return;
+      }
       if (!active) return;
       if (existing) {
         setClientId(existing.clientId);
@@ -192,6 +205,7 @@ export function DailyLogForm({ date, onSaved, onUrgent }: DailyLogFormProps) {
   async function onSubmit(values: FormValues) {
     if (!clientId) return;
     setSaveState("saving");
+    setSaveError(null);
 
     const log: SymptomLogInput = {
       clientId,
@@ -225,7 +239,18 @@ export function DailyLogForm({ date, onSaved, onUrgent }: DailyLogFormProps) {
       updatedAt: new Date().toISOString(),
     };
 
-    await saveLog(log);
+    try {
+      await saveLog(log);
+    } catch (err) {
+      // Previously unhandled — saveLog() throwing (e.g. IndexedDB write
+      // failure) left the button stuck on "Saving…" forever with nothing
+      // explaining why nothing happened.
+      setSaveState("idle");
+      setSaveError(
+        err instanceof Error ? err.message : "Failed to save this log",
+      );
+      return;
+    }
     setSaveState("saved");
     onSaved?.();
 
@@ -244,6 +269,11 @@ export function DailyLogForm({ date, onSaved, onUrgent }: DailyLogFormProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
+      {loadError && (
+        <p className="rounded-md border border-red-300 bg-red-50 p-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-950 dark:text-red-300">
+          {t("loadError")}: {loadError}
+        </p>
+      )}
       {/* periodDay itself is marked via the calendar's tap-to-log and the
           Track hero's quick action, not here — this form carries whatever
           value is already on record for the date (see DEFAULT_VALUES/reset
@@ -456,6 +486,11 @@ export function DailyLogForm({ date, onSaved, onUrgent }: DailyLogFormProps) {
         )}
       />
 
+      {saveError && (
+        <p className="text-sm text-red-600 dark:text-red-400">
+          {t("saveError")}: {saveError}
+        </p>
+      )}
       <Button type="submit" size="lg" disabled={!clientId}>
         {saveState === "saving" ? t("saving") : t("save")}
       </Button>

@@ -104,6 +104,7 @@ export function LogCalendar() {
   const [togglingDate, setTogglingDate] = useState<string | null>(null);
   const [painDraft, setPainDraft] = useState(0);
   const [savingPain, setSavingPain] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
 
   const viewedMonth = new Date(
     today.getFullYear(),
@@ -216,12 +217,19 @@ export function LogCalendar() {
   async function handleDayTap(date: string) {
     selectDate(date);
     setTogglingDate(date);
+    setActionError(null);
     try {
       await togglePeriodForDate(date);
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ["logs"] }),
         queryClient.invalidateQueries({ queryKey: ["cycles"] }),
       ]);
+    } catch (err) {
+      // Previously unhandled — a throw here (e.g. IndexedDB write failure)
+      // left the tap looking like it did nothing at all.
+      setActionError(
+        err instanceof Error ? err.message : "Failed to log period",
+      );
     } finally {
       setTogglingDate((current) => (current === date ? null : current));
     }
@@ -230,9 +238,12 @@ export function LogCalendar() {
   async function handleSavePain() {
     if (!selectedDate) return;
     setSavingPain(true);
+    setActionError(null);
     try {
       await setPainForDate(selectedDate, painDraft);
       await queryClient.invalidateQueries({ queryKey: ["logs"] });
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : "Failed to log pain");
     } finally {
       setSavingPain(false);
     }
@@ -452,6 +463,11 @@ export function LogCalendar() {
           >
             {savingPain ? t("saving") : t("savePainButton")}
           </Button>
+          {actionError && (
+            <p className="text-sm text-red-600 dark:text-red-400">
+              {t("saveError")}: {actionError}
+            </p>
+          )}
         </div>
       )}
 
