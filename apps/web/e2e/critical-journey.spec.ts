@@ -136,10 +136,11 @@ test.describe("critical user journey", () => {
     const userId = profile!.userId;
 
     // --- Log offline, then sync --------------------------------------
-    // Period-day marking now lives on its own Calendar tab (no longer
-    // bundled into this symptom form — see log-calendar.tsx) and isn't
-    // required for an assessment to be generated, so this just saves the
-    // day's (all-default) symptom log.
+    // /track is the period calendar now; the symptom/diagnosis question
+    // form (with the Save button this needs) lives on its own Symptoms
+    // tab — see log-calendar.tsx. Navigate there before going offline, since
+    // a page navigation can't succeed once offline.
+    await page.goto("/en/symptoms");
     await context.setOffline(true);
     await page.getByRole("button", { name: /^save$/i }).click();
     await expect(page.getByText(/offline.*will sync later/i)).toBeVisible();

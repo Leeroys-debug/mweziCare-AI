@@ -1,8 +1,8 @@
 {
   "Nav": {
     "primary": "Primary navigation",
-    "track": "Symptoms",
-    "calendar": "Calendar",
+    "track": "Track",
+    "symptoms": "Symptoms",
     "insights": "Insights",
     "assistant": "Ask",
     "care": "Care",
@@ -21,8 +21,8 @@
     "sw": "Kiswahili"
   },
   "Track": {
-    "title": "Symptoms",
-    "calendarTitle": "Calendar",
+    "title": "Track",
+    "symptomsTitle": "Symptoms",
     "hero": {
       "periodLabel": "Period",
       "cycleLabel": "Cycle day",

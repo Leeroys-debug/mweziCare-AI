@@ -26,6 +26,7 @@ import { Button, Chip, PainSlider } from "@mwezicare/ui";
 import { useProfile } from "@/hooks/use-profile";
 import { offlineDb } from "@/lib/offline-db";
 import { saveLog } from "@/lib/sync-engine";
+import { generateUuid } from "@/lib/uuid";
 
 const PAIN_LOCATIONS = painLocationSchema.options;
 const PAIN_TIMINGS = painTimingSchema.options;
@@ -157,7 +158,7 @@ export function DailyLogForm({ date, onSaved, onUrgent }: DailyLogFormProps) {
           notes: existing.notes ?? null,
         });
       } else {
-        setClientId(crypto.randomUUID());
+        setClientId(generateUuid());
         reset(DEFAULT_VALUES);
       }
     })();

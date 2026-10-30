@@ -1,8 +1,8 @@
 {
   "Nav": {
     "primary": "Uelekezaji mkuu",
-    "track": "Dalili",
-    "calendar": "Kalenda",
+    "track": "Fuatilia",
+    "symptoms": "Dalili",
     "insights": "Maarifa",
     "assistant": "Uliza",
     "care": "Huduma",
@@ -21,8 +21,8 @@
     "sw": "Kiswahili"
   },
   "Track": {
-    "title": "Dalili",
-    "calendarTitle": "Kalenda",
+    "title": "Fuatilia",
+    "symptomsTitle": "Dalili",
     "hero": {
       "periodLabel": "Hedhi",
       "cycleLabel": "Siku ya mzunguko",

@@ -67,7 +67,7 @@ export default function QuizPage() {
           {t("resultBody", { score: result.score, total: result.total })}
         </p>
         <Button asChild size="lg">
-          <Link href="/track">{t("continue")}</Link>
+          <Link href="/symptoms">{t("continue")}</Link>
         </Button>
       </div>
     );
@@ -128,7 +128,7 @@ export default function QuizPage() {
           {submitting ? t("submitting") : t("submit")}
         </Button>
         <Button asChild variant="ghost" size="lg">
-          <Link href="/track">{t("skip")}</Link>
+          <Link href="/symptoms">{t("skip")}</Link>
         </Button>
       </div>
     </div>

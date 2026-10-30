@@ -18,11 +18,11 @@ export function AppBottomNav() {
   const pathname = usePathname();
 
   const tabs: Array<{
-    key: "calendar" | "track" | "insights" | "assistant" | "care" | "me";
+    key: "track" | "symptoms" | "insights" | "assistant" | "care" | "me";
     icon: BottomNavItem["icon"];
   }> = [
-    { key: "calendar", icon: <Calendar size={20} /> },
-    { key: "track", icon: <ClipboardList size={20} /> },
+    { key: "track", icon: <Calendar size={20} /> },
+    { key: "symptoms", icon: <ClipboardList size={20} /> },
     { key: "insights", icon: <LineChart size={20} /> },
     { key: "assistant", icon: <MessageCircle size={20} /> },
     { key: "care", icon: <MapPin size={20} /> },

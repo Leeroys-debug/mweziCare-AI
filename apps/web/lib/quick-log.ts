@@ -1,6 +1,7 @@
 import type { SymptomLogInput } from "@mwezicare/validation";
 import { offlineDb } from "./offline-db";
 import { saveLog } from "./sync-engine";
+import { generateUuid } from "./uuid";
 
 const EMPTY_SYMPTOMS = {
   fatigue: false,
@@ -23,7 +24,7 @@ const EMPTY_RED_FLAGS = {
 
 function defaultLog(dateIso: string): SymptomLogInput {
   return {
-    clientId: crypto.randomUUID(),
+    clientId: generateUuid(),
     logDate: dateIso,
     periodDay: false,
     bleedingLevel: null,
