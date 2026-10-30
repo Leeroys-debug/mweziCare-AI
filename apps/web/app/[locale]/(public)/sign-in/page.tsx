@@ -27,15 +27,18 @@ export default function SignInPage() {
         setError(t("errorGeneric"));
         return;
       }
-      const staffRoles = [
-        "clinician",
-        "verifier",
-        "programme_admin",
-        "system_admin",
-      ];
-      router.push(
-        staffRoles.includes(data.user.role ?? "user") ? "/dashboard" : "/track",
-      );
+      // Each staff role only has page-level access (requireRole) to a
+      // different subset of (staff) routes — sending everyone to /dashboard
+      // bounced clinician/verifier/system_admin straight back out, since
+      // that page itself is requireRole(["programme_admin"]) only. Route
+      // each role to a page it's actually allowed to view.
+      const staffLandingPage: Record<string, string> = {
+        clinician: "/knowledge-base",
+        verifier: "/facilities",
+        programme_admin: "/dashboard",
+        system_admin: "/users",
+      };
+      router.push(staffLandingPage[data.user.role ?? ""] ?? "/track");
       router.refresh();
     } catch {
       setError(t("errorGeneric"));
