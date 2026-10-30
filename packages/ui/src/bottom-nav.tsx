@@ -20,7 +20,12 @@ export function BottomNav({ items, ariaLabel }: BottomNavProps) {
       aria-label={ariaLabel}
       className="fixed inset-x-0 bottom-0 z-50 border-t border-neutral-200 bg-white pb-[env(safe-area-inset-bottom)] dark:border-neutral-800 dark:bg-neutral-950"
     >
-      <ul className="grid grid-cols-5">
+      <ul
+        className="grid"
+        style={{
+          gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))`,
+        }}
+      >
         {items.map((item) => (
           <li key={item.href}>
             <Link

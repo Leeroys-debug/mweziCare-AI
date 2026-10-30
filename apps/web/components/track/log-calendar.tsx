@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import * as Dialog from "@radix-ui/react-dialog";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
@@ -9,7 +8,6 @@ import { X } from "lucide-react";
 import { Button, cn } from "@mwezicare/ui";
 import { offlineDb } from "@/lib/offline-db";
 import { togglePeriodForDate } from "@/lib/quick-log";
-import { DailyLogForm } from "./daily-log-form";
 
 interface CalendarLog {
   logDate: string;
@@ -75,17 +73,18 @@ function painBadgeClass(painScore: number | null): string | null {
   return "bg-red-600 dark:bg-red-700";
 }
 
-export interface LogCalendarProps {
-  onUrgent?: () => void;
-}
-
-export function LogCalendar({ onUrgent }: LogCalendarProps) {
+/**
+ * Period-calendar only — tapping a day marks/unmarks it as a period day
+ * directly. Deliberately has no path into the symptom/diagnosis question
+ * form (that lives on its own Symptoms tab) — see the user's request to
+ * keep calendar tracking and the triage questions distinct, not bridged.
+ */
+export function LogCalendar() {
   const t = useTranslations("Track");
   const queryClient = useQueryClient();
   const today = useMemo(() => new Date(), []);
   const [monthOffset, setMonthOffset] = useState(0); // 0 = current month, negative = past
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [dialogOpen, setDialogOpen] = useState(false);
   const [togglingDate, setTogglingDate] = useState<string | null>(null);
 
   const viewedMonth = new Date(
@@ -116,7 +115,7 @@ export function LogCalendar({ onUrgent }: LogCalendarProps) {
     },
   });
 
-  // Shared cache key with the Track/Insights pages — reuses their fetch
+  // Shared cache key with the Calendar/Insights pages — reuses their fetch
   // when already in the query cache instead of duplicating the request.
   const { data: cyclesData } = useQuery({
     queryKey: ["cycles"],
@@ -169,11 +168,6 @@ export function LogCalendar({ onUrgent }: LogCalendarProps) {
     year: "numeric",
   });
 
-  function closeSheet() {
-    setDialogOpen(false);
-    void queryClient.invalidateQueries({ queryKey: ["logs"] });
-  }
-
   function goToPreviousMonth() {
     setMonthOffset((m) => m - 1);
   }
@@ -181,7 +175,7 @@ export function LogCalendar({ onUrgent }: LogCalendarProps) {
     setMonthOffset((m) => Math.min(MAX_FORWARD_OFFSET, m + 1));
   }
 
-  /** Tapping a day marks/unmarks it as a period day directly — no form needed for the common case. "Log more" in the strip below opens the full form for pain/symptoms/notes on that date. */
+  /** Tapping a day marks/unmarks it as a period day directly — the only action this screen offers. */
   async function handleDayTap(date: string) {
     setSelectedDate(date);
     setTogglingDate(date);
@@ -351,24 +345,14 @@ export function LogCalendar({ onUrgent }: LogCalendarProps) {
                 : t("calendarDayStatus.notPeriodDay")}
             </p>
           </div>
-          <div className="flex items-center gap-2">
-            <Button
-              type="button"
-              size="sm"
-              variant="outline"
-              onClick={() => setDialogOpen(true)}
-            >
-              {t("logDetailsButton")}
-            </Button>
-            <button
-              type="button"
-              aria-label={t("close")}
-              onClick={() => setSelectedDate(null)}
-              className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-brand-700 hover:bg-brand-100 dark:text-brand-300 dark:hover:bg-brand-900"
-            >
-              <X size={18} />
-            </button>
-          </div>
+          <button
+            type="button"
+            aria-label={t("close")}
+            onClick={() => setSelectedDate(null)}
+            className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-brand-700 hover:bg-brand-100 dark:text-brand-300 dark:hover:bg-brand-900"
+          >
+            <X size={18} />
+          </button>
         </div>
       )}
 
@@ -402,44 +386,6 @@ export function LogCalendar({ onUrgent }: LogCalendarProps) {
           {t("legend.painLogged")}
         </span>
       </div>
-
-      <Dialog.Root
-        open={dialogOpen}
-        onOpenChange={(open) => !open && closeSheet()}
-      >
-        <Dialog.Portal>
-          <Dialog.Overlay className="fixed inset-0 z-40 bg-black/40" />
-          <Dialog.Content className="fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-y-auto rounded-t-2xl bg-white p-4 dark:bg-neutral-950">
-            <div className="mx-auto flex max-w-md flex-col gap-4">
-              <div className="flex items-center justify-between">
-                <Dialog.Title className="text-lg font-semibold">
-                  {selectedDate}
-                </Dialog.Title>
-                <Dialog.Close asChild>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    aria-label={t("close")}
-                  >
-                    ✕
-                  </Button>
-                </Dialog.Close>
-              </div>
-              {selectedDate && (
-                <DailyLogForm
-                  date={selectedDate}
-                  onSaved={closeSheet}
-                  onUrgent={() => {
-                    closeSheet();
-                    onUrgent?.();
-                  }}
-                />
-              )}
-            </div>
-          </Dialog.Content>
-        </Dialog.Portal>
-      </Dialog.Root>
     </div>
   );
 }

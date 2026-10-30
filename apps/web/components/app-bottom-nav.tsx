@@ -4,6 +4,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { usePathname } from "@/i18n/navigation";
 import { BottomNav, type BottomNavItem } from "@mwezicare/ui";
 import {
+  Calendar,
   ClipboardList,
   LineChart,
   MessageCircle,
@@ -17,9 +18,10 @@ export function AppBottomNav() {
   const pathname = usePathname();
 
   const tabs: Array<{
-    key: "track" | "insights" | "assistant" | "care" | "me";
+    key: "calendar" | "track" | "insights" | "assistant" | "care" | "me";
     icon: BottomNavItem["icon"];
   }> = [
+    { key: "calendar", icon: <Calendar size={20} /> },
     { key: "track", icon: <ClipboardList size={20} /> },
     { key: "insights", icon: <LineChart size={20} /> },
     { key: "assistant", icon: <MessageCircle size={20} /> },

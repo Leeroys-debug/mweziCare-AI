@@ -1,7 +1,8 @@
 {
   "Nav": {
     "primary": "Uelekezaji mkuu",
-    "track": "Fuatilia",
+    "track": "Dalili",
+    "calendar": "Kalenda",
     "insights": "Maarifa",
     "assistant": "Uliza",
     "care": "Huduma",
@@ -20,7 +21,8 @@
     "sw": "Kiswahili"
   },
   "Track": {
-    "title": "Fuatilia",
+    "title": "Dalili",
+    "calendarTitle": "Kalenda",
     "hero": {
       "periodLabel": "Hedhi",
       "cycleLabel": "Siku ya mzunguko",
@@ -121,7 +123,6 @@
       "periodDay": "Siku ya hedhi",
       "notPeriodDay": "Siyo siku ya hedhi"
     },
-    "logDetailsButton": "Andika dalili za siku hii",
     "close": "Funga",
     "urgentOverlay": {
       "title": "Tafuta huduma ya dharura sasa",

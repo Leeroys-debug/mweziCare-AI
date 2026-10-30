@@ -1,7 +1,8 @@
 {
   "Nav": {
     "primary": "Primary navigation",
-    "track": "Track",
+    "track": "Symptoms",
+    "calendar": "Calendar",
     "insights": "Insights",
     "assistant": "Ask",
     "care": "Care",
@@ -20,7 +21,8 @@
     "sw": "Kiswahili"
   },
   "Track": {
-    "title": "Track",
+    "title": "Symptoms",
+    "calendarTitle": "Calendar",
     "hero": {
       "periodLabel": "Period",
       "cycleLabel": "Cycle day",
@@ -121,7 +123,6 @@
       "periodDay": "Period day",
       "notPeriodDay": "Not a period day"
     },
-    "logDetailsButton": "Log symptoms for this day",
     "close": "Close",
     "urgentOverlay": {
       "title": "Seek urgent care now",
