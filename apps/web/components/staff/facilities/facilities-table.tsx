@@ -86,47 +86,49 @@ export function FacilitiesTable() {
           {t("noResults")}
         </p>
       ) : (
-        <table className="w-full border-collapse text-sm">
-          <thead>
-            <tr className="border-b border-neutral-200 text-left dark:border-neutral-800">
-              <th className="py-2">{t("name")}</th>
-              <th className="py-2">{t("county")}</th>
-              <th className="py-2">{t("status")}</th>
-              <th className="py-2">{t("lastVerified")}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {facilities.map((f) => (
-              <tr
-                key={f.id}
-                className="border-b border-neutral-100 dark:border-neutral-900"
-              >
-                <td className="py-2">
-                  <Link
-                    href={`/facilities/${f.id}`}
-                    className="font-medium text-emerald-700 dark:text-emerald-400"
-                  >
-                    {f.name}
-                  </Link>
-                </td>
-                <td className="py-2">{f.county}</td>
-                <td className="py-2">{t(`statusLabel.${f.status}`)}</td>
-                <td
-                  className={
-                    f.dueForReverification
-                      ? "py-2 font-semibold text-red-600"
-                      : "py-2"
-                  }
-                >
-                  {f.lastVerifiedAt
-                    ? new Date(f.lastVerifiedAt).toLocaleDateString()
-                    : t("never")}
-                  {f.dueForReverification && ` (${t("dueBadge")})`}
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse text-sm">
+            <thead>
+              <tr className="border-b border-neutral-200 text-left dark:border-neutral-800">
+                <th className="py-2">{t("name")}</th>
+                <th className="py-2">{t("county")}</th>
+                <th className="py-2">{t("status")}</th>
+                <th className="py-2">{t("lastVerified")}</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {facilities.map((f) => (
+                <tr
+                  key={f.id}
+                  className="border-b border-neutral-100 dark:border-neutral-900"
+                >
+                  <td className="py-2">
+                    <Link
+                      href={`/facilities/${f.id}`}
+                      className="font-medium text-emerald-700 dark:text-emerald-400"
+                    >
+                      {f.name}
+                    </Link>
+                  </td>
+                  <td className="py-2">{f.county}</td>
+                  <td className="py-2">{t(`statusLabel.${f.status}`)}</td>
+                  <td
+                    className={
+                      f.dueForReverification
+                        ? "py-2 font-semibold text-red-600"
+                        : "py-2"
+                    }
+                  >
+                    {f.lastVerifiedAt
+                      ? new Date(f.lastVerifiedAt).toLocaleDateString()
+                      : t("never")}
+                    {f.dueForReverification && ` (${t("dueBadge")})`}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

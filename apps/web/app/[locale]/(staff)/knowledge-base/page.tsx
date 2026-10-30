@@ -31,46 +31,50 @@ export default async function KnowledgeBaseListPage() {
           {t("noArticles")}
         </p>
       ) : (
-        <table className="w-full border-collapse text-sm">
-          <thead>
-            <tr className="border-b border-neutral-200 text-left dark:border-neutral-800">
-              <th className="py-2">{t("articleTitle")}</th>
-              <th className="py-2">{t("locale")}</th>
-              <th className="py-2">{t("status")}</th>
-              <th className="py-2">{t("reviewDue")}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {documents.map((doc) => {
-              const isOverdue = Boolean(doc.reviewDue && doc.reviewDue < today);
-              return (
-                <tr
-                  key={doc.id}
-                  className="border-b border-neutral-100 dark:border-neutral-900"
-                >
-                  <td className="py-2">
-                    <Link
-                      href={`/knowledge-base/${doc.id}`}
-                      className="font-medium text-emerald-700 dark:text-emerald-400"
-                    >
-                      {doc.title}
-                    </Link>
-                  </td>
-                  <td className="py-2">{doc.locale}</td>
-                  <td className="py-2">{t(`statusLabel.${doc.status}`)}</td>
-                  <td
-                    className={
-                      isOverdue ? "py-2 font-semibold text-red-600" : "py-2"
-                    }
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse text-sm">
+            <thead>
+              <tr className="border-b border-neutral-200 text-left dark:border-neutral-800">
+                <th className="py-2">{t("articleTitle")}</th>
+                <th className="py-2">{t("locale")}</th>
+                <th className="py-2">{t("status")}</th>
+                <th className="py-2">{t("reviewDue")}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {documents.map((doc) => {
+                const isOverdue = Boolean(
+                  doc.reviewDue && doc.reviewDue < today,
+                );
+                return (
+                  <tr
+                    key={doc.id}
+                    className="border-b border-neutral-100 dark:border-neutral-900"
                   >
-                    {doc.reviewDue ?? "—"}
-                    {isOverdue && ` (${t("overdue")})`}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                    <td className="py-2">
+                      <Link
+                        href={`/knowledge-base/${doc.id}`}
+                        className="font-medium text-emerald-700 dark:text-emerald-400"
+                      >
+                        {doc.title}
+                      </Link>
+                    </td>
+                    <td className="py-2">{doc.locale}</td>
+                    <td className="py-2">{t(`statusLabel.${doc.status}`)}</td>
+                    <td
+                      className={
+                        isOverdue ? "py-2 font-semibold text-red-600" : "py-2"
+                      }
+                    >
+                      {doc.reviewDue ?? "—"}
+                      {isOverdue && ` (${t("overdue")})`}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

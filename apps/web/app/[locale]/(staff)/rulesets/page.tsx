@@ -24,38 +24,40 @@ export default async function RulesetsListPage() {
           {t("noVersions")}
         </p>
       ) : (
-        <table className="w-full border-collapse text-sm">
-          <thead>
-            <tr className="border-b border-neutral-200 text-left dark:border-neutral-800">
-              <th className="py-2">{t("version")}</th>
-              <th className="py-2">{t("status")}</th>
-              <th className="py-2">{t("approvedBy")}</th>
-              <th className="py-2">{t("createdAt")}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {versions.map((v) => (
-              <tr
-                key={v.id}
-                className="border-b border-neutral-100 dark:border-neutral-900"
-              >
-                <td className="py-2">
-                  <Link
-                    href={`/rulesets/${v.version}`}
-                    className="font-medium text-emerald-700 dark:text-emerald-400"
-                  >
-                    {v.version}
-                  </Link>
-                </td>
-                <td className="py-2">{t(`statusLabel.${v.status}`)}</td>
-                <td className="py-2">{v.approvedByName ?? "—"}</td>
-                <td className="py-2">
-                  {new Date(v.createdAt).toLocaleDateString()}
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse text-sm">
+            <thead>
+              <tr className="border-b border-neutral-200 text-left dark:border-neutral-800">
+                <th className="py-2">{t("version")}</th>
+                <th className="py-2">{t("status")}</th>
+                <th className="py-2">{t("approvedBy")}</th>
+                <th className="py-2">{t("createdAt")}</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {versions.map((v) => (
+                <tr
+                  key={v.id}
+                  className="border-b border-neutral-100 dark:border-neutral-900"
+                >
+                  <td className="py-2">
+                    <Link
+                      href={`/rulesets/${v.version}`}
+                      className="font-medium text-emerald-700 dark:text-emerald-400"
+                    >
+                      {v.version}
+                    </Link>
+                  </td>
+                  <td className="py-2">{t(`statusLabel.${v.status}`)}</td>
+                  <td className="py-2">{v.approvedByName ?? "—"}</td>
+                  <td className="py-2">
+                    {new Date(v.createdAt).toLocaleDateString()}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );
