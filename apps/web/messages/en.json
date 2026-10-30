@@ -88,6 +88,7 @@
       "nausea": "Nausea",
       "painWithBowelMovements": "Pain with bowel movements",
       "painWithUrination": "Pain with urination",
+      "bloodInUrine": "Blood in urine",
       "painWithSex": "Pain with sex"
     },
     "impactLabel": "Today's impact",
@@ -633,6 +634,7 @@
         "nausea": "Nausea",
         "painWithBowelMovements": "Pain with bowel movements",
         "painWithUrination": "Pain with urination",
+        "bloodInUrine": "Blood in urine",
         "painWithSex": "Pain with sex"
       },
       "missedSchoolLabel": "Missed school days",

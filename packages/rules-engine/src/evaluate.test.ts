@@ -208,4 +208,39 @@ describe("evaluate", () => {
     });
     expect(result.outcome).toBe("routine");
   });
+
+  it("the real draft ruleset does not flag family history alone, with no pain history", () => {
+    const result = evaluate(draftRuleset, {
+      familyHistoryEndometriosis: true,
+    });
+    expect(result.outcome).toBe("routine");
+  });
+
+  it("the real draft ruleset does not flag severe-pain history alone, with no family history", () => {
+    const result = evaluate(draftRuleset, {
+      cyclesWithMaxPainGte7_last3: 2,
+    });
+    expect(result.outcome).toBe("routine");
+  });
+
+  it("the real draft ruleset flags assess_soon for family history combined with a severe-pain cycle", () => {
+    const result = evaluate(draftRuleset, {
+      familyHistoryEndometriosis: true,
+      cyclesWithMaxPainGte7_last3: 1,
+    });
+    expect(result.outcome).toBe("assess_soon");
+    expect(result.firedRules.map((r) => r.id)).toEqual([
+      "assess_soon_family_history_with_pain",
+    ]);
+  });
+
+  it("the real draft ruleset flags assess_soon for blood in urine via the shared bowel/urinary feature", () => {
+    const result = evaluate(draftRuleset, {
+      anyBowelOrUrinarySymptom_last3: true,
+    });
+    expect(result.outcome).toBe("assess_soon");
+    expect(result.firedRules.map((r) => r.id)).toEqual([
+      "assess_soon_pain_with_bowel_or_urination",
+    ]);
+  });
 });

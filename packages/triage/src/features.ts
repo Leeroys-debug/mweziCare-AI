@@ -11,6 +11,7 @@ export interface TriageLog extends PeriodDayLog {
   symptoms?: {
     painWithBowelMovements?: boolean;
     painWithUrination?: boolean;
+    bloodInUrine?: boolean;
   } | null;
   impact?: {
     missedSchool?: boolean;
@@ -48,7 +49,7 @@ function windowFeatures(
       cyclesWithMaxPainGte7: 0,
       missedSchoolOrWorkOrSleepOrActivityDays: 0,
       painDaysOutsideMenstruation: 0,
-      anyPainWithBowelOrUrination: false,
+      anyBowelOrUrinarySymptom: false,
       heavyOrVeryHeavyBleedingDays: 0,
       periodsLongerThan7Days: 0,
       bleedingBetweenPeriods: false,
@@ -85,9 +86,14 @@ function windowFeatures(
     (log) => !log.periodDay && (log.painScore ?? 0) > 0,
   ).length;
 
-  const anyPainWithBowelOrUrination = logsInWindow.some(
+  // NICE NG73 1.3.1 groups painful bowel movements (dyschezia) with
+  // urinary symptoms — "blood in the urine or pain passing urine" — as
+  // symptoms to suspect endometriosis on, so all three feed one feature.
+  const anyBowelOrUrinarySymptom = logsInWindow.some(
     (log) =>
-      log.symptoms?.painWithBowelMovements || log.symptoms?.painWithUrination,
+      log.symptoms?.painWithBowelMovements ||
+      log.symptoms?.painWithUrination ||
+      log.symptoms?.bloodInUrine,
   );
 
   const heavyOrVeryHeavyBleedingDays = logsInWindow.filter(
@@ -124,7 +130,7 @@ function windowFeatures(
     cyclesWithMaxPainGte7,
     missedSchoolOrWorkOrSleepOrActivityDays,
     painDaysOutsideMenstruation,
-    anyPainWithBowelOrUrination,
+    anyBowelOrUrinarySymptom,
     heavyOrVeryHeavyBleedingDays,
     periodsLongerThan7Days,
     bleedingBetweenPeriods,
@@ -155,8 +161,8 @@ export function extractFeatures(
       last6.missedSchoolOrWorkOrSleepOrActivityDays,
     painDaysOutsideMenstruation_last3: last3.painDaysOutsideMenstruation,
     painDaysOutsideMenstruation_last6: last6.painDaysOutsideMenstruation,
-    anyPainWithBowelOrUrination_last3: last3.anyPainWithBowelOrUrination,
-    anyPainWithBowelOrUrination_last6: last6.anyPainWithBowelOrUrination,
+    anyBowelOrUrinarySymptom_last3: last3.anyBowelOrUrinarySymptom,
+    anyBowelOrUrinarySymptom_last6: last6.anyBowelOrUrinarySymptom,
     heavyOrVeryHeavyBleedingDays_last3: last3.heavyOrVeryHeavyBleedingDays,
     heavyOrVeryHeavyBleedingDays_last6: last6.heavyOrVeryHeavyBleedingDays,
     periodsLongerThan7Days_last3: last3.periodsLongerThan7Days,

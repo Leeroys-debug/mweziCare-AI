@@ -8,8 +8,9 @@ const booleanFeatureKeys = [
   "suddenSeverePain",
   "fainting",
   "possiblePregnancySuspected",
-  "anyPainWithBowelOrUrination_last3",
+  "anyBowelOrUrinarySymptom_last3",
   "bleedingBetweenPeriods_last3",
+  "familyHistoryEndometriosis",
 ] as const;
 
 const numericFeatureKeys = [
@@ -19,14 +20,16 @@ const numericFeatureKeys = [
   "painDaysOutsideMenstruation_last3",
   "heavyOrVeryHeavyBleedingDays_last3",
   "periodsLongerThan7Days_last6",
+  "cyclesWithMaxPainGte7_last3",
 ] as const;
 
 const featureRecordArbitrary = fc.record({
   suddenSeverePain: fc.boolean(),
   fainting: fc.boolean(),
   possiblePregnancySuspected: fc.boolean(),
-  anyPainWithBowelOrUrination_last3: fc.boolean(),
+  anyBowelOrUrinarySymptom_last3: fc.boolean(),
   bleedingBetweenPeriods_last3: fc.boolean(),
+  familyHistoryEndometriosis: fc.boolean(),
   painScore: fc.integer({ min: 0, max: 10 }),
   missedSchoolOrWorkOrSleepOrActivityDays_last3: fc.integer({
     min: 0,
@@ -36,6 +39,7 @@ const featureRecordArbitrary = fc.record({
   painDaysOutsideMenstruation_last3: fc.integer({ min: 0, max: 10 }),
   heavyOrVeryHeavyBleedingDays_last3: fc.integer({ min: 0, max: 10 }),
   periodsLongerThan7Days_last6: fc.integer({ min: 0, max: 5 }),
+  cyclesWithMaxPainGte7_last3: fc.integer({ min: 0, max: 6 }),
 });
 
 /** Every condition in the draft ruleset only ever gets *more* true as flags

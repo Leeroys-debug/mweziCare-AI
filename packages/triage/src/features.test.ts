@@ -21,7 +21,7 @@ describe("extractFeatures", () => {
   it("returns all-zero/false features when there's no cycle data yet", () => {
     const features = extractFeatures([log({ logDate: "2026-01-01" })], []);
     expect(features.cyclesWithMaxPainGte7_last3).toBe(0);
-    expect(features.anyPainWithBowelOrUrination_last3).toBe(false);
+    expect(features.anyBowelOrUrinarySymptom_last3).toBe(false);
     expect(features.painTrendSlope_last3).toBe(0);
   });
 
@@ -74,7 +74,20 @@ describe("extractFeatures", () => {
       }),
     ];
     const features = extractFeatures(logs, deriveCycles(logs));
-    expect(features.anyPainWithBowelOrUrination_last3).toBe(true);
+    expect(features.anyBowelOrUrinarySymptom_last3).toBe(true);
+  });
+
+  it("flags blood in urine within the window, distinct from pain with urination", () => {
+    const logs: TriageLog[] = [
+      log({ logDate: "2026-01-01", periodDay: true }),
+      log({
+        logDate: "2026-01-02",
+        periodDay: true,
+        symptoms: { bloodInUrine: true },
+      }),
+    ];
+    const features = extractFeatures(logs, deriveCycles(logs));
+    expect(features.anyBowelOrUrinarySymptom_last3).toBe(true);
   });
 
   it("counts heavy/very-heavy bleeding days", () => {

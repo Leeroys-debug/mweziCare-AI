@@ -4,7 +4,14 @@ import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
-import { BatteryLow, Droplet, Activity, Waves, Heart } from "lucide-react";
+import {
+  BatteryLow,
+  Droplet,
+  Droplets,
+  Activity,
+  Waves,
+  Heart,
+} from "lucide-react";
 import { z } from "zod";
 import { evaluate, urgentOnlyRuleset } from "@mwezicare/rules-engine";
 import { extractRedFlagFeatures } from "@mwezicare/triage";
@@ -29,6 +36,7 @@ const SYMPTOM_ICONS = {
   nausea: Waves,
   painWithBowelMovements: Activity,
   painWithUrination: Droplet,
+  bloodInUrine: Droplets,
   painWithSex: Heart,
 } as const;
 
@@ -43,6 +51,7 @@ const formSchema = z.object({
   nausea: z.boolean(),
   painWithBowelMovements: z.boolean(),
   painWithUrination: z.boolean(),
+  bloodInUrine: z.boolean(),
   painWithSex: z.boolean(),
   missedSchool: z.boolean(),
   missedWork: z.boolean(),
@@ -66,6 +75,7 @@ const DEFAULT_VALUES: FormValues = {
   nausea: false,
   painWithBowelMovements: false,
   painWithUrination: false,
+  bloodInUrine: false,
   painWithSex: false,
   missedSchool: false,
   missedWork: false,
@@ -134,6 +144,7 @@ export function DailyLogForm({ date, onSaved, onUrgent }: DailyLogFormProps) {
           painWithBowelMovements:
             existing.symptoms.painWithBowelMovements ?? false,
           painWithUrination: existing.symptoms.painWithUrination ?? false,
+          bloodInUrine: existing.symptoms.bloodInUrine ?? false,
           painWithSex: existing.symptoms.painWithSex ?? false,
           missedSchool: existing.impact.missedSchool ?? false,
           missedWork: existing.impact.missedWork ?? false,
@@ -195,6 +206,7 @@ export function DailyLogForm({ date, onSaved, onUrgent }: DailyLogFormProps) {
         nausea: values.nausea,
         painWithBowelMovements: values.painWithBowelMovements,
         painWithUrination: values.painWithUrination,
+        bloodInUrine: values.bloodInUrine,
         ...(showPainWithSex ? { painWithSex: values.painWithSex } : {}),
       },
       impact: {
@@ -333,6 +345,7 @@ export function DailyLogForm({ date, onSaved, onUrgent }: DailyLogFormProps) {
               "nausea",
               "painWithBowelMovements",
               "painWithUrination",
+              "bloodInUrine",
               ...(showPainWithSex ? (["painWithSex"] as const) : []),
             ] as const
           ).map((symptom) => {

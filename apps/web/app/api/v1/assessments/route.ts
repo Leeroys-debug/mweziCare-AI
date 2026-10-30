@@ -59,7 +59,24 @@ export async function POST(request: Request) {
   const historyFeatures = extractFeatures(logs, cycles);
   const latestLog = logs.at(-1) ?? {};
   const redFlagFeatures = extractRedFlagFeatures(latestLog);
-  const features = { ...historyFeatures, ...redFlagFeatures };
+
+  // Capture-only in onboarding until now (NICE NG73 1.3.2: a first-degree
+  // relative's history "increases the likelihood of endometriosis") — only
+  // ever combined with an existing pain-history feature in the ruleset,
+  // never a standalone trigger, matching NG73's framing. Not from
+  // packages/triage since it's a one-time profile fact, not derived from logs.
+  const [profile] = await db
+    .select({
+      familyHistoryEndometriosis: schema.profiles.familyHistoryEndometriosis,
+    })
+    .from(schema.profiles)
+    .where(eq(schema.profiles.userId, user.id));
+
+  const features = {
+    ...historyFeatures,
+    ...redFlagFeatures,
+    familyHistoryEndometriosis: profile?.familyHistoryEndometriosis ?? false,
+  };
   const { outcome, reasons, firedRules } = evaluate(ruleset, features);
 
   const assessment = await withUser(db, user.id, async (tx) => {

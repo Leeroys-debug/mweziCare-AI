@@ -88,6 +88,7 @@
       "nausea": "Kichefuchefu",
       "painWithBowelMovements": "Maumivu wakati wa haja kubwa",
       "painWithUrination": "Maumivu wakati wa haja ndogo",
+      "bloodInUrine": "Damu kwenye mkojo",
       "painWithSex": "Maumivu wakati wa kujamiiana"
     },
     "impactLabel": "Athari ya leo",
@@ -633,6 +634,7 @@
         "nausea": "Kichefuchefu",
         "painWithBowelMovements": "Maumivu wakati wa haja kubwa",
         "painWithUrination": "Maumivu wakati wa haja ndogo",
+        "bloodInUrine": "Damu kwenye mkojo",
         "painWithSex": "Maumivu wakati wa kujamiiana"
       },
       "missedSchoolLabel": "Siku za kukosa shule",

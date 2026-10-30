@@ -19,6 +19,7 @@ function validLog(): SymptomLogInput {
       nausea: false,
       painWithBowelMovements: false,
       painWithUrination: false,
+      bloodInUrine: false,
     },
     impact: {
       missedSchool: false,
@@ -69,6 +70,23 @@ describe("symptomLogSchema", () => {
     const log = validLog();
     log.symptoms = { ...log.symptoms, painWithSex: true };
     expect(symptomLogSchema.safeParse(log).success).toBe(true);
+  });
+
+  it("accepts a true bloodInUrine flag", () => {
+    const log = validLog();
+    log.symptoms = { ...log.symptoms, bloodInUrine: true };
+    expect(symptomLogSchema.safeParse(log).success).toBe(true);
+  });
+
+  it("rejects a log missing the required bloodInUrine flag", () => {
+    const log = validLog();
+    const { bloodInUrine: _omitted, ...symptomsWithoutBloodInUrine } =
+      log.symptoms;
+    const result = symptomLogSchema.safeParse({
+      ...log,
+      symptoms: symptomsWithoutBloodInUrine,
+    });
+    expect(result.success).toBe(false);
   });
 
   it("rejects a malformed logDate", () => {

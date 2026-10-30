@@ -7,6 +7,7 @@ const EMPTY_SYMPTOMS = {
   nausea: false,
   painWithBowelMovements: false,
   painWithUrination: false,
+  bloodInUrine: false,
 };
 const EMPTY_IMPACT = {
   missedSchool: false,

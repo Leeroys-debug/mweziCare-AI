@@ -12,6 +12,7 @@ export interface SummaryLog {
     nausea?: boolean;
     painWithBowelMovements?: boolean;
     painWithUrination?: boolean;
+    bloodInUrine?: boolean;
     painWithSex?: boolean;
   } | null;
   impact?: {
@@ -53,6 +54,7 @@ const SYMPTOM_KEYS = [
   "nausea",
   "painWithBowelMovements",
   "painWithUrination",
+  "bloodInUrine",
   "painWithSex",
 ] as const;
 

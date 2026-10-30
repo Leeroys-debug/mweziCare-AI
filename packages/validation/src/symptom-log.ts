@@ -42,6 +42,10 @@ export const symptomFlagsSchema = z.object({
   nausea: z.boolean(),
   painWithBowelMovements: z.boolean(),
   painWithUrination: z.boolean(),
+  // NICE NG73 1.3.1 lists "blood in the urine" alongside "pain passing
+  // urine" as a separate symptom to suspect endometriosis on — distinct
+  // from painWithUrination, so tracked as its own flag.
+  bloodInUrine: z.boolean(),
   // Only shown in the UI for 18+ age bands — accepted here regardless since
   // age-gating is a UI concern, not a trust boundary worth enforcing server-side.
   painWithSex: z.boolean().optional(),

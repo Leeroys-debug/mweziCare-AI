@@ -14,9 +14,13 @@ import type { Ruleset } from "../dsl";
  *   fainting, possiblePregnancySuspected, painScore.
  * - History features (extractFeatures), each suffixed _last3/_last6:
  *   missedSchoolOrWorkOrSleepOrActivityDays, painTrendSlope,
- *   painDaysOutsideMenstruation, anyPainWithBowelOrUrination,
+ *   painDaysOutsideMenstruation, anyBowelOrUrinarySymptom,
  *   heavyOrVeryHeavyBleedingDays, periodsLongerThan7Days,
- *   bleedingBetweenPeriods, cycleLengthVariabilityDays.
+ *   bleedingBetweenPeriods, cycleLengthVariabilityDays, cyclesWithMaxPainGte7.
+ * - familyHistoryEndometriosis is NOT from packages/triage — it's read
+ *   straight off the user's profile (identity.profiles) by the assessments
+ *   route and merged into the feature record, since it's a one-time capture
+ *   rather than something derived from daily logs.
  */
 export const draftRuleset: Ruleset = {
   version: 1,
@@ -133,20 +137,63 @@ export const draftRuleset: Ruleset = {
       priority: 47,
       outcome: "assess_soon",
       conditions: {
-        feature: "anyPainWithBowelOrUrination_last3",
+        feature: "anyBowelOrUrinarySymptom_last3",
         operator: "eq",
         value: true,
       },
       reason: {
-        en: "[CLINICAL REVIEW REQUIRED] You've had pain with bowel movements or urination.",
-        sw: "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Umekuwa na maumivu wakati wa haja kubwa au haja ndogo.",
+        en: "[CLINICAL REVIEW REQUIRED] You've had pain with bowel movements or urination, or blood in your urine.",
+        sw: "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Umekuwa na maumivu wakati wa haja kubwa au haja ndogo, au damu kwenye mkojo.",
       },
       clinicianNote:
         "[CLINICAL REVIEW REQUIRED] Confirm this should be assess_soon, not urgent. " +
         'Cf. NICE NG73 1.3.1 — "period-related or cyclical gastrointestinal ' +
         'symptoms, in particular, painful bowel movements" and "period-related ' +
         "or cyclical urinary symptoms, in particular, blood in the urine or pain " +
-        'passing urine" are both listed as symptoms to suspect endometriosis on.',
+        'passing urine" are both listed as symptoms to suspect endometriosis on. ' +
+        "Previously this feature only checked painWithBowelMovements/painWithUrination " +
+        "— the reason text cited blood in urine but the app never actually asked " +
+        "about it; bloodInUrine is now a real question (daily-log-form.tsx) and " +
+        "folded into this same feature/rule rather than a separate one, since NG73 " +
+        "lists it alongside dysuria as one symptom category, not two.",
+    },
+    {
+      id: "assess_soon_family_history_with_pain",
+      version: 1,
+      priority: 43,
+      outcome: "assess_soon",
+      conditions: {
+        all: [
+          {
+            feature: "familyHistoryEndometriosis",
+            operator: "eq",
+            value: true,
+          },
+          {
+            feature: "cyclesWithMaxPainGte7_last3",
+            operator: "gte",
+            value: 1,
+          },
+        ],
+      },
+      reason: {
+        en: "[CLINICAL REVIEW REQUIRED] You told us a close family member has had endometriosis, and you've had at least one cycle with severe pain recently — family history raises the chance this is worth a clinician's look.",
+        sw: "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Umetujulisha kuwa mwanafamilia wa karibu amewahi kuwa na endometriosis, na umekuwa na angalau mzunguko mmoja wenye maumivu makali hivi karibuni — historia ya familia huongeza uwezekano wa hili kuhitaji daktari kuliangalia.",
+      },
+      clinicianNote:
+        "[CLINICAL REVIEW REQUIRED] This is a new rule, lowest-confidence of the " +
+        "assess_soon tier by design (priority 43, below the other assess_soon " +
+        "rules) — confirm that's the right relative weighting, and confirm the " +
+        "cyclesWithMaxPainGte7_last3 >= 1 threshold (deliberately lower than the " +
+        "other pain-based rules' thresholds, since family history is doing some " +
+        "of the work here). Cf. NICE NG73 1.3.2: 'Ask women if they have a " +
+        "first-degree relative with a history of endometriosis, because this " +
+        "increases the likelihood of endometriosis' — NG73 frames family history " +
+        "as a likelihood-raising factor to combine with other symptoms, not a " +
+        "standalone trigger, which is why this rule requires both conditions " +
+        "rather than firing on family history alone. familyHistoryEndometriosis " +
+        "comes from identity.profiles (onboarding), previously captured but never " +
+        "read by the rules engine — see packages/db/src/schema/identity.ts.",
     },
     {
       id: "assess_soon_heavy_or_prolonged_bleeding",
@@ -216,7 +263,9 @@ export const draftRuleset: Ruleset = {
       clinicianNote:
         "[CLINICAL REVIEW REQUIRED] Confirm the >=9-day variability-across-6-cycles threshold, and whether fewer than 2 completed cycles in the window should suppress this rule entirely rather than default to 0 variability (see packages/triage/src/features.ts). " +
         "Cf. the UNICEF Femtech proposal's educational-triage table — 'occasional changes in cycle timing' is listed with lighter-touch guidance ('record changes; recommend assessment if they persist or are concerning') than the other assess_soon rows; " +
-        "this rule's threshold and priority (lowest among assess_soon rules) are this app's own placeholder operationalization of that guidance, not from a cited clinical source.",
+        "this rule's threshold and (originally lowest, now second-lowest after " +
+        "assess_soon_family_history_with_pain) priority are this app's own " +
+        "placeholder operationalization of that guidance, not from a cited clinical source.",
     },
     {
       id: "routine_baseline",

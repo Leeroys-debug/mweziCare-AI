@@ -81,6 +81,10 @@ async function main() {
       ageBand: ageBands[i] ?? "18-20",
       county: counties[i] ?? "Kiambu",
       consentVersion: 1,
+      // Only the "concerning" user (userRows[0], see below) — demonstrates
+      // assess_soon_family_history_with_pain without making every synthetic
+      // user trigger it.
+      familyHistoryEndometriosis: u.id === userRows[0]?.id,
     })),
   );
 
@@ -134,6 +138,7 @@ async function main() {
           nausea: rng() > 0.8,
           painWithBowelMovements: onPeriod && concerning && rng() > 0.7,
           painWithUrination: onPeriod && concerning && rng() > 0.8,
+          bloodInUrine: onPeriod && concerning && rng() > 0.9,
         },
         impact: {
           missedSchool: onPeriod && concerning && rng() > 0.4,

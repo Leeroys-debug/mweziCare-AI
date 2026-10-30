@@ -143,4 +143,40 @@ describe.skipIf(!db)("POST & GET /api/v1/assessments", () => {
     expect(getBody.available).toBe(true);
     expect(getBody.assessment.id).toBe(body.assessment.id);
   });
+
+  it("reads familyHistoryEndometriosis off the user's profile into the stored features", async () => {
+    const [ruleset] = await db!
+      .insert(schema.rulesets)
+      .values({ version: 999, status: "draft" })
+      .returning({ id: schema.rulesets.id });
+    await db!.insert(schema.rules).values({
+      rulesetId: ruleset!.id,
+      code: "test_routine",
+      priority: 0,
+      outcome: "routine",
+      definition: { all: [] },
+      reasonEn: "test reason en",
+      reasonSw: "test reason sw",
+      clinicianNote: "test",
+      sortOrder: 0,
+    });
+    await db!
+      .update(schema.rulesets)
+      .set({ status: "approved", approvedAt: new Date() })
+      .where(eq(schema.rulesets.id, ruleset!.id));
+
+    await db!.insert(schema.profiles).values({
+      userId,
+      ageBand: "18-20",
+      familyHistoryEndometriosis: true,
+    });
+
+    const { POST } = await import("./route");
+    const response = await POST(sameOriginRequest());
+    const body = await response.json();
+
+    expect(body.assessment.features.familyHistoryEndometriosis).toBe(true);
+
+    await db!.delete(schema.profiles).where(eq(schema.profiles.userId, userId));
+  });
 });
