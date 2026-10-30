@@ -120,6 +120,10 @@
     },
     "predictedPeriodDay": "Predicted period day",
     "jumpToToday": "Today",
+    "thisWeekLabel": "This week",
+    "showFullMonth": "Show full month",
+    "showWeek": "Show week",
+    "savePainButton": "Save pain",
     "calendarDayStatus": {
       "periodDay": "Period day",
       "notPeriodDay": "Not a period day"

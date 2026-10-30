@@ -120,6 +120,10 @@
     },
     "predictedPeriodDay": "Siku ya hedhi inayotarajiwa",
     "jumpToToday": "Leo",
+    "thisWeekLabel": "Wiki hii",
+    "showFullMonth": "Onyesha mwezi mzima",
+    "showWeek": "Onyesha wiki",
+    "savePainButton": "Hifadhi maumivu",
     "calendarDayStatus": {
       "periodDay": "Siku ya hedhi",
       "notPeriodDay": "Siyo siku ya hedhi"

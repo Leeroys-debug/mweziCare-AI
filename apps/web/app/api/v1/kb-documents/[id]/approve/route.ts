@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
 import { schema } from "@mwezicare/db";
+import { stripReviewTags } from "@mwezicare/validation";
 import { assertSameOrigin } from "@/lib/csrf";
 import { enqueueKbIngest } from "@/lib/job-queue";
 import { problem } from "@/lib/problem-details";
@@ -41,6 +42,11 @@ export async function POST(
     .update(schema.kbDocuments)
     .set({
       status: "approved",
+      // Once approved, the [CLINICAL REVIEW REQUIRED]/[TRANSLATION REVIEW
+      // REQUIRED] markers embedded in the prose itself (not just the status
+      // field) no longer belong in what a real user reads.
+      title: stripReviewTags(existing.title),
+      body: stripReviewTags(existing.body),
       reviewedBy: roleCheck.user.id,
       reviewDue: existing.reviewDue ?? defaultReviewDue(),
       updatedAt: new Date(),

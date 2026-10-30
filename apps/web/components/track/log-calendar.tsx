@@ -5,9 +5,9 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { X } from "lucide-react";
-import { Button, cn } from "@mwezicare/ui";
+import { Button, PainSlider, cn } from "@mwezicare/ui";
 import { offlineDb } from "@/lib/offline-db";
-import { togglePeriodForDate } from "@/lib/quick-log";
+import { setPainForDate, togglePeriodForDate } from "@/lib/quick-log";
 
 interface CalendarLog {
   logDate: string;
@@ -42,6 +42,14 @@ function addDaysIso(iso: string, days: number): string {
   return date.toISOString().slice(0, 10);
 }
 
+/** Monday-Sunday week containing `iso`, as 7 YYYY-MM-DD strings. */
+function weekDates(iso: string): string[] {
+  const jsDay = new Date(`${iso}T00:00:00.000Z`).getUTCDay(); // 0=Sun..6=Sat
+  const mondayOffset = jsDay === 0 ? -6 : 1 - jsDay;
+  const monday = addDaysIso(iso, mondayOffset);
+  return Array.from({ length: 7 }, (_, i) => addDaysIso(monday, i));
+}
+
 /**
  * Last estimated period, shaded as a range the same way Flo shows predicted
  * days (dotted ring, not a solid fill) — display only, derived entirely from
@@ -74,18 +82,28 @@ function painBadgeClass(painScore: number | null): string | null {
 }
 
 /**
- * Period-calendar only — tapping a day marks/unmarks it as a period day
- * directly. Deliberately has no path into the symptom/diagnosis question
- * form (that lives on its own Symptoms tab) — see the user's request to
- * keep calendar tracking and the triage questions distinct, not bridged.
+ * Period-calendar — tapping a day toggles its period status directly, and
+ * the strip under the grid also lets you log a pain score for that day.
+ * Deliberately stops short of the full symptom/diagnosis question form
+ * (that lives on its own Symptoms tab) — see the user's request to keep
+ * calendar tracking and the triage questions distinct, not bridged.
+ *
+ * Defaults to a week view (the "top strip" the user wanted, now the same
+ * interactive component as the month grid instead of a separate static
+ * row) with an option to expand to the full month, so there's only ever
+ * one calendar on screen, not two.
  */
 export function LogCalendar() {
   const t = useTranslations("Track");
   const queryClient = useQueryClient();
   const today = useMemo(() => new Date(), []);
+  const todayIso = useMemo(() => toIsoDate(today), [today]);
+  const [viewMode, setViewMode] = useState<"week" | "month">("week");
   const [monthOffset, setMonthOffset] = useState(0); // 0 = current month, negative = past
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [togglingDate, setTogglingDate] = useState<string | null>(null);
+  const [painDraft, setPainDraft] = useState(0);
+  const [savingPain, setSavingPain] = useState(false);
 
   const viewedMonth = new Date(
     today.getFullYear(),
@@ -102,8 +120,10 @@ export function LogCalendar() {
     viewedMonth.getMonth() + 1,
     0,
   );
-  const from = toIsoDate(monthStart);
-  const to = toIsoDate(monthEnd);
+  const week = useMemo(() => weekDates(todayIso), [todayIso]);
+
+  const from = viewMode === "week" ? week[0]! : toIsoDate(monthStart);
+  const to = viewMode === "week" ? week[6]! : toIsoDate(monthEnd);
 
   const { data } = useQuery({
     queryKey: ["logs", from, to],
@@ -152,16 +172,21 @@ export function LogCalendar() {
     return map;
   }, [data, localLogs]);
 
-  const leadingBlanks = monthStart.getDay();
-  const daysInMonth = monthEnd.getDate();
-  const cells: (string | null)[] = [
-    ...Array.from({ length: leadingBlanks }, () => null),
-    ...Array.from({ length: daysInMonth }, (_, i) =>
-      toIsoDate(
-        new Date(viewedMonth.getFullYear(), viewedMonth.getMonth(), i + 1),
-      ),
-    ),
-  ];
+  const cells: (string | null)[] =
+    viewMode === "week"
+      ? week
+      : [
+          ...Array.from({ length: monthStart.getDay() }, () => null),
+          ...Array.from({ length: monthEnd.getDate() }, (_, i) =>
+            toIsoDate(
+              new Date(
+                viewedMonth.getFullYear(),
+                viewedMonth.getMonth(),
+                i + 1,
+              ),
+            ),
+          ),
+        ];
 
   const monthLabel = viewedMonth.toLocaleDateString(undefined, {
     month: "long",
@@ -174,10 +199,22 @@ export function LogCalendar() {
   function goToNextMonth() {
     setMonthOffset((m) => Math.min(MAX_FORWARD_OFFSET, m + 1));
   }
+  function expandToMonth() {
+    setMonthOffset(0);
+    setViewMode("month");
+  }
+  function collapseToWeek() {
+    setViewMode("week");
+  }
 
-  /** Tapping a day marks/unmarks it as a period day directly — the only action this screen offers. */
-  async function handleDayTap(date: string) {
+  function selectDate(date: string) {
     setSelectedDate(date);
+    setPainDraft(logsByDate.get(date)?.painScore ?? 0);
+  }
+
+  /** Tapping a day marks/unmarks it as a period day directly — pain is logged via the slider in the strip below. */
+  async function handleDayTap(date: string) {
+    selectDate(date);
     setTogglingDate(date);
     try {
       await togglePeriodForDate(date);
@@ -190,10 +227,22 @@ export function LogCalendar() {
     }
   }
 
-  // Pointer-based swipe: pointerId is tracked so a second finger/pointer
-  // mid-gesture can't corrupt the first's delta, and pointercancel (the
-  // browser taking the gesture over, e.g. a system edge-swipe) clears the
-  // ref instead of leaving a stale start point for the next gesture.
+  async function handleSavePain() {
+    if (!selectedDate) return;
+    setSavingPain(true);
+    try {
+      await setPainForDate(selectedDate, painDraft);
+      await queryClient.invalidateQueries({ queryKey: ["logs"] });
+    } finally {
+      setSavingPain(false);
+    }
+  }
+
+  // Pointer-based swipe (month view only): pointerId is tracked so a second
+  // finger/pointer mid-gesture can't corrupt the first's delta, and
+  // pointercancel (the browser taking the gesture over, e.g. a system
+  // edge-swipe) clears the ref instead of leaving a stale start point for
+  // the next gesture.
   const swipeStart = useRef<{ x: number; y: number; pointerId: number } | null>(
     null,
   );
@@ -221,42 +270,75 @@ export function LogCalendar() {
     }
   }
 
+  const painScoreLabels = Array.from({ length: 11 }, (_, i) =>
+    t(`painScoreLabel.${i}`),
+  );
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={goToPreviousMonth}
-          aria-label={t("previousMonth")}
-        >
-          ‹
-        </Button>
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-semibold">{monthLabel}</span>
-          {monthOffset !== 0 && (
+        {viewMode === "month" ? (
+          <>
             <Button
               type="button"
-              variant="ghost"
+              variant="outline"
               size="sm"
-              onClick={() => setMonthOffset(0)}
+              onClick={goToPreviousMonth}
+              aria-label={t("previousMonth")}
             >
-              {t("jumpToToday")}
+              ‹
             </Button>
-          )}
-        </div>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={goToNextMonth}
-          disabled={monthOffset === MAX_FORWARD_OFFSET}
-          aria-label={t("nextMonth")}
-        >
-          ›
-        </Button>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-semibold">{monthLabel}</span>
+              {monthOffset !== 0 && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setMonthOffset(0)}
+                >
+                  {t("jumpToToday")}
+                </Button>
+              )}
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={goToNextMonth}
+              disabled={monthOffset === MAX_FORWARD_OFFSET}
+              aria-label={t("nextMonth")}
+            >
+              ›
+            </Button>
+          </>
+        ) : (
+          <>
+            <span className="text-sm font-semibold">{t("thisWeekLabel")}</span>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={expandToMonth}
+            >
+              {t("showFullMonth")}
+            </Button>
+          </>
+        )}
       </div>
+
+      {viewMode === "month" && (
+        <div className="flex justify-end">
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={collapseToWeek}
+          >
+            {t("showWeek")}
+          </Button>
+        </div>
+      )}
 
       <div className="grid grid-cols-7 gap-1 text-center text-xs text-neutral-500 dark:text-neutral-400">
         {t.raw("weekdayAbbrev").map((day: string) => (
@@ -267,9 +349,9 @@ export function LogCalendar() {
       <div
         className="grid touch-pan-y grid-cols-7 gap-1"
         style={{ touchAction: "pan-y" }}
-        onPointerDown={handlePointerDown}
-        onPointerUp={handlePointerUp}
-        onPointerCancel={handlePointerCancel}
+        onPointerDown={viewMode === "month" ? handlePointerDown : undefined}
+        onPointerUp={viewMode === "month" ? handlePointerUp : undefined}
+        onPointerCancel={viewMode === "month" ? handlePointerCancel : undefined}
       >
         {cells.map((date, i) => {
           if (date == null) return <div key={`blank-${i}`} />;
@@ -278,7 +360,7 @@ export function LogCalendar() {
           const isPeriodDay = log?.periodDay ?? false;
           const painScore = log?.painScore ?? null;
           const badgeClass = painBadgeClass(painScore);
-          const isToday = date === toIsoDate(today);
+          const isToday = date === todayIso;
           const isPredictedPeriod =
             !isPeriodDay &&
             !!predictedRange &&
@@ -334,25 +416,42 @@ export function LogCalendar() {
       </div>
 
       {selectedDate && (
-        <div className="flex items-center justify-between gap-2 rounded-lg border border-brand-300 bg-brand-50 p-3 dark:border-brand-800 dark:bg-brand-950">
-          <div>
-            <p className="text-sm font-semibold text-brand-900 dark:text-brand-100">
-              {selectedDate}
-            </p>
-            <p className="text-xs text-brand-700 dark:text-brand-300">
-              {logsByDate.get(selectedDate)?.periodDay
-                ? t("calendarDayStatus.periodDay")
-                : t("calendarDayStatus.notPeriodDay")}
-            </p>
+        <div className="flex flex-col gap-3 rounded-lg border border-brand-300 bg-brand-50 p-3 dark:border-brand-800 dark:bg-brand-950">
+          <div className="flex items-center justify-between gap-2">
+            <div>
+              <p className="text-sm font-semibold text-brand-900 dark:text-brand-100">
+                {selectedDate}
+              </p>
+              <p className="text-xs text-brand-700 dark:text-brand-300">
+                {logsByDate.get(selectedDate)?.periodDay
+                  ? t("calendarDayStatus.periodDay")
+                  : t("calendarDayStatus.notPeriodDay")}
+              </p>
+            </div>
+            <button
+              type="button"
+              aria-label={t("close")}
+              onClick={() => setSelectedDate(null)}
+              className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-brand-700 hover:bg-brand-100 dark:text-brand-300 dark:hover:bg-brand-900"
+            >
+              <X size={18} />
+            </button>
           </div>
-          <button
+
+          <PainSlider
+            value={painDraft}
+            onChange={setPainDraft}
+            label={t("painScoreLabel.title")}
+            valueLabels={painScoreLabels}
+          />
+          <Button
             type="button"
-            aria-label={t("close")}
-            onClick={() => setSelectedDate(null)}
-            className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-brand-700 hover:bg-brand-100 dark:text-brand-300 dark:hover:bg-brand-900"
+            size="sm"
+            disabled={savingPain}
+            onClick={() => void handleSavePain()}
           >
-            <X size={18} />
-          </button>
+            {savingPain ? t("saving") : t("savePainButton")}
+          </Button>
         </div>
       )}
 

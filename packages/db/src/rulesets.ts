@@ -1,5 +1,6 @@
 import { desc, eq } from "drizzle-orm";
 import type { Rule, Ruleset, RulesetStatus } from "@mwezicare/rules-engine";
+import { stripReviewTags } from "@mwezicare/validation";
 import type { Database, Tx } from "./client";
 import * as schema from "./schema";
 
@@ -178,6 +179,32 @@ export async function approveRuleset(
   input: ApproveRulesetInput,
 ): Promise<void> {
   await db.transaction(async (tx) => {
+    // Strips [CLINICAL REVIEW REQUIRED]/[TRANSLATION REVIEW REQUIRED] tags
+    // from each rule's user-facing reason text — must happen before the
+    // ruleset flips to approved below: clinical/0006's
+    // rules_immutable_when_ruleset_approved trigger blocks any write to
+    // clinical.rules once its ruleset's status is 'approved', even a later
+    // statement in this same transaction.
+    const ruleRows = await tx
+      .select({
+        id: schema.rules.id,
+        reasonEn: schema.rules.reasonEn,
+        reasonSw: schema.rules.reasonSw,
+      })
+      .from(schema.rules)
+      .where(eq(schema.rules.rulesetId, input.rulesetId));
+
+    for (const rule of ruleRows) {
+      const reasonEn = stripReviewTags(rule.reasonEn);
+      const reasonSw = stripReviewTags(rule.reasonSw);
+      if (reasonEn !== rule.reasonEn || reasonSw !== rule.reasonSw) {
+        await tx
+          .update(schema.rules)
+          .set({ reasonEn, reasonSw })
+          .where(eq(schema.rules.id, rule.id));
+      }
+    }
+
     await tx
       .update(schema.rulesets)
       .set({ status: "retired" })
