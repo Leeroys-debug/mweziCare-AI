@@ -461,7 +461,12 @@
     "yes": "Ndiyo",
     "no": "Hapana",
     "createdAt": "Akaunti iliundwa",
-    "error": "Hitilafu imetokea. Tafadhali jaribu tena."
+    "error": "Hitilafu imetokea. Tafadhali jaribu tena.",
+    "changeRoleLabel": "Badilisha wajibu",
+    "updateRoleButton": "Sasisha wajibu",
+    "updatingRole": "Inasasisha…",
+    "updateRoleSuccess": "Wajibu umesasishwa.",
+    "updateRoleError": "Imeshindwa kusasisha wajibu. Huwezi kubadilisha wajibu wako mwenyewe kwenye skrini hii, na ni wasimamizi wa mfumo pekee wanaoweza kufanya hivi."
   },
   "Learn": {
     "title": "Jifunze",

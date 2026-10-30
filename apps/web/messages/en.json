@@ -461,7 +461,12 @@
     "yes": "Yes",
     "no": "No",
     "createdAt": "Account created",
-    "error": "Something went wrong. Please try again."
+    "error": "Something went wrong. Please try again.",
+    "changeRoleLabel": "Change role",
+    "updateRoleButton": "Update role",
+    "updatingRole": "Updating…",
+    "updateRoleSuccess": "Role updated.",
+    "updateRoleError": "Couldn't update the role. You can't change your own role from this screen, and only system admins can do this."
   },
   "Learn": {
     "title": "Learn",
