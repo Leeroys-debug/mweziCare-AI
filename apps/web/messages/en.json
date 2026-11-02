@@ -81,6 +81,19 @@
       "after_period": "After my period ends",
       "between_periods": "Other times between periods"
     },
+    "painDurationLabel": "How long did the pain last today?",
+    "painDuration": {
+      "brief": "Briefly (under an hour)",
+      "few_hours": "A few hours",
+      "most_of_day": "Most of the day",
+      "all_day": "All day / constant"
+    },
+    "painReliefLabel": "Did painkillers help?",
+    "painRelief": {
+      "not_taken": "Didn't take any",
+      "relieved": "Yes, it helped",
+      "not_relieved": "No, it didn't help"
+    },
     "painPersistsDespiteRelief": "Pain persists despite heat or usual pain relief",
     "symptomsLabel": "Symptoms",
     "symptom": {
@@ -89,6 +102,8 @@
       "painWithBowelMovements": "Pain with bowel movements",
       "painWithUrination": "Pain with urination",
       "bloodInUrine": "Blood in urine",
+      "bloating": "Bloating",
+      "bowelHabitChange": "Diarrhoea or constipation",
       "painWithSex": "Pain with sex"
     },
     "impactLabel": "Today's impact",
@@ -646,6 +661,8 @@
         "painWithBowelMovements": "Pain with bowel movements",
         "painWithUrination": "Pain with urination",
         "bloodInUrine": "Blood in urine",
+        "bloating": "Bloating",
+        "bowelHabitChange": "Diarrhoea or constipation",
         "painWithSex": "Pain with sex"
       },
       "missedSchoolLabel": "Missed school days",

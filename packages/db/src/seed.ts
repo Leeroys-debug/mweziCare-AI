@@ -139,6 +139,8 @@ async function main() {
           painWithBowelMovements: onPeriod && concerning && rng() > 0.7,
           painWithUrination: onPeriod && concerning && rng() > 0.8,
           bloodInUrine: onPeriod && concerning && rng() > 0.9,
+          bloating: onPeriod && rng() > 0.6,
+          bowelHabitChange: onPeriod && concerning && rng() > 0.7,
         },
         impact: {
           missedSchool: onPeriod && concerning && rng() > 0.4,

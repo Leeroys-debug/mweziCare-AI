@@ -17,7 +17,7 @@ const valueLabels = [
 ];
 
 describe("PainSlider", () => {
-  it("renders with the accessible label and marks the current value as checked", () => {
+  it("renders a 0-10 slider with the accessible label and current value", () => {
     render(
       <PainSlider
         value={4}
@@ -26,16 +26,14 @@ describe("PainSlider", () => {
         valueLabels={valueLabels}
       />,
     );
-    const group = screen.getByRole("radiogroup", { name: "Pain" });
-    expect(group).toBeInTheDocument();
-    expect(screen.getByRole("radio", { name: "4 — Moderate" })).toHaveAttribute(
-      "aria-checked",
-      "true",
-    );
+    const slider = screen.getByRole("slider", { name: "Pain" });
+    expect(slider).toHaveAttribute("min", "0");
+    expect(slider).toHaveAttribute("max", "10");
+    expect(slider).toHaveValue("4");
     expect(screen.getByText("4 · Moderate")).toBeInTheDocument();
   });
 
-  it("calls onChange with the new numeric value on click", () => {
+  it("calls onChange with the new numeric value when dragged", () => {
     const onChange = vi.fn();
     render(
       <PainSlider
@@ -45,25 +43,46 @@ describe("PainSlider", () => {
         valueLabels={valueLabels}
       />,
     );
-    fireEvent.click(screen.getByRole("radio", { name: "7 — Severe" }));
+    fireEvent.change(screen.getByRole("slider", { name: "Pain" }), {
+      target: { value: "7" },
+    });
     expect(onChange).toHaveBeenCalledWith(7);
   });
 
-  it("moves to the next value on ArrowRight", () => {
-    const onChange = vi.fn();
-    render(
+  it("shows a severe-pain face only at 9 and 10", () => {
+    const { rerender } = render(
       <PainSlider
-        value={3}
-        onChange={onChange}
+        value={8}
+        onChange={() => {}}
         label="Pain"
         valueLabels={valueLabels}
       />,
     );
-    fireEvent.keyDown(screen.getByRole("radiogroup"), { key: "ArrowRight" });
-    expect(onChange).toHaveBeenCalledWith(4);
+    expect(screen.queryByText("😖")).not.toBeInTheDocument();
+    expect(screen.queryByText("😭")).not.toBeInTheDocument();
+
+    rerender(
+      <PainSlider
+        value={9}
+        onChange={() => {}}
+        label="Pain"
+        valueLabels={valueLabels}
+      />,
+    );
+    expect(screen.getByText("😖")).toBeInTheDocument();
+
+    rerender(
+      <PainSlider
+        value={10}
+        onChange={() => {}}
+        label="Pain"
+        valueLabels={valueLabels}
+      />,
+    );
+    expect(screen.getByText("😭")).toBeInTheDocument();
   });
 
-  it("exposes a descriptive accessible name for each option", () => {
+  it("exposes a descriptive aria-valuetext for the current value", () => {
     render(
       <PainSlider
         value={10}
@@ -72,8 +91,9 @@ describe("PainSlider", () => {
         valueLabels={valueLabels}
       />,
     );
-    expect(
-      screen.getByRole("radio", { name: "10 — Worst pain" }),
-    ).toHaveAttribute("aria-checked", "true");
+    expect(screen.getByRole("slider")).toHaveAttribute(
+      "aria-valuetext",
+      "10 — Worst pain",
+    );
   });
 });

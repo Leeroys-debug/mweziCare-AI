@@ -81,6 +81,19 @@
       "after_period": "Baada ya hedhi kuisha",
       "between_periods": "Nyakati nyingine kati ya hedhi"
     },
+    "painDurationLabel": "Maumivu yaliendelea kwa muda gani leo?",
+    "painDuration": {
+      "brief": "Kwa muda mfupi (chini ya saa moja)",
+      "few_hours": "Saa chache",
+      "most_of_day": "Sehemu kubwa ya siku",
+      "all_day": "Siku nzima / bila kukoma"
+    },
+    "painReliefLabel": "Je, dawa za maumivu zilisaidia?",
+    "painRelief": {
+      "not_taken": "Sikutumia dawa yoyote",
+      "relieved": "Ndiyo, ilisaidia",
+      "not_relieved": "Hapana, haikusaidia"
+    },
     "painPersistsDespiteRelief": "Maumivu yanaendelea licha ya joto au dawa za kawaida za maumivu",
     "symptomsLabel": "Dalili",
     "symptom": {
@@ -89,6 +102,8 @@
       "painWithBowelMovements": "Maumivu wakati wa haja kubwa",
       "painWithUrination": "Maumivu wakati wa haja ndogo",
       "bloodInUrine": "Damu kwenye mkojo",
+      "bloating": "Kuvimba tumbo",
+      "bowelHabitChange": "Kuhara au kuvimbiwa",
       "painWithSex": "Maumivu wakati wa kujamiiana"
     },
     "impactLabel": "Athari ya leo",
@@ -646,6 +661,8 @@
         "painWithBowelMovements": "Maumivu wakati wa haja kubwa",
         "painWithUrination": "Maumivu wakati wa haja ndogo",
         "bloodInUrine": "Damu kwenye mkojo",
+        "bloating": "Kuvimba tumbo",
+        "bowelHabitChange": "Kuhara au kuvimbiwa",
         "painWithSex": "Maumivu wakati wa kujamiiana"
       },
       "missedSchoolLabel": "Siku za kukosa shule",

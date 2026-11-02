@@ -11,6 +11,8 @@ import {
   Activity,
   Waves,
   Heart,
+  Wind,
+  RefreshCw,
 } from "lucide-react";
 import { z } from "zod";
 import { evaluate, urgentOnlyRuleset } from "@mwezicare/rules-engine";
@@ -20,6 +22,8 @@ import {
   bleedingLevelSchema,
   painLocationSchema,
   painTimingSchema,
+  painReliefByMedicationSchema,
+  painDurationSchema,
   type SymptomLogInput,
 } from "@mwezicare/validation";
 import { Button, Chip, PainSlider } from "@mwezicare/ui";
@@ -31,6 +35,8 @@ import { generateUuid } from "@/lib/uuid";
 const PAIN_LOCATIONS = painLocationSchema.options;
 const PAIN_TIMINGS = painTimingSchema.options;
 const BLEEDING_LEVELS = bleedingLevelSchema.options;
+const PAIN_RELIEF_OPTIONS = painReliefByMedicationSchema.options;
+const PAIN_DURATIONS = painDurationSchema.options;
 
 const SYMPTOM_ICONS = {
   fatigue: BatteryLow,
@@ -38,6 +44,8 @@ const SYMPTOM_ICONS = {
   painWithBowelMovements: Activity,
   painWithUrination: Droplet,
   bloodInUrine: Droplets,
+  bloating: Wind,
+  bowelHabitChange: RefreshCw,
   painWithSex: Heart,
 } as const;
 
@@ -47,12 +55,16 @@ const formSchema = z.object({
   painScore: z.number().int().min(0).max(10),
   painLocations: z.array(painLocationSchema),
   painTiming: z.array(painTimingSchema),
+  painDuration: painDurationSchema.nullable(),
+  painReliefByMedication: painReliefByMedicationSchema.nullable(),
   painPersistsDespiteRelief: z.boolean(),
   fatigue: z.boolean(),
   nausea: z.boolean(),
   painWithBowelMovements: z.boolean(),
   painWithUrination: z.boolean(),
   bloodInUrine: z.boolean(),
+  bloating: z.boolean(),
+  bowelHabitChange: z.boolean(),
   painWithSex: z.boolean(),
   missedSchool: z.boolean(),
   missedWork: z.boolean(),
@@ -71,12 +83,16 @@ const DEFAULT_VALUES: FormValues = {
   painScore: 0,
   painLocations: [],
   painTiming: [],
+  painDuration: null,
+  painReliefByMedication: null,
   painPersistsDespiteRelief: false,
   fatigue: false,
   nausea: false,
   painWithBowelMovements: false,
   painWithUrination: false,
   bloodInUrine: false,
+  bloating: false,
+  bowelHabitChange: false,
   painWithSex: false,
   missedSchool: false,
   missedWork: false,
@@ -151,6 +167,8 @@ export function DailyLogForm({ date, onSaved, onUrgent }: DailyLogFormProps) {
           painLocations: (existing.painLocations ??
             []) as FormValues["painLocations"],
           painTiming: (existing.painTiming ?? []) as FormValues["painTiming"],
+          painDuration: existing.painDuration ?? null,
+          painReliefByMedication: existing.painReliefByMedication ?? null,
           painPersistsDespiteRelief:
             existing.painPersistsDespiteRelief ?? false,
           fatigue: existing.symptoms.fatigue ?? false,
@@ -159,6 +177,8 @@ export function DailyLogForm({ date, onSaved, onUrgent }: DailyLogFormProps) {
             existing.symptoms.painWithBowelMovements ?? false,
           painWithUrination: existing.symptoms.painWithUrination ?? false,
           bloodInUrine: existing.symptoms.bloodInUrine ?? false,
+          bloating: existing.symptoms.bloating ?? false,
+          bowelHabitChange: existing.symptoms.bowelHabitChange ?? false,
           painWithSex: existing.symptoms.painWithSex ?? false,
           missedSchool: existing.impact.missedSchool ?? false,
           missedWork: existing.impact.missedWork ?? false,
@@ -215,6 +235,8 @@ export function DailyLogForm({ date, onSaved, onUrgent }: DailyLogFormProps) {
       painScore: values.painScore,
       painLocations: values.painLocations,
       painTiming: values.painTiming,
+      painDuration: values.painDuration,
+      painReliefByMedication: values.painReliefByMedication,
       painPersistsDespiteRelief: values.painPersistsDespiteRelief,
       symptoms: {
         fatigue: values.fatigue,
@@ -222,6 +244,8 @@ export function DailyLogForm({ date, onSaved, onUrgent }: DailyLogFormProps) {
         painWithBowelMovements: values.painWithBowelMovements,
         painWithUrination: values.painWithUrination,
         bloodInUrine: values.bloodInUrine,
+        bloating: values.bloating,
+        bowelHabitChange: values.bowelHabitChange,
         ...(showPainWithSex ? { painWithSex: values.painWithSex } : {}),
       },
       impact: {
@@ -352,6 +376,56 @@ export function DailyLogForm({ date, onSaved, onUrgent }: DailyLogFormProps) {
         </div>
       </fieldset>
 
+      <fieldset className="flex flex-col gap-2">
+        <legend className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+          {t("painDurationLabel")}
+        </legend>
+        <Controller
+          control={control}
+          name="painDuration"
+          render={({ field }) => (
+            <div className="flex flex-wrap gap-2">
+              {PAIN_DURATIONS.map((duration) => (
+                <Chip
+                  key={duration}
+                  selected={field.value === duration}
+                  onClick={() =>
+                    field.onChange(field.value === duration ? null : duration)
+                  }
+                >
+                  {t(`painDuration.${duration}`)}
+                </Chip>
+              ))}
+            </div>
+          )}
+        />
+      </fieldset>
+
+      <fieldset className="flex flex-col gap-2">
+        <legend className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+          {t("painReliefLabel")}
+        </legend>
+        <Controller
+          control={control}
+          name="painReliefByMedication"
+          render={({ field }) => (
+            <div className="flex flex-wrap gap-2">
+              {PAIN_RELIEF_OPTIONS.map((option) => (
+                <Chip
+                  key={option}
+                  selected={field.value === option}
+                  onClick={() =>
+                    field.onChange(field.value === option ? null : option)
+                  }
+                >
+                  {t(`painRelief.${option}`)}
+                </Chip>
+              ))}
+            </div>
+          )}
+        />
+      </fieldset>
+
       <Controller
         control={control}
         name="painPersistsDespiteRelief"
@@ -377,6 +451,8 @@ export function DailyLogForm({ date, onSaved, onUrgent }: DailyLogFormProps) {
               "painWithBowelMovements",
               "painWithUrination",
               "bloodInUrine",
+              "bloating",
+              "bowelHabitChange",
               ...(showPainWithSex ? (["painWithSex"] as const) : []),
             ] as const
           ).map((symptom) => {

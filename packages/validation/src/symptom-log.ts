@@ -46,11 +46,41 @@ export const symptomFlagsSchema = z.object({
   // urine" as a separate symptom to suspect endometriosis on — distinct
   // from painWithUrination, so tracked as its own flag.
   bloodInUrine: z.boolean(),
+  // NICE NG73 1.3.1 also lists abdominal bloating, and cyclical bowel
+  // symptoms (diarrhoea/constipation) as a separate sign from painful bowel
+  // movements — tracked as their own flags for the same reason as above.
+  bloating: z.boolean(),
+  bowelHabitChange: z.boolean(),
   // Only shown in the UI for 18+ age bands — accepted here regardless since
   // age-gating is a UI concern, not a trust boundary worth enforcing server-side.
   painWithSex: z.boolean().optional(),
 });
 export type SymptomFlags = z.infer<typeof symptomFlagsSchema>;
+
+/**
+ * Whether the day's pain responded to the user's usual painkillers —
+ * capture-only, same as painTimingSchema above: never read by
+ * packages/rules-engine or packages/triage. "not_relieved" mirrors the
+ * existing painPersistsDespiteRelief flag but is specific to medication
+ * rather than relief measures generally (heat, rest, etc.).
+ */
+export const painReliefByMedicationSchema = z.enum([
+  "not_taken",
+  "relieved",
+  "not_relieved",
+]);
+export type PainReliefByMedication = z.infer<
+  typeof painReliefByMedicationSchema
+>;
+
+/** How long the pain lasted today — capture-only, see painTimingSchema's doc comment. */
+export const painDurationSchema = z.enum([
+  "brief",
+  "few_hours",
+  "most_of_day",
+  "all_day",
+]);
+export type PainDuration = z.infer<typeof painDurationSchema>;
 
 export const impactFlagsSchema = z.object({
   missedSchool: z.boolean(),
@@ -85,6 +115,8 @@ export const symptomLogSchema = z.object({
   painTiming: z.array(painTimingSchema).default([]),
   /** Capture-only — see painTimingSchema's doc comment. Null = not indicated. */
   painPersistsDespiteRelief: z.boolean().nullish(),
+  painReliefByMedication: painReliefByMedicationSchema.nullish(),
+  painDuration: painDurationSchema.nullish(),
   symptoms: symptomFlagsSchema,
   impact: impactFlagsSchema,
   redFlags: redFlagsSchema,

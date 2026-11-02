@@ -120,6 +120,13 @@
       "when": 1793035200000,
       "tag": "0016_facility_name_lower_trgm_idx",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1793644440901,
+      "tag": "0017_flaky_kang",
+      "breakpoints": true
     }
   ]
 }

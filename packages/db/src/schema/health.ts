@@ -59,6 +59,10 @@ export const symptomLogs = healthSchema.table(
     // packages/triage) — see packages/validation's painTimingSchema.
     painTiming: text("pain_timing").array(),
     painPersistsDespiteRelief: boolean("pain_persists_despite_relief"),
+    // Capture-only (same as painTiming above) — see packages/validation's
+    // painReliefByMedicationSchema/painDurationSchema.
+    painReliefByMedication: text("pain_relief_by_medication"),
+    painDuration: text("pain_duration"),
     symptoms: jsonb("symptoms"),
     impact: jsonb("impact"),
     redFlags: jsonb("red_flags"),

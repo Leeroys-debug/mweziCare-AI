@@ -9,6 +9,8 @@ const EMPTY_SYMPTOMS = {
   painWithBowelMovements: false,
   painWithUrination: false,
   bloodInUrine: false,
+  bloating: false,
+  bowelHabitChange: false,
 };
 const EMPTY_IMPACT = {
   missedSchool: false,
@@ -32,6 +34,8 @@ function defaultLog(dateIso: string): SymptomLogInput {
     painLocations: [],
     painTiming: [],
     painPersistsDespiteRelief: null,
+    painReliefByMedication: null,
+    painDuration: null,
     symptoms: EMPTY_SYMPTOMS,
     impact: EMPTY_IMPACT,
     redFlags: EMPTY_RED_FLAGS,

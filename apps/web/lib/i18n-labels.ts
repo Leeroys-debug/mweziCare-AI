@@ -49,6 +49,8 @@ export async function loadSummaryPdfLabels(
       painWithBowelMovements: t("symptom.painWithBowelMovements"),
       painWithUrination: t("symptom.painWithUrination"),
       bloodInUrine: t("symptom.bloodInUrine"),
+      bloating: t("symptom.bloating"),
+      bowelHabitChange: t("symptom.bowelHabitChange"),
       painWithSex: t("symptom.painWithSex"),
     },
     missedSchoolLabel: t("missedSchoolLabel"),
@@ -121,6 +123,8 @@ export async function loadMyDataPdfLabels(
       painWithBowelMovements: track("symptom.painWithBowelMovements"),
       painWithUrination: track("symptom.painWithUrination"),
       bloodInUrine: track("symptom.bloodInUrine"),
+      bloating: track("symptom.bloating"),
+      bowelHabitChange: track("symptom.bowelHabitChange"),
       painWithSex: track("symptom.painWithSex"),
     },
     impactLabels: {

@@ -20,6 +20,8 @@ function validLog(): SymptomLogInput {
       painWithBowelMovements: false,
       painWithUrination: false,
       bloodInUrine: false,
+      bloating: false,
+      bowelHabitChange: false,
     },
     impact: {
       missedSchool: false,
@@ -135,6 +137,71 @@ describe("symptomLogSchema", () => {
       });
       expect(result.success).toBe(true);
     }
+  });
+
+  it("accepts each painReliefByMedication value, plus null/omitted", () => {
+    for (const value of [
+      "not_taken",
+      "relieved",
+      "not_relieved",
+      null,
+      undefined,
+    ]) {
+      const result = symptomLogSchema.safeParse({
+        ...validLog(),
+        painReliefByMedication: value,
+      });
+      expect(result.success).toBe(true);
+    }
+  });
+
+  it("rejects an unknown painReliefByMedication value", () => {
+    const result = symptomLogSchema.safeParse({
+      ...validLog(),
+      painReliefByMedication: "sometimes",
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("accepts each painDuration value, plus null/omitted", () => {
+    for (const value of [
+      "brief",
+      "few_hours",
+      "most_of_day",
+      "all_day",
+      null,
+      undefined,
+    ]) {
+      const result = symptomLogSchema.safeParse({
+        ...validLog(),
+        painDuration: value,
+      });
+      expect(result.success).toBe(true);
+    }
+  });
+
+  it("rejects an unknown painDuration value", () => {
+    const result = symptomLogSchema.safeParse({
+      ...validLog(),
+      painDuration: "all_week",
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("accepts true bloating and bowelHabitChange flags", () => {
+    const log = validLog();
+    log.symptoms = { ...log.symptoms, bloating: true, bowelHabitChange: true };
+    expect(symptomLogSchema.safeParse(log).success).toBe(true);
+  });
+
+  it("rejects a log missing the required bloating flag", () => {
+    const log = validLog();
+    const { bloating: _omitted, ...symptomsWithoutBloating } = log.symptoms;
+    const result = symptomLogSchema.safeParse({
+      ...log,
+      symptoms: symptomsWithoutBloating,
+    });
+    expect(result.success).toBe(false);
   });
 });
 

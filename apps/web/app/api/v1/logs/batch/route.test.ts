@@ -41,6 +41,9 @@ function validLog(overrides: Record<string, unknown> = {}) {
       nausea: false,
       painWithBowelMovements: false,
       painWithUrination: false,
+      bloodInUrine: false,
+      bloating: false,
+      bowelHabitChange: false,
     },
     impact: {
       missedSchool: false,

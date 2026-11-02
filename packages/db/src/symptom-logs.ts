@@ -15,6 +15,8 @@ export interface SymptomLogInput {
   painLocations: string[];
   painTiming?: string[];
   painPersistsDespiteRelief?: boolean | null;
+  painReliefByMedication?: string | null;
+  painDuration?: string | null;
   symptoms: Record<string, boolean>;
   impact: Record<string, boolean>;
   redFlags: Record<string, boolean>;
@@ -33,6 +35,8 @@ export interface SymptomLogRecord {
   painLocations: string[];
   painTiming: string[];
   painPersistsDespiteRelief: boolean | null;
+  painReliefByMedication: string | null;
+  painDuration: string | null;
   symptoms: Record<string, boolean>;
   impact: Record<string, boolean>;
   redFlags: Record<string, boolean>;
@@ -64,6 +68,8 @@ function toRecord(
     painLocations: row.painLocations ?? [],
     painTiming: row.painTiming ?? [],
     painPersistsDespiteRelief: row.painPersistsDespiteRelief,
+    painReliefByMedication: row.painReliefByMedication,
+    painDuration: row.painDuration,
     symptoms: (row.symptoms as Record<string, boolean>) ?? {},
     impact: (row.impact as Record<string, boolean>) ?? {},
     redFlags: (row.redFlags as Record<string, boolean>) ?? {},
@@ -121,6 +127,8 @@ export async function upsertSymptomLog(
         painLocations: log.painLocations,
         painTiming: log.painTiming ?? [],
         painPersistsDespiteRelief: log.painPersistsDespiteRelief ?? null,
+        painReliefByMedication: log.painReliefByMedication ?? null,
+        painDuration: log.painDuration ?? null,
         symptoms: log.symptoms,
         impact: log.impact,
         redFlags: log.redFlags,
@@ -163,6 +171,8 @@ export async function upsertSymptomLog(
       painLocations: log.painLocations,
       painTiming: log.painTiming ?? [],
       painPersistsDespiteRelief: log.painPersistsDespiteRelief ?? null,
+      painReliefByMedication: log.painReliefByMedication ?? null,
+      painDuration: log.painDuration ?? null,
       symptoms: log.symptoms,
       impact: log.impact,
       redFlags: log.redFlags,

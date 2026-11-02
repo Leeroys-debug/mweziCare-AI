@@ -55,6 +55,8 @@ describe("buildSummaryData", () => {
       { symptom: "painWithBowelMovements", days: 0 },
       { symptom: "painWithUrination", days: 0 },
       { symptom: "bloodInUrine", days: 0 },
+      { symptom: "bloating", days: 0 },
+      { symptom: "bowelHabitChange", days: 0 },
       { symptom: "painWithSex", days: 0 },
     ]);
     expect(data.missedSchoolDays).toBe(1);
