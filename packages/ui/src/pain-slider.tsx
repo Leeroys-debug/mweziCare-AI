@@ -3,16 +3,9 @@
 import * as React from "react";
 import { cn } from "./lib/utils";
 
-/**
- * The two most severe points on the 0-10 scale get a face next to the
- * number, as a quick visual flag for "this is the bad end" — everything
- * below just reads as a plain number so the control is a single
- * draggable 0-10 slider rather than a row of individually-tappable faces.
- */
-const SEVERE_FACES: Record<number, string> = {
-  9: "😖",
-  10: "😭",
-};
+/** Anchors the two ends of the scale — no pain to worst pain. */
+const FIRST_FACE = "😀";
+const LAST_FACE = "😭";
 
 export interface PainSliderProps {
   value: number;
@@ -41,7 +34,6 @@ export function PainSlider({
   className,
 }: PainSliderProps) {
   const pointLabel = valueLabels[value] ?? "";
-  const face = SEVERE_FACES[value];
   const inputId = id ? `${id}-input` : undefined;
 
   return (
@@ -53,31 +45,34 @@ export function PainSlider({
         >
           {label}
         </label>
-        <span className="flex items-center gap-1 text-sm font-semibold text-brand-700 dark:text-brand-400">
-          {face && (
-            <span aria-hidden="true" className="text-base leading-none">
-              {face}
-            </span>
-          )}
+        <span className="text-sm font-semibold text-brand-700 dark:text-brand-400">
           {value} · {pointLabel}
         </span>
       </div>
-      <input
-        id={inputId}
-        type="range"
-        min={0}
-        max={10}
-        step={1}
-        value={value}
-        onChange={(event) => onChange(Number(event.target.value))}
-        aria-label={label}
-        aria-valuetext={`${value} — ${pointLabel}`}
-        className={cn(
-          "h-2 w-full cursor-pointer touch-none rounded-full accent-brand-700",
-          "[&::-webkit-slider-thumb]:h-7 [&::-webkit-slider-thumb]:w-7",
-          "[&::-moz-range-thumb]:h-7 [&::-moz-range-thumb]:w-7",
-        )}
-      />
+      <div className="flex items-center gap-2">
+        <span aria-hidden="true" className="shrink-0 text-xl leading-none">
+          {FIRST_FACE}
+        </span>
+        <input
+          id={inputId}
+          type="range"
+          min={0}
+          max={10}
+          step={1}
+          value={value}
+          onChange={(event) => onChange(Number(event.target.value))}
+          aria-label={label}
+          aria-valuetext={`${value} — ${pointLabel}`}
+          className={cn(
+            "h-2 w-full cursor-pointer touch-none rounded-full accent-brand-700",
+            "[&::-webkit-slider-thumb]:h-7 [&::-webkit-slider-thumb]:w-7",
+            "[&::-moz-range-thumb]:h-7 [&::-moz-range-thumb]:w-7",
+          )}
+        />
+        <span aria-hidden="true" className="shrink-0 text-xl leading-none">
+          {LAST_FACE}
+        </span>
+      </div>
       <div
         aria-hidden="true"
         className="flex justify-between text-xs text-neutral-500 dark:text-neutral-400"

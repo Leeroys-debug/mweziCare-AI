@@ -49,36 +49,27 @@ describe("PainSlider", () => {
     expect(onChange).toHaveBeenCalledWith(7);
   });
 
-  it("shows a severe-pain face only at 9 and 10", () => {
+  it("always shows the first and last faces as fixed anchors, regardless of value", () => {
     const { rerender } = render(
       <PainSlider
-        value={8}
+        value={0}
         onChange={() => {}}
         label="Pain"
         valueLabels={valueLabels}
       />,
     );
-    expect(screen.queryByText("😖")).not.toBeInTheDocument();
-    expect(screen.queryByText("😭")).not.toBeInTheDocument();
+    expect(screen.getByText("😀")).toBeInTheDocument();
+    expect(screen.getByText("😭")).toBeInTheDocument();
 
     rerender(
       <PainSlider
-        value={9}
+        value={5}
         onChange={() => {}}
         label="Pain"
         valueLabels={valueLabels}
       />,
     );
-    expect(screen.getByText("😖")).toBeInTheDocument();
-
-    rerender(
-      <PainSlider
-        value={10}
-        onChange={() => {}}
-        label="Pain"
-        valueLabels={valueLabels}
-      />,
-    );
+    expect(screen.getByText("😀")).toBeInTheDocument();
     expect(screen.getByText("😭")).toBeInTheDocument();
   });
 
