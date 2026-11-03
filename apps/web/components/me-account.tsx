@@ -45,17 +45,6 @@ export function MeAccount({ consents }: { consents: ConsentRow[] }) {
     );
   }
 
-  async function downloadExport() {
-    const response = await fetch("/api/v1/me/export");
-    const blob = await response.blob();
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "mwezicare-data.pdf";
-    link.click();
-    URL.revokeObjectURL(url);
-  }
-
   async function deleteAccount() {
     if (!window.confirm(t("deleteConfirm"))) return;
     setDeleting(true);
@@ -109,16 +98,6 @@ export function MeAccount({ consents }: { consents: ConsentRow[] }) {
       </section>
 
       <DiscreetModeToggle />
-
-      <section className="flex flex-col gap-2">
-        <h2 className="text-lg font-semibold">{t("exportTitle")}</h2>
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">
-          {t("exportBody")}
-        </p>
-        <Button variant="outline" onClick={downloadExport}>
-          {t("exportButton")}
-        </Button>
-      </section>
 
       <section className="flex flex-col gap-2 rounded-md border border-red-200 p-4 shadow-sm dark:border-red-900">
         <h2 className="text-lg font-semibold text-red-700 dark:text-red-400">
