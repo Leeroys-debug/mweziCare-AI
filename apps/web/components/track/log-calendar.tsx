@@ -6,8 +6,13 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { X } from "lucide-react";
 import { Button, PainSlider, cn } from "@mwezicare/ui";
+import { addDaysIso } from "@/lib/date";
 import { offlineDb } from "@/lib/offline-db";
-import { setPainForDate, togglePeriodForDate } from "@/lib/quick-log";
+import {
+  markPeriodEnd,
+  setPainForDate,
+  togglePeriodForDate,
+} from "@/lib/quick-log";
 
 interface CalendarLog {
   logDate: string;
@@ -33,12 +38,6 @@ const MAX_FORWARD_OFFSET = 1;
 const SWIPE_THRESHOLD_PX = 50;
 
 function toIsoDate(date: Date): string {
-  return date.toISOString().slice(0, 10);
-}
-
-function addDaysIso(iso: string, days: number): string {
-  const date = new Date(`${iso}T00:00:00.000Z`);
-  date.setUTCDate(date.getUTCDate() + days);
   return date.toISOString().slice(0, 10);
 }
 
@@ -73,17 +72,26 @@ function predictedPeriodRange(
   return { from: estimate.date, to: addDaysIso(estimate.date, avgLength - 1) };
 }
 
-/** Small pain-severity badge color — a secondary signal, kept separate from the period-day fill so the two don't visually compete on the same cell. */
+/**
+ * Small pain-severity badge color — a secondary signal, kept separate from
+ * the period-day fill so the two don't visually compete on the same cell.
+ * Stays within amber/orange at every severity (never red) so it's never
+ * confusable with the period-day fill, which is red.
+ */
 function painBadgeClass(painScore: number | null): string | null {
   if (painScore == null || painScore === 0) return null;
   if (painScore <= 3) return "bg-amber-400 dark:bg-amber-500";
   if (painScore <= 6) return "bg-orange-500 dark:bg-orange-600";
-  return "bg-red-600 dark:bg-red-700";
+  return "bg-orange-700 dark:bg-orange-800";
 }
 
 /**
- * Period-calendar — tapping a day toggles its period status directly, and
- * the strip under the grid also lets you log a pain score for that day.
+ * Period-calendar — tapping a day only selects it; the panel below offers
+ * distinct, separately-colored period (red) and pain (orange) actions
+ * rather than a tap silently toggling period status. "Mark period end"
+ * fills every day from the nearest earlier logged period day through the
+ * selected one, so ending a period doesn't require tapping each day in
+ * between individually (see lib/quick-log.ts's markPeriodEnd).
  * Deliberately stops short of the full symptom/diagnosis question form
  * (that lives on its own Symptoms tab) — see the user's request to keep
  * calendar tracking and the triage questions distinct, not bridged.
@@ -213,13 +221,19 @@ export function LogCalendar() {
     setPainDraft(logsByDate.get(date)?.painScore ?? 0);
   }
 
-  /** Tapping a day marks/unmarks it as a period day directly — pain is logged via the slider in the strip below. */
-  async function handleDayTap(date: string) {
+  /** Tapping a day only selects it — the panel below offers distinct period/pain actions rather than a tap directly mutating anything. */
+  function handleDayTap(date: string) {
     selectDate(date);
+    setActionError(null);
+  }
+
+  async function runPeriodAction(action: (date: string) => Promise<unknown>) {
+    if (!selectedDate) return;
+    const date = selectedDate;
     setTogglingDate(date);
     setActionError(null);
     try {
-      await togglePeriodForDate(date);
+      await action(date);
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ["logs"] }),
         queryClient.invalidateQueries({ queryKey: ["cycles"] }),
@@ -233,6 +247,14 @@ export function LogCalendar() {
     } finally {
       setTogglingDate((current) => (current === date ? null : current));
     }
+  }
+
+  function handleTogglePeriod() {
+    void runPeriodAction(togglePeriodForDate);
+  }
+
+  function handleMarkPeriodEnd() {
+    void runPeriodAction(markPeriodEnd);
   }
 
   async function handleSavePain() {
@@ -388,23 +410,23 @@ export function LogCalendar() {
             <button
               key={date}
               type="button"
-              onClick={() => void handleDayTap(date)}
+              onClick={() => handleDayTap(date)}
               disabled={togglingDate === date}
               aria-label={srParts.join(" — ")}
               className={cn(
                 "relative flex min-h-[44px] flex-col items-center justify-center gap-0.5 rounded-full text-xs font-medium transition-all active:scale-95",
                 togglingDate === date && "opacity-50",
                 isPeriodDay
-                  ? "bg-brand-600 text-white"
+                  ? "bg-red-600 text-white dark:bg-red-700"
                   : "text-neutral-900 dark:text-neutral-100",
                 isPredictedPeriod &&
-                  "border-2 border-dotted border-brand-500 dark:border-brand-400",
+                  "border-2 border-dotted border-red-400 dark:border-red-500",
                 isToday &&
                   !isPeriodDay &&
-                  "border-2 border-dashed border-brand-600",
+                  "border-2 border-dashed border-neutral-900 dark:border-neutral-100",
                 isToday &&
                   isPeriodDay &&
-                  "ring-2 ring-brand-900 dark:ring-brand-200",
+                  "ring-2 ring-red-900 dark:ring-red-200",
                 selectedDate === date &&
                   "ring-2 ring-offset-2 ring-brand-700 dark:ring-brand-300",
               )}
@@ -427,13 +449,13 @@ export function LogCalendar() {
       </div>
 
       {selectedDate && (
-        <div className="flex flex-col gap-3 rounded-lg border border-brand-300 bg-brand-50 p-3 dark:border-brand-800 dark:bg-brand-950">
+        <div className="flex flex-col gap-3 rounded-lg border border-neutral-300 bg-neutral-50 p-3 dark:border-neutral-700 dark:bg-neutral-900">
           <div className="flex items-center justify-between gap-2">
             <div>
-              <p className="text-sm font-semibold text-brand-900 dark:text-brand-100">
+              <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
                 {selectedDate}
               </p>
-              <p className="text-xs text-brand-700 dark:text-brand-300">
+              <p className="text-xs text-neutral-600 dark:text-neutral-400">
                 {logsByDate.get(selectedDate)?.periodDay
                   ? t("calendarDayStatus.periodDay")
                   : t("calendarDayStatus.notPeriodDay")}
@@ -443,26 +465,62 @@ export function LogCalendar() {
               type="button"
               aria-label={t("close")}
               onClick={() => setSelectedDate(null)}
-              className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-brand-700 hover:bg-brand-100 dark:text-brand-300 dark:hover:bg-brand-900"
+              className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-neutral-600 hover:bg-neutral-200 dark:text-neutral-300 dark:hover:bg-neutral-800"
             >
               <X size={18} />
             </button>
           </div>
 
-          <PainSlider
-            value={painDraft}
-            onChange={setPainDraft}
-            label={t("painScoreLabel.title")}
-            valueLabels={painScoreLabels}
-          />
-          <Button
-            type="button"
-            size="sm"
-            disabled={savingPain}
-            onClick={() => void handleSavePain()}
-          >
-            {savingPain ? t("saving") : t("savePainButton")}
-          </Button>
+          <div className="flex flex-col gap-2 rounded-md border border-red-200 bg-red-50 p-2 dark:border-red-900 dark:bg-red-950">
+            <span className="text-xs font-semibold text-red-800 dark:text-red-300">
+              {t("periodSectionLabel")}
+            </span>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                type="button"
+                size="sm"
+                disabled={togglingDate === selectedDate}
+                onClick={handleTogglePeriod}
+                className="bg-red-600 hover:bg-red-700 focus-visible:ring-red-700"
+              >
+                {logsByDate.get(selectedDate)?.periodDay
+                  ? t("removePeriodButton")
+                  : t("markPeriodButton")}
+              </Button>
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                disabled={togglingDate === selectedDate}
+                onClick={handleMarkPeriodEnd}
+                className="border-red-400 text-red-700 hover:bg-red-100 focus-visible:ring-red-700 dark:border-red-700 dark:text-red-300 dark:hover:bg-red-900"
+              >
+                {t("markPeriodEndButton")}
+              </Button>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-2 rounded-md border border-orange-200 bg-orange-50 p-2 dark:border-orange-900 dark:bg-orange-950">
+            <span className="text-xs font-semibold text-orange-800 dark:text-orange-300">
+              {t("painSectionLabel")}
+            </span>
+            <PainSlider
+              value={painDraft}
+              onChange={setPainDraft}
+              label={t("painScoreLabel.title")}
+              valueLabels={painScoreLabels}
+            />
+            <Button
+              type="button"
+              size="sm"
+              disabled={savingPain}
+              onClick={() => void handleSavePain()}
+              className="bg-orange-600 hover:bg-orange-700 focus-visible:ring-orange-700"
+            >
+              {savingPain ? t("saving") : t("savePainButton")}
+            </Button>
+          </div>
+
           {actionError && (
             <p className="text-sm text-red-600 dark:text-red-400">
               {t("saveError")}: {actionError}
@@ -474,21 +532,21 @@ export function LogCalendar() {
       <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-neutral-600 dark:text-neutral-400">
         <span className="flex items-center gap-1.5">
           <span
-            className="h-3 w-3 rounded-full bg-brand-600"
+            className="h-3 w-3 rounded-full bg-red-600"
             aria-hidden="true"
           />
           {t("legend.periodDay")}
         </span>
         <span className="flex items-center gap-1.5">
           <span
-            className="h-3 w-3 rounded-full border-2 border-dotted border-brand-500 dark:border-brand-400"
+            className="h-3 w-3 rounded-full border-2 border-dotted border-red-400 dark:border-red-500"
             aria-hidden="true"
           />
           {t("legend.predictedPeriod")}
         </span>
         <span className="flex items-center gap-1.5">
           <span
-            className="h-3 w-3 rounded-full border-2 border-dashed border-brand-600"
+            className="h-3 w-3 rounded-full border-2 border-dashed border-neutral-900 dark:border-neutral-100"
             aria-hidden="true"
           />
           {t("legend.today")}

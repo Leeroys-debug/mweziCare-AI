@@ -140,6 +140,11 @@
     "thisWeekLabel": "This week",
     "showFullMonth": "Show full month",
     "showWeek": "Show week",
+    "periodSectionLabel": "Period",
+    "markPeriodButton": "Mark period day",
+    "removePeriodButton": "Remove period day",
+    "markPeriodEndButton": "Mark period end",
+    "painSectionLabel": "Pain",
     "savePainButton": "Save pain",
     "calendarDayStatus": {
       "periodDay": "Period day",

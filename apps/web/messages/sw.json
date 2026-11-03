@@ -140,6 +140,11 @@
     "thisWeekLabel": "Wiki hii",
     "showFullMonth": "Onyesha mwezi mzima",
     "showWeek": "Onyesha wiki",
+    "periodSectionLabel": "Hedhi",
+    "markPeriodButton": "Weka siku ya hedhi",
+    "removePeriodButton": "Ondoa siku ya hedhi",
+    "markPeriodEndButton": "Weka mwisho wa hedhi",
+    "painSectionLabel": "Maumivu",
     "savePainButton": "Hifadhi maumivu",
     "calendarDayStatus": {
       "periodDay": "Siku ya hedhi",
