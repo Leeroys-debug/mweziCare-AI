@@ -153,7 +153,7 @@
     "close": "Funga",
     "urgentOverlay": {
       "title": "Tafuta huduma ya dharura sasa",
-      "body": "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Kutokana na ulichoandika, unapaswa kupata huduma ya matibabu mara moja — usisubiri.",
+      "body": "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Kutokana na ulichoandika sasa hivi, tafadhali tafuta huduma ya matibabu mara moja — usisubiri. Tunataka tu kuhakikisha uko salama.",
       "step1": "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Nenda hospitali au kliniki iliyo karibu, au piga simu huduma ya dharura, sasa hivi.",
       "step2": "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Ikiwa hauko peke yako, muombe mtu akuandamane.",
       "step3": "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Leta simu yako ili uweze kuonyesha daktari dalili ulizofuatilia ikiwa itasaidia.",
@@ -187,9 +187,9 @@
     "assessment": {
       "unavailable": "Mwongozo wako binafsi bado haujapatikana. Endelea kufuatilia — tutakujulisha mara utakapokuwa tayari.",
       "nextStep": {
-        "routine": "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Maumivu yako ya hedhi yanaonekana kuwa madogo hadi ya wastani na hayakuzuii maisha yako. Vidokezo vya kujitunza viko kwenye Jifunze — endelea kufuatilia.",
-        "assess_soon": "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Yale ambayo umekuwa ukifuatilia yanafaa kuangaliwa na daktari hivi karibuni.",
-        "urgent": "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Kulingana na ufuatiliaji wako, unapaswa kutafuta huduma ya dharura."
+        "routine": "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Unachoeleza kinaonekana kama hedhi ya kawaida — maumivu yako yanaonekana kuwa madogo hadi ya wastani na hayaonekani kukuzuia kuendelea na siku yako. Hilo ni jambo zuri! Endelea kufuatilia, na utapata vidokezo vya kujitunza kwenye Jifunze wakati wowote unapovihitaji.",
+        "assess_soon": "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Asante kwa kufuatilia kwa makini. Kulingana na ulichoshiriki, itakuwa vizuri kumwona daktari hivi karibuni — anaweza kukusaidia kuelewa kinachoendelea na kuhakikisha unapata msaada unaofaa.",
+        "urgent": "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Kulingana na ulichokuwa ukifuatilia, tafadhali tafuta huduma ya matibabu haraka iwezekanavyo — tunataka tu kuhakikisha uko salama na unatunzwa vizuri."
       },
       "uncertaintyNote": "Huu ni mwongozo wa jumla kulingana na mielekeo uliyofuatilia, si utambuzi.",
       "findCare": "Tafuta huduma",

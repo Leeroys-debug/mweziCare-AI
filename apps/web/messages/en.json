@@ -153,7 +153,7 @@
     "close": "Close",
     "urgentOverlay": {
       "title": "Seek urgent care now",
-      "body": "[CLINICAL REVIEW REQUIRED] Based on what you just logged, you should get medical care right away — don't wait.",
+      "body": "[CLINICAL REVIEW REQUIRED] Based on what you just logged, please get medical care right away — don't wait. We just want to make sure you're safe.",
       "step1": "[CLINICAL REVIEW REQUIRED] Go to the nearest hospital or clinic, or call emergency services, now.",
       "step2": "[CLINICAL REVIEW REQUIRED] If you're not alone, ask someone to go with you.",
       "step3": "[CLINICAL REVIEW REQUIRED] Bring your phone so you can show a clinician your tracked symptoms if helpful.",
@@ -187,9 +187,9 @@
     "assessment": {
       "unavailable": "Your personalized guidance isn't available yet. Keep tracking — we'll let you know as soon as it's ready.",
       "nextStep": {
-        "routine": "[CLINICAL REVIEW REQUIRED] Your cramps look mild to moderate and aren't disrupting your life. Self-care tips are in Learn — keep tracking.",
-        "assess_soon": "[CLINICAL REVIEW REQUIRED] What you've been tracking is worth having a clinician look at soon.",
-        "urgent": "[CLINICAL REVIEW REQUIRED] Based on your tracking, you should seek care urgently."
+        "routine": "[CLINICAL REVIEW REQUIRED] What you're describing sounds like a fairly typical period — your cramps look mild to moderate and don't seem to be getting in the way of your day. That's good to hear! Keep tracking, and there are some self-care tips in Learn whenever you want them.",
+        "assess_soon": "[CLINICAL REVIEW REQUIRED] Thanks for tracking so closely. Based on what you've shared, it'd be a good idea to have a clinician take a look soon — they can help you understand what's going on and make sure you get the right support.",
+        "urgent": "[CLINICAL REVIEW REQUIRED] Based on what you've been tracking, please reach out for medical care as soon as you can — we just want to make sure you're safe and looked after."
       },
       "uncertaintyNote": "This is general guidance based on your tracked patterns, not a diagnosis.",
       "findCare": "Find care",

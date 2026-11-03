@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import {
   BatteryLow,
   Droplet,
@@ -27,6 +27,10 @@ import {
   type SymptomLogInput,
 } from "@mwezicare/validation";
 import { Button, Chip, PainSlider } from "@mwezicare/ui";
+import {
+  AssessmentCard,
+  type AssessmentsResponse,
+} from "@/components/assessment-card";
 import { useProfile } from "@/hooks/use-profile";
 import { offlineDb } from "@/lib/offline-db";
 import { saveLog } from "@/lib/sync-engine";
@@ -121,6 +125,8 @@ export interface DailyLogFormProps {
  */
 export function DailyLogForm({ date, onSaved, onUrgent }: DailyLogFormProps) {
   const t = useTranslations("Track");
+  const insightsT = useTranslations("Insights");
+  const locale = useLocale() as "en" | "sw";
   const { data: profile } = useProfile();
   const showPainWithSex =
     profile != null && !MINOR_AGE_BANDS.has(profile.ageBand);
@@ -131,6 +137,10 @@ export function DailyLogForm({ date, onSaved, onUrgent }: DailyLogFormProps) {
   );
   const [loadError, setLoadError] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [assessmentData, setAssessmentData] = useState<
+    AssessmentsResponse | undefined
+  >(undefined);
+  const [assessmentLoading, setAssessmentLoading] = useState(false);
   const { control, handleSubmit, reset, watch, setValue } = useForm<FormValues>(
     {
       resolver: zodResolver(formSchema),
@@ -277,6 +287,7 @@ export function DailyLogForm({ date, onSaved, onUrgent }: DailyLogFormProps) {
     }
     setSaveState("saved");
     onSaved?.();
+    void loadLatestAssessment();
 
     const redFlagResult = evaluate(
       urgentOnlyRuleset,
@@ -284,6 +295,28 @@ export function DailyLogForm({ date, onSaved, onUrgent }: DailyLogFormProps) {
     );
     if (redFlagResult.outcome === "urgent") {
       onUrgent?.();
+    }
+  }
+
+  /**
+   * Surfaces the user's current rules-engine assessment right here after
+   * saving, not just on Insights — reassurance for a routine/normal-period
+   * pattern, a friendlier nudge toward care otherwise. Best-effort: syncing
+   * and re-running the assessment happen in the background (lib/sync-engine.ts),
+   * so this may briefly reflect the last-computed assessment rather than one
+   * that already accounts for today's save — same latency Insights has.
+   */
+  async function loadLatestAssessment() {
+    setAssessmentLoading(true);
+    try {
+      const response = await fetch("/api/v1/assessments");
+      if (response.ok) {
+        setAssessmentData((await response.json()) as AssessmentsResponse);
+      }
+    } catch {
+      // Best-effort — the user can still see it on Insights if this fails.
+    } finally {
+      setAssessmentLoading(false);
     }
   }
 
@@ -570,6 +603,15 @@ export function DailyLogForm({ date, onSaved, onUrgent }: DailyLogFormProps) {
       <Button type="submit" size="lg" disabled={!clientId}>
         {saveState === "saving" ? t("saving") : t("save")}
       </Button>
+
+      {saveState === "saved" && (
+        <AssessmentCard
+          data={assessmentData}
+          isLoading={assessmentLoading}
+          locale={locale}
+          t={insightsT}
+        />
+      )}
     </form>
   );
 }

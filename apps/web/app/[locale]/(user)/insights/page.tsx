@@ -17,9 +17,12 @@ import {
 } from "recharts";
 import { X } from "lucide-react";
 import { cycleDateRange, logsInRange, type Cycle } from "@mwezicare/triage";
-import { Button, Chip, Skeleton } from "@mwezicare/ui";
-import { Link } from "@/i18n/navigation";
+import { Chip, Skeleton } from "@mwezicare/ui";
 import { OfflineBanner } from "@/components/offline-banner";
+import {
+  AssessmentCard,
+  type AssessmentsResponse,
+} from "@/components/assessment-card";
 
 interface ChartPoint {
   cycleStartDate: string;
@@ -50,20 +53,6 @@ const RANGE_OPTIONS = [3, 6, 12] as const;
 /** What Recharts' container onClick hands the handler — just the piece we need. */
 interface ChartClickState {
   activeLabel?: string;
-}
-
-type TriageOutcome = "routine" | "assess_soon" | "urgent";
-
-interface Assessment {
-  id: string;
-  outcome: TriageOutcome;
-  reasons: { en: string; sw: string }[];
-  createdAt: string;
-}
-
-interface AssessmentsResponse {
-  available: boolean;
-  assessment?: Assessment;
 }
 
 // Pain chart: 2-series categorical palette, validated with dataviz skill's
@@ -104,65 +93,6 @@ function NextPeriodHero({
       <p className="text-xs italic text-neutral-500 dark:text-neutral-400">
         {estimate.date} ({t("estimateLabel")})
       </p>
-    </div>
-  );
-}
-
-const OUTCOME_TONE: Record<TriageOutcome, string> = {
-  routine:
-    "border-emerald-300 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-950",
-  assess_soon:
-    "border-amber-400 bg-amber-50 dark:border-amber-800 dark:bg-amber-950",
-  urgent: "border-red-400 bg-red-50 dark:border-red-800 dark:bg-red-950",
-};
-
-function AssessmentCard({
-  data,
-  isLoading,
-  locale,
-  t,
-}: {
-  data: AssessmentsResponse | undefined;
-  isLoading: boolean;
-  locale: "en" | "sw";
-  t: (key: string) => string;
-}) {
-  if (isLoading) return <Skeleton className="h-20" />;
-  if (!data) return null;
-
-  if (!data.available || !data.assessment) {
-    return (
-      <div className="rounded-lg border border-neutral-200 p-4 text-sm text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
-        {t("assessment.unavailable")}
-      </div>
-    );
-  }
-
-  const { outcome, reasons } = data.assessment;
-
-  return (
-    <div
-      className={`flex flex-col gap-3 rounded-lg border p-4 ${OUTCOME_TONE[outcome]}`}
-    >
-      <p className="font-semibold">{t(`assessment.nextStep.${outcome}`)}</p>
-      {reasons.length > 0 && (
-        <ul className="list-disc space-y-1 pl-5 text-sm">
-          {reasons.map((reason, i) => (
-            <li key={i}>{reason[locale]}</li>
-          ))}
-        </ul>
-      )}
-      <p className="text-xs italic text-neutral-600 dark:text-neutral-400">
-        {t("assessment.uncertaintyNote")}
-      </p>
-      <div className="flex gap-2">
-        <Button asChild size="sm">
-          <Link href="/care">{t("assessment.findCare")}</Link>
-        </Button>
-        <Button asChild size="sm" variant="outline">
-          <Link href="/summary">{t("assessment.shareSummary")}</Link>
-        </Button>
-      </div>
     </div>
   );
 }
