@@ -391,6 +391,15 @@ export function LogCalendar() {
 
           const log = logsByDate.get(date);
           const isPeriodDay = log?.periodDay ?? false;
+          // Last day of a contiguous period streak — green, so it reads
+          // distinctly from the red fill of the days before it. Derived
+          // purely from periodDay data already loaded for the visible
+          // range; a day with no next-day data loaded (e.g. the last cell
+          // in view) is treated as the end, which is usually correct since
+          // that's typically the most recently logged day.
+          const isPeriodEndDay =
+            isPeriodDay &&
+            !(logsByDate.get(addDaysIso(date, 1))?.periodDay ?? false);
           const painScore = log?.painScore ?? null;
           const badgeClass = painBadgeClass(painScore);
           const isToday = date === todayIso;
@@ -417,7 +426,9 @@ export function LogCalendar() {
                 "relative flex min-h-[44px] flex-col items-center justify-center gap-0.5 rounded-full text-xs font-medium transition-all active:scale-95",
                 togglingDate === date && "opacity-50",
                 isPeriodDay
-                  ? "bg-red-600 text-white dark:bg-red-700"
+                  ? isPeriodEndDay
+                    ? "bg-green-600 text-white dark:bg-green-700"
+                    : "bg-red-600 text-white dark:bg-red-700"
                   : "text-neutral-900 dark:text-neutral-100",
                 isPredictedPeriod &&
                   "border-2 border-dotted border-red-400 dark:border-red-500",
@@ -426,7 +437,9 @@ export function LogCalendar() {
                   "border-2 border-dashed border-neutral-900 dark:border-neutral-100",
                 isToday &&
                   isPeriodDay &&
-                  "ring-2 ring-red-900 dark:ring-red-200",
+                  (isPeriodEndDay
+                    ? "ring-2 ring-green-900 dark:ring-green-200"
+                    : "ring-2 ring-red-900 dark:ring-red-200"),
                 selectedDate === date &&
                   "ring-2 ring-offset-2 ring-brand-700 dark:ring-brand-300",
               )}
@@ -536,6 +549,13 @@ export function LogCalendar() {
             aria-hidden="true"
           />
           {t("legend.periodDay")}
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span
+            className="h-3 w-3 rounded-full bg-green-600"
+            aria-hidden="true"
+          />
+          {t("legend.periodEnd")}
         </span>
         <span className="flex items-center gap-1.5">
           <span

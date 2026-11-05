@@ -131,6 +131,7 @@
     "weekdayAbbrev": ["Jpi", "Jtt", "Jnn", "Jtn", "Alh", "Ijm", "Jmo"],
     "legend": {
       "periodDay": "Siku ya hedhi",
+      "periodEnd": "Siku ya mwisho ya hedhi",
       "today": "Leo",
       "painLogged": "Maumivu yameandikwa",
       "predictedPeriod": "Hedhi inayotarajiwa"

@@ -131,6 +131,7 @@
     "weekdayAbbrev": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
     "legend": {
       "periodDay": "Period day",
+      "periodEnd": "Last day of period",
       "today": "Today",
       "painLogged": "Pain logged",
       "predictedPeriod": "Predicted period"
