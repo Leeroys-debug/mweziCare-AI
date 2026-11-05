@@ -28,6 +28,38 @@ const EMPTY_RED_FLAGS = {
   possiblePregnancySuspected: false,
 };
 
+/**
+ * The local IndexedDB only ever gets written by this device's own saveLog()
+ * calls — nothing hydrates it from the server (see sync-engine.ts). So a log
+ * that exists server-side but was never created through this browser (a
+ * different device, a direct API call, etc.) is invisible locally, and every
+ * quick-log action below previously treated such a date as blank — silently
+ * re-flipping an already-true periodDay back to true (looked like "remove"
+ * did nothing) and overwriting every other field on that date with blank
+ * defaults when saving pain. This fetches and caches the server's real
+ * state for a date before falling back to "no log exists" for it.
+ */
+async function getKnownLog(dateIso: string): Promise<SymptomLogInput | null> {
+  const local = await offlineDb.logs.where("logDate").equals(dateIso).first();
+  if (local) return local;
+
+  const response = await fetch(`/api/v1/logs?from=${dateIso}&to=${dateIso}`);
+  if (!response.ok) throw new Error("Failed to load existing log");
+  const { logs } = (await response.json()) as {
+    logs: (SymptomLogInput & { id?: string })[];
+  };
+  const [serverLog] = logs;
+  if (!serverLog) return null;
+
+  const { id: _id, ...log } = serverLog;
+  await offlineDb.logs.put({
+    ...log,
+    syncStatus: "synced",
+    syncedAt: new Date().toISOString(),
+  });
+  return log;
+}
+
 function defaultLog(dateIso: string): SymptomLogInput {
   return {
     clientId: generateUuid(),
@@ -56,10 +88,7 @@ function defaultLog(dateIso: string): SymptomLogInput {
  * that date has no log yet. Returns the new periodDay value.
  */
 export async function togglePeriodForDate(dateIso: string): Promise<boolean> {
-  const existing = await offlineDb.logs
-    .where("logDate")
-    .equals(dateIso)
-    .first();
+  const existing = await getKnownLog(dateIso);
   const nextPeriodDay = !(existing?.periodDay ?? false);
 
   const log: SymptomLogInput = existing
@@ -85,13 +114,13 @@ export async function markPeriodEnd(dateIso: string): Promise<void> {
   let start = dateIso;
   for (let i = 1; i <= PERIOD_END_LOOKBACK_DAYS; i++) {
     const candidate = addDaysIso(dateIso, -i);
-    const log = await offlineDb.logs.where("logDate").equals(candidate).first();
+    const log = await getKnownLog(candidate);
     if (!log?.periodDay) break;
     start = candidate;
   }
 
   for (let date = start; date <= dateIso; date = addDaysIso(date, 1)) {
-    const existing = await offlineDb.logs.where("logDate").equals(date).first();
+    const existing = await getKnownLog(date);
     if (existing?.periodDay) continue;
 
     const log: SymptomLogInput = existing
@@ -113,10 +142,7 @@ export async function setPainForDate(
   dateIso: string,
   painScore: number,
 ): Promise<void> {
-  const existing = await offlineDb.logs
-    .where("logDate")
-    .equals(dateIso)
-    .first();
+  const existing = await getKnownLog(dateIso);
 
   const log: SymptomLogInput = existing
     ? { ...existing, painScore, updatedAt: new Date().toISOString() }
