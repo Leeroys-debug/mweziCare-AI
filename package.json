@@ -28,7 +28,7 @@
     "format": "prettier --write ."
   },
   "devDependencies": {
-    "turbo": "^2.3.0",
+    "turbo": "^2.11.10",
     "typescript": "^5.7.0",
     "eslint": "^9",
     "prettier": "^3.4.0",
