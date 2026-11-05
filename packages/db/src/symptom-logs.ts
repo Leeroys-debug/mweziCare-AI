@@ -145,14 +145,16 @@ export async function upsertSymptomLog(
     };
   }
 
-  if (existing.clientId === log.clientId) {
-    return {
-      clientId: log.clientId,
-      status: "unchanged",
-      log: toRecord(existing, keyProvider),
-    };
-  }
-
+  // A matching clientId does NOT by itself mean "unchanged" — clientId is
+  // stable across every edit to a given day's log (see offline-db.ts), so a
+  // genuine edit (toggle period, save pain, etc.) legitimately resends the
+  // same clientId with a newer updatedAt. Only the timestamp comparison
+  // below decides whether an incoming write is a true no-op retry (equal
+  // updatedAt) or a real edit that should apply. A previous version of this
+  // function short-circuited on clientId equality alone, which silently
+  // discarded every edit to an already-synced record — the client's local
+  // calendar would show the change, then revert seconds later when sync
+  // reconciliation wrote the server's unchanged-and-stale row back over it.
   if (incomingUpdatedAt <= existing.updatedAt) {
     // Incoming write is stale — keep the server's canonical row.
     return {

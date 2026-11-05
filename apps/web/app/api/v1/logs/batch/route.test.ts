@@ -202,6 +202,58 @@ describe.skipIf(!db)("POST /api/v1/logs/batch", () => {
     expect(body.results[0].log.painScore).toBe(3); // server's canonical value, not the stale write
   });
 
+  it("a genuine edit to an already-synced record (same client_id, newer updatedAt) is applied, not dropped as unchanged", async () => {
+    // Regression test: clientId is stable across every edit to a given
+    // day's log (the calendar's period/pain quick-actions resend the same
+    // clientId they read back from the server). A prior version of
+    // upsertSymptomLog treated any matching clientId as an idempotent
+    // no-op retry regardless of updatedAt, so a real edit (e.g. toggling
+    // periodDay off) was silently discarded and the client's optimistic
+    // local update got overwritten with the server's stale row on the next
+    // sync reconciliation.
+    const { POST } = await import("./route");
+    const logDate = "2026-02-05";
+    const clientId = "5f1c5e3a-0000-4000-8000-000000000007";
+    const first = validLog({
+      clientId,
+      logDate,
+      periodDay: true,
+      updatedAt: "2026-02-05T08:00:00.000Z",
+    });
+    const edit = validLog({
+      clientId,
+      logDate,
+      periodDay: false,
+      updatedAt: "2026-02-05T09:00:00.000Z",
+    });
+
+    await POST(
+      new Request("http://localhost/api/v1/logs/batch", {
+        method: "POST",
+        headers: { origin: "http://localhost:3000" },
+        body: JSON.stringify({ logs: [first] }),
+      }),
+    );
+    const response = await POST(
+      new Request("http://localhost/api/v1/logs/batch", {
+        method: "POST",
+        headers: { origin: "http://localhost:3000" },
+        body: JSON.stringify({ logs: [edit] }),
+      }),
+    );
+    const body = await response.json();
+    expect(body.results[0].status).toBe("updated");
+    expect(body.results[0].log.periodDay).toBe(false);
+
+    const rows = await db!
+      .select()
+      .from(schema.symptomLogs)
+      .where(eq(schema.symptomLogs.userId, userId));
+    const matching = rows.filter((r) => r.logDate === logDate);
+    expect(matching).toHaveLength(1);
+    expect(matching[0]?.periodDay).toBe(false);
+  });
+
   it("rejects a malformed batch", async () => {
     const { POST } = await import("./route");
     const response = await POST(
