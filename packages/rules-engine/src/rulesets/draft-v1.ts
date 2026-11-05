@@ -16,7 +16,8 @@ import type { Ruleset } from "../dsl";
  *   missedSchoolOrWorkOrSleepOrActivityDays, painTrendSlope,
  *   painDaysOutsideMenstruation, anyBowelOrUrinarySymptom,
  *   heavyOrVeryHeavyBleedingDays, periodsLongerThan7Days,
- *   bleedingBetweenPeriods, cycleLengthVariabilityDays, cyclesWithMaxPainGte7.
+ *   bleedingBetweenPeriods, cycleLengthVariabilityDays, cyclesWithMaxPainGte7,
+ *   longDurationPainDays.
  * - familyHistoryEndometriosis is NOT from packages/triage — it's read
  *   straight off the user's profile (identity.profiles) by the assessments
  *   route and merged into the feature record, since it's a one-time capture
@@ -266,6 +267,36 @@ export const draftRuleset: Ruleset = {
         "this rule's threshold and (originally lowest, now second-lowest after " +
         "assess_soon_family_history_with_pain) priority are this app's own " +
         "placeholder operationalization of that guidance, not from a cited clinical source.",
+    },
+    {
+      id: "assess_soon_prolonged_pain_duration",
+      version: 1,
+      priority: 42,
+      outcome: "assess_soon",
+      conditions: {
+        feature: "longDurationPainDays_last3",
+        operator: "gte",
+        value: 2,
+      },
+      reason: {
+        en: "[CLINICAL REVIEW REQUIRED] Your pain has lasted most of the day or longer on more than one day recently.",
+        sw: "[CLINICAL REVIEW REQUIRED][TRANSLATION REVIEW REQUIRED] Maumivu yako yamedumu sehemu kubwa ya siku au zaidi kwa zaidi ya siku moja hivi karibuni.",
+      },
+      clinicianNote:
+        "[CLINICAL REVIEW REQUIRED] New rule, lowest-priority of the " +
+        "assess_soon tier (42, below assess_soon_family_history_with_pain's " +
+        "43) since it's the newest and least clinically validated. Fires when " +
+        "a day's pain lasted >=8 hours (LONG_PAIN_DURATION_HOURS_THRESHOLD in " +
+        "packages/triage/src/features.ts — this app's own placeholder cutoff " +
+        "for 'most of the day', not a cited clinical threshold) on >=2 days " +
+        "within the last 3 cycles. Cf. NICE NG73 1.3.1 — period-related pain " +
+        "affecting daily activities/quality of life is listed as a symptom to " +
+        "suspect endometriosis on; the specific hours-per-day and 2-day counts " +
+        "are this app's own operationalization, not NG73's own metric, and " +
+        "need a clinician's explicit sign-off. painDuration (packages/validation) " +
+        "was previously a capture-only 4-bucket field never read by this " +
+        "engine; it's now specific hours (0-24) and this is the first rule to " +
+        "use it.",
     },
     {
       id: "routine_baseline",

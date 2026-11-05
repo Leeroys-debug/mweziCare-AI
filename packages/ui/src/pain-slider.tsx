@@ -12,24 +12,30 @@ export interface PainSliderProps {
   onChange: (value: number) => void;
   /** Accessible label for the control, e.g. "Pain". */
   label: string;
-  /** Localized label per point, index 0-10 (e.g. "No pain" ... "Worst pain"). */
+  /** Localized label per point, index 0-max (e.g. "No pain" ... "Worst pain"). */
   valueLabels: string[];
+  /** Top of the scale — defaults to 10 (the 0-10 pain score). */
+  max?: number;
   id?: string;
   className?: string;
 }
 
 /**
- * 0-10 pain scale as a single draggable slider (native `<input type="range">`
- * so dragging, tapping-to-jump, and keyboard stepping all come from the
- * browser rather than hand-rolled pointer handling). 0 stays on the scale
- * even though it's drawn as the slider's left end — "no pain today" is a
- * meaningful, common value to record, not something to make harder to reach.
+ * 0-max integer scale as a single draggable slider (native `<input
+ * type="range">` so dragging, tapping-to-jump, and keyboard stepping all
+ * come from the browser rather than hand-rolled pointer handling). 0 stays
+ * on the scale even though it's drawn as the slider's left end — "none"
+ * (no pain, 0 hours, etc.) is a meaningful, common value to record, not
+ * something to make harder to reach. Despite the name, also reused for
+ * other 0-max scales shaped like pain (e.g. pain duration in hours) rather
+ * than renamed, since the faces/interaction are equally apt there.
  */
 export function PainSlider({
   value,
   onChange,
   label,
   valueLabels,
+  max = 10,
   id,
   className,
 }: PainSliderProps) {
@@ -57,7 +63,7 @@ export function PainSlider({
           id={inputId}
           type="range"
           min={0}
-          max={10}
+          max={max}
           step={1}
           value={value}
           onChange={(event) => onChange(Number(event.target.value))}
@@ -78,8 +84,8 @@ export function PainSlider({
         className="flex justify-between text-xs text-neutral-500 dark:text-neutral-400"
       >
         <span>0</span>
-        <span>5</span>
-        <span>10</span>
+        <span>{Math.round(max / 2)}</span>
+        <span>{max}</span>
       </div>
     </div>
   );

@@ -163,15 +163,8 @@ describe("symptomLogSchema", () => {
     expect(result.success).toBe(false);
   });
 
-  it("accepts each painDuration value, plus null/omitted", () => {
-    for (const value of [
-      "brief",
-      "few_hours",
-      "most_of_day",
-      "all_day",
-      null,
-      undefined,
-    ]) {
+  it("accepts pain duration hours from 0 to 24, plus null/omitted", () => {
+    for (const value of [0, 1, 12, 24, null, undefined]) {
       const result = symptomLogSchema.safeParse({
         ...validLog(),
         painDuration: value,
@@ -180,12 +173,14 @@ describe("symptomLogSchema", () => {
     }
   });
 
-  it("rejects an unknown painDuration value", () => {
-    const result = symptomLogSchema.safeParse({
-      ...validLog(),
-      painDuration: "all_week",
-    });
-    expect(result.success).toBe(false);
+  it("rejects a pain duration outside 0-24 hours", () => {
+    for (const value of [-1, 25, 1.5]) {
+      const result = symptomLogSchema.safeParse({
+        ...validLog(),
+        painDuration: value,
+      });
+      expect(result.success).toBe(false);
+    }
   });
 
   it("accepts true bloating and bowelHabitChange flags", () => {

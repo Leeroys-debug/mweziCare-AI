@@ -73,14 +73,17 @@ export type PainReliefByMedication = z.infer<
   typeof painReliefByMedicationSchema
 >;
 
-/** How long the pain lasted today — capture-only, see painTimingSchema's doc comment. */
-export const painDurationSchema = z.enum([
-  "brief",
-  "few_hours",
-  "most_of_day",
-  "all_day",
-]);
-export type PainDuration = z.infer<typeof painDurationSchema>;
+/**
+ * How many hours the pain lasted today, 0-24. Previously a capture-only
+ * 4-bucket enum (never read by packages/rules-engine or packages/triage,
+ * see painTimingSchema's doc comment above for that pattern) — now a
+ * specific hour count that packages/triage/src/features.ts folds into a
+ * feature the rules engine can act on. See
+ * packages/rules-engine/src/rulesets/draft-v1.ts's
+ * assess_soon_prolonged_pain_duration rule [CLINICAL REVIEW REQUIRED].
+ */
+export const painDurationHoursSchema = z.number().int().min(0).max(24);
+export type PainDurationHours = z.infer<typeof painDurationHoursSchema>;
 
 export const impactFlagsSchema = z.object({
   missedSchool: z.boolean(),
@@ -116,7 +119,7 @@ export const symptomLogSchema = z.object({
   /** Capture-only — see painTimingSchema's doc comment. Null = not indicated. */
   painPersistsDespiteRelief: z.boolean().nullish(),
   painReliefByMedication: painReliefByMedicationSchema.nullish(),
-  painDuration: painDurationSchema.nullish(),
+  painDuration: painDurationHoursSchema.nullish(),
   symptoms: symptomFlagsSchema,
   impact: impactFlagsSchema,
   redFlags: redFlagsSchema,

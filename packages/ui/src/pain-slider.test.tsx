@@ -73,6 +73,23 @@ describe("PainSlider", () => {
     expect(screen.getByText("😭")).toBeInTheDocument();
   });
 
+  it("supports a custom max for non-pain-score scales, e.g. 0-24 hours", () => {
+    const hourLabels = Array.from({ length: 25 }, (_, h) => `${h} hours`);
+    render(
+      <PainSlider
+        value={10}
+        onChange={() => {}}
+        label="Hours"
+        valueLabels={hourLabels}
+        max={24}
+      />,
+    );
+    const slider = screen.getByRole("slider", { name: "Hours" });
+    expect(slider).toHaveAttribute("min", "0");
+    expect(slider).toHaveAttribute("max", "24");
+    expect(screen.getByText("10 · 10 hours")).toBeInTheDocument();
+  });
+
   it("exposes a descriptive aria-valuetext for the current value", () => {
     render(
       <PainSlider

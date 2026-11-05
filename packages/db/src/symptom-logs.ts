@@ -16,7 +16,8 @@ export interface SymptomLogInput {
   painTiming?: string[];
   painPersistsDespiteRelief?: boolean | null;
   painReliefByMedication?: string | null;
-  painDuration?: string | null;
+  /** Hours (0-24) the pain lasted today. */
+  painDuration?: number | null;
   symptoms: Record<string, boolean>;
   impact: Record<string, boolean>;
   redFlags: Record<string, boolean>;
@@ -36,7 +37,8 @@ export interface SymptomLogRecord {
   painTiming: string[];
   painPersistsDespiteRelief: boolean | null;
   painReliefByMedication: string | null;
-  painDuration: string | null;
+  /** Hours (0-24) the pain lasted today. */
+  painDuration: number | null;
   symptoms: Record<string, boolean>;
   impact: Record<string, boolean>;
   redFlags: Record<string, boolean>;
@@ -240,6 +242,7 @@ export async function listTriageLogs(tx: Tx, userId: string) {
       periodDay: schema.symptomLogs.periodDay,
       bleedingLevel: schema.symptomLogs.bleedingLevel,
       painScore: schema.symptomLogs.painScore,
+      painDuration: schema.symptomLogs.painDuration,
       symptoms: schema.symptomLogs.symptoms,
       impact: schema.symptomLogs.impact,
       redFlags: schema.symptomLogs.redFlags,
@@ -253,6 +256,7 @@ export async function listTriageLogs(tx: Tx, userId: string) {
     periodDay: row.periodDay,
     bleedingLevel: row.bleedingLevel,
     painScore: row.painScore,
+    painDuration: row.painDuration,
     symptoms: (row.symptoms as Record<string, boolean>) ?? {},
     impact: (row.impact as Record<string, boolean>) ?? {},
     redFlags: (row.redFlags as Record<string, boolean>) ?? {},

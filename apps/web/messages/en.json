@@ -82,12 +82,7 @@
       "between_periods": "Other times between periods"
     },
     "painDurationLabel": "How long did the pain last today?",
-    "painDuration": {
-      "brief": "Briefly (under an hour)",
-      "few_hours": "A few hours",
-      "most_of_day": "Most of the day",
-      "all_day": "All day / constant"
-    },
+    "painDurationHoursValue": "{hours, plural, =0 {No pain today} =24 {All day / constant} one {# hour} other {# hours}}",
     "painReliefLabel": "Did painkillers help?",
     "painRelief": {
       "not_taken": "Didn't take any",

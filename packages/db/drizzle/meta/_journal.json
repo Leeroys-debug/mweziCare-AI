@@ -127,6 +127,13 @@
       "when": 1793644440901,
       "tag": "0017_flaky_kang",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1793899046546,
+      "tag": "0018_add_pain_duration_hours",
+      "breakpoints": true
     }
   ]
 }

@@ -1,0 +1,99 @@
+{
+  "id": "routine-15-single-long-duration-pain-day-boundary",
+  "description": "Pain lasted most of the day (>=8 hours) on exactly 1 day in the last 3 cycles — below the >=2-days boundary, stays routine.",
+  "expectedOutcome": "routine",
+  "logs": [
+    {
+      "logDate": "2026-01-01",
+      "periodDay": true,
+      "bleedingLevel": "light",
+      "painScore": 3,
+      "painLocations": ["lower_abdomen"],
+      "painDuration": 10,
+      "symptoms": {
+        "painWithBowelMovements": false,
+        "painWithUrination": false
+      },
+      "impact": {
+        "missedSchool": false,
+        "missedWork": false,
+        "sleepDisrupted": false,
+        "activitiesLimited": false
+      },
+      "redFlags": {
+        "suddenSeverePain": false,
+        "fainting": false,
+        "possiblePregnancySuspected": false
+      }
+    },
+    {
+      "logDate": "2026-01-02",
+      "periodDay": true,
+      "bleedingLevel": "light",
+      "painScore": 3,
+      "painLocations": ["lower_abdomen"],
+      "painDuration": 2,
+      "symptoms": {
+        "painWithBowelMovements": false,
+        "painWithUrination": false
+      },
+      "impact": {
+        "missedSchool": false,
+        "missedWork": false,
+        "sleepDisrupted": false,
+        "activitiesLimited": false
+      },
+      "redFlags": {
+        "suddenSeverePain": false,
+        "fainting": false,
+        "possiblePregnancySuspected": false
+      }
+    },
+    {
+      "logDate": "2026-01-29",
+      "periodDay": true,
+      "bleedingLevel": "light",
+      "painScore": 3,
+      "painLocations": ["lower_abdomen"],
+      "painDuration": 3,
+      "symptoms": {
+        "painWithBowelMovements": false,
+        "painWithUrination": false
+      },
+      "impact": {
+        "missedSchool": false,
+        "missedWork": false,
+        "sleepDisrupted": false,
+        "activitiesLimited": false
+      },
+      "redFlags": {
+        "suddenSeverePain": false,
+        "fainting": false,
+        "possiblePregnancySuspected": false
+      }
+    },
+    {
+      "logDate": "2026-02-26",
+      "periodDay": true,
+      "bleedingLevel": "light",
+      "painScore": 3,
+      "painLocations": ["lower_abdomen"],
+      "painDuration": 1,
+      "symptoms": {
+        "painWithBowelMovements": false,
+        "painWithUrination": false
+      },
+      "impact": {
+        "missedSchool": false,
+        "missedWork": false,
+        "sleepDisrupted": false,
+        "activitiesLimited": false
+      },
+      "redFlags": {
+        "suddenSeverePain": false,
+        "fainting": false,
+        "possiblePregnancySuspected": false
+      }
+    }
+  ]
+}

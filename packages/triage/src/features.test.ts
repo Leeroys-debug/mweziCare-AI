@@ -162,6 +162,22 @@ describe("extractFeatures", () => {
     expect(features.cycleLengthVariabilityDays_last3).toBe(0);
   });
 
+  it("counts days with pain lasting at least the long-duration threshold hours", () => {
+    const logs: TriageLog[] = [
+      log({ logDate: "2026-01-01", periodDay: true, painDuration: 8 }),
+      log({ logDate: "2026-01-02", periodDay: true, painDuration: 2 }),
+      log({ logDate: "2026-01-29", periodDay: true, painDuration: 24 }),
+    ];
+    const features = extractFeatures(logs, deriveCycles(logs));
+    expect(features.longDurationPainDays_last3).toBe(2);
+  });
+
+  it("treats a missing painDuration as 0 hours", () => {
+    const logs: TriageLog[] = [log({ logDate: "2026-01-01", periodDay: true })];
+    const features = extractFeatures(logs, deriveCycles(logs));
+    expect(features.longDurationPainDays_last3).toBe(0);
+  });
+
   it("produces both _last3 and _last6 variants", () => {
     const features = extractFeatures([], []);
     expect(features).toHaveProperty("cyclesWithMaxPainGte7_last3");

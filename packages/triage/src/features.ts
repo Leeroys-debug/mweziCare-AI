@@ -8,6 +8,8 @@ import {
 export interface TriageLog extends PeriodDayLog {
   bleedingLevel?: string | null;
   painScore?: number | null;
+  /** Hours (0-24) the pain lasted that day — see packages/validation's painDurationHoursSchema. */
+  painDuration?: number | null;
   symptoms?: {
     painWithBowelMovements?: boolean;
     painWithUrination?: boolean;
@@ -22,6 +24,14 @@ export interface TriageLog extends PeriodDayLog {
 }
 
 const HEAVY_BLEEDING_LEVELS = new Set(["heavy", "very_heavy"]);
+
+/**
+ * [CLINICAL REVIEW REQUIRED] This app's own placeholder cutoff for "pain
+ * lasted most of the day or longer" — not a cited clinical threshold, needs
+ * a clinician's explicit sign-off (same status as every other threshold in
+ * packages/rules-engine/src/rulesets/draft-v1.ts).
+ */
+const LONG_PAIN_DURATION_HOURS_THRESHOLD = 8;
 
 function linearRegressionSlope(points: { x: number; y: number }[]): number {
   if (points.length < 2) return 0;
@@ -55,6 +65,7 @@ function windowFeatures(
       bleedingBetweenPeriods: false,
       painTrendSlope: 0,
       cycleLengthVariabilityDays: 0,
+      longDurationPainDays: 0,
     };
   }
 
@@ -109,6 +120,10 @@ function windowFeatures(
       !log.periodDay && log.bleedingLevel && log.bleedingLevel !== "none",
   );
 
+  const longDurationPainDays = logsInWindow.filter(
+    (log) => (log.painDuration ?? 0) >= LONG_PAIN_DURATION_HOURS_THRESHOLD,
+  ).length;
+
   const painPoints = logsInWindow
     .filter((log) => log.painScore != null)
     .map((log, i) => ({ x: i, y: log.painScore! }));
@@ -136,6 +151,7 @@ function windowFeatures(
     bleedingBetweenPeriods,
     painTrendSlope,
     cycleLengthVariabilityDays,
+    longDurationPainDays,
   };
 }
 
@@ -173,6 +189,8 @@ export function extractFeatures(
     painTrendSlope_last6: last6.painTrendSlope,
     cycleLengthVariabilityDays_last3: last3.cycleLengthVariabilityDays,
     cycleLengthVariabilityDays_last6: last6.cycleLengthVariabilityDays,
+    longDurationPainDays_last3: last3.longDurationPainDays,
+    longDurationPainDays_last6: last6.longDurationPainDays,
   };
 }
 

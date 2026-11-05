@@ -23,7 +23,7 @@ import {
   painLocationSchema,
   painTimingSchema,
   painReliefByMedicationSchema,
-  painDurationSchema,
+  painDurationHoursSchema,
   type SymptomLogInput,
 } from "@mwezicare/validation";
 import { Button, Chip, PainSlider } from "@mwezicare/ui";
@@ -40,7 +40,8 @@ const PAIN_LOCATIONS = painLocationSchema.options;
 const PAIN_TIMINGS = painTimingSchema.options;
 const BLEEDING_LEVELS = bleedingLevelSchema.options;
 const PAIN_RELIEF_OPTIONS = painReliefByMedicationSchema.options;
-const PAIN_DURATIONS = painDurationSchema.options;
+/** Mirrors painDurationHoursSchema's 0-24 range (packages/validation). */
+const MAX_PAIN_DURATION_HOURS = 24;
 
 const SYMPTOM_ICONS = {
   fatigue: BatteryLow,
@@ -59,7 +60,7 @@ const formSchema = z.object({
   painScore: z.number().int().min(0).max(10),
   painLocations: z.array(painLocationSchema),
   painTiming: z.array(painTimingSchema),
-  painDuration: painDurationSchema.nullable(),
+  painDuration: painDurationHoursSchema,
   painReliefByMedication: painReliefByMedicationSchema.nullable(),
   painPersistsDespiteRelief: z.boolean(),
   fatigue: z.boolean(),
@@ -87,7 +88,7 @@ const DEFAULT_VALUES: FormValues = {
   painScore: 0,
   painLocations: [],
   painTiming: [],
-  painDuration: null,
+  painDuration: 0,
   painReliefByMedication: null,
   painPersistsDespiteRelief: false,
   fatigue: false,
@@ -177,7 +178,7 @@ export function DailyLogForm({ date, onSaved, onUrgent }: DailyLogFormProps) {
           painLocations: (existing.painLocations ??
             []) as FormValues["painLocations"],
           painTiming: (existing.painTiming ?? []) as FormValues["painTiming"],
-          painDuration: existing.painDuration ?? null,
+          painDuration: existing.painDuration ?? 0,
           painReliefByMedication: existing.painReliefByMedication ?? null,
           painPersistsDespiteRelief:
             existing.painPersistsDespiteRelief ?? false,
@@ -323,6 +324,10 @@ export function DailyLogForm({ date, onSaved, onUrgent }: DailyLogFormProps) {
   const painScoreLabels = Array.from({ length: 11 }, (_, i) =>
     t(`painScoreLabel.${i}`),
   );
+  const painDurationHoursLabels = Array.from(
+    { length: MAX_PAIN_DURATION_HOURS + 1 },
+    (_, hours) => t("painDurationHoursValue", { hours }),
+  );
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
@@ -409,30 +414,19 @@ export function DailyLogForm({ date, onSaved, onUrgent }: DailyLogFormProps) {
         </div>
       </fieldset>
 
-      <fieldset className="flex flex-col gap-2">
-        <legend className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-          {t("painDurationLabel")}
-        </legend>
-        <Controller
-          control={control}
-          name="painDuration"
-          render={({ field }) => (
-            <div className="flex flex-wrap gap-2">
-              {PAIN_DURATIONS.map((duration) => (
-                <Chip
-                  key={duration}
-                  selected={field.value === duration}
-                  onClick={() =>
-                    field.onChange(field.value === duration ? null : duration)
-                  }
-                >
-                  {t(`painDuration.${duration}`)}
-                </Chip>
-              ))}
-            </div>
-          )}
-        />
-      </fieldset>
+      <Controller
+        control={control}
+        name="painDuration"
+        render={({ field }) => (
+          <PainSlider
+            value={field.value}
+            onChange={field.onChange}
+            label={t("painDurationLabel")}
+            valueLabels={painDurationHoursLabels}
+            max={MAX_PAIN_DURATION_HOURS}
+          />
+        )}
+      />
 
       <fieldset className="flex flex-col gap-2">
         <legend className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
