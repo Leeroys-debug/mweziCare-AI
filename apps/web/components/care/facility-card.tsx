@@ -55,7 +55,16 @@ export function FacilityCard({
   const status = gynStatus(facility);
   const distance = formatDistance(facility.distanceMeters);
 
-  const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${facility.lat},${facility.lng}`;
+  // Searches Google's own place database by name instead of our stored
+  // coordinates — our lat/lng is good enough for "near me" radius search
+  // and the overview map, but isn't guaranteed to land on Google's own
+  // exact pin for a facility. A name+locality search resolves through
+  // Google's own data, so "Directions" always lands correctly regardless
+  // of how precise our stored coordinates are.
+  const mapsQuery = encodeURIComponent(
+    `${facility.name}, ${facility.subCounty ? `${facility.subCounty}, ` : ""}${facility.county}, Kenya`,
+  );
+  const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
   const osmUrl = `https://www.openstreetmap.org/?mlat=${facility.lat}&mlon=${facility.lng}#map=16/${facility.lat}/${facility.lng}`;
 
   async function recordReferral() {
