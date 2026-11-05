@@ -22,6 +22,7 @@ evals/
 .env*
 apps/web/.agents/
 apps/web/.claude/
+.claude/settings.local.json
 apps/web/skills-lock.json
 **/.terraform/
 *.tfstate
