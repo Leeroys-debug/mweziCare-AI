@@ -493,7 +493,7 @@ export function LogCalendar() {
                 variant="outline"
                 disabled={togglingDate === selectedDate}
                 onClick={handleMarkPeriodEnd}
-                className="border-red-400 text-red-700 hover:bg-red-100 focus-visible:ring-red-700 dark:border-red-700 dark:text-red-300 dark:hover:bg-red-900"
+                className="border-green-400 text-green-700 hover:bg-green-100 focus-visible:ring-green-700 dark:border-green-700 dark:text-green-300 dark:hover:bg-green-900"
               >
                 {t("markPeriodEndButton")}
               </Button>
