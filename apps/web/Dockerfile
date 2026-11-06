@@ -17,8 +17,25 @@
 FROM node:20-bookworm-slim AS source
 RUN corepack enable
 WORKDIR /app
-COPY . .
+# Manifests only, copied before the rest of the source, so this layer (and
+# the slow `pnpm install` below) stays cached across builds that don't touch
+# dependencies — a plain code change no longer busts the cache and forces a
+# full from-scratch reinstall of ~1200 packages every time. pnpm needs every
+# workspace package's package.json up front to resolve the workspace graph,
+# even though it doesn't need each package's actual source yet.
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc* ./
+COPY apps/web/package.json ./apps/web/package.json
+COPY packages/assistant/package.json ./packages/assistant/package.json
+COPY packages/db/package.json ./packages/db/package.json
+COPY packages/eslint-config/package.json ./packages/eslint-config/package.json
+COPY packages/facilities/package.json ./packages/facilities/package.json
+COPY packages/rules-engine/package.json ./packages/rules-engine/package.json
+COPY packages/triage/package.json ./packages/triage/package.json
+COPY packages/tsconfig/package.json ./packages/tsconfig/package.json
+COPY packages/ui/package.json ./packages/ui/package.json
+COPY packages/validation/package.json ./packages/validation/package.json
 RUN pnpm install --frozen-lockfile
+COPY . .
 
 # ---- build: Next.js standalone server bundle ----
 FROM source AS build
