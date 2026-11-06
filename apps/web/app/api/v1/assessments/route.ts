@@ -9,24 +9,24 @@ import {
   withUser,
 } from "@mwezicare/db";
 import { evaluate } from "@mwezicare/rules-engine";
-import {
-  deriveCycles,
-  extractFeatures,
-  extractRedFlagFeatures,
-} from "@mwezicare/triage";
+import { extractRedFlagFeatures } from "@mwezicare/triage";
 import { assertSameOrigin } from "@/lib/csrf";
 import { getCurrentUser } from "@/lib/rbac";
 import { analyticsKeyProvider, db } from "@/lib/server-db";
 import { problem } from "@/lib/problem-details";
 
 /**
- * Runs the full triage evaluation against the currently APPROVED ruleset —
- * the only place (besides the client-side urgent pre-check) urgency is
- * decided, and the only one that writes the immutable system-of-record row
- * (CLAUDE.md: "Rules engine decides urgency, not the LLM"). If no ruleset
- * has been approved yet, reports unavailable rather than erroring — see
+ * Runs the triage evaluation against the currently APPROVED ruleset — the
+ * only place (besides the client-side urgent pre-check) urgency is decided,
+ * and the only one that writes the immutable system-of-record row (CLAUDE.md:
+ * "Rules engine decides urgency, not the LLM"). If no ruleset has been
+ * approved yet, reports unavailable rather than erroring — see
  * packages/rules-engine's draft-v1 ruleset, which intentionally stays
  * "draft" until a named clinician signs off.
+ *
+ * Currently evaluates only today's described symptoms (red-flag features),
+ * not multi-cycle history/trend features — see the comment at the features
+ * object below for why.
  */
 export async function POST(request: Request) {
   const csrfError = assertSameOrigin(request);
@@ -55,27 +55,26 @@ export async function POST(request: Request) {
   }
 
   const logs = await withUser(db, user.id, (tx) => listTriageLogs(tx, user.id));
-  const cycles = deriveCycles(logs);
-  const historyFeatures = extractFeatures(logs, cycles);
   const latestLog = logs.at(-1) ?? {};
   const redFlagFeatures = extractRedFlagFeatures(latestLog);
 
-  // Capture-only in onboarding until now (NICE NG73 1.3.2: a first-degree
-  // relative's history "increases the likelihood of endometriosis") — only
-  // ever combined with an existing pain-history feature in the ruleset,
-  // never a standalone trigger, matching NG73's framing. Not from
-  // packages/triage since it's a one-time profile fact, not derived from logs.
-  const [profile] = await db
-    .select({
-      familyHistoryEndometriosis: schema.profiles.familyHistoryEndometriosis,
-    })
-    .from(schema.profiles)
-    .where(eq(schema.profiles.userId, user.id));
-
+  // Product decision (not a clinical-safety rollback): for now, the
+  // assessment is derived only from today's described symptoms
+  // (redFlagFeatures above) — multi-cycle pattern tracking (worsening
+  // trend, cycle-length variability, repeated disruption, etc.) is
+  // deferred until that's actually built out. packages/triage's
+  // extractFeatures/deriveCycles and every history-based rule in
+  // packages/rules-engine/src/rulesets/draft-v1.ts stay fully implemented
+  // and fixture-tested for when it's re-enabled — this route just doesn't
+  // feed those features into evaluate() yet, so routine_baseline (and its
+  // reassuring "that's good to hear" copy) is reached whenever today's
+  // symptoms alone don't trip an urgent red flag.
+  //
+  // familyHistoryEndometriosis is also left out here, since its only
+  // current rule (assess_soon_family_history_with_pain) requires the
+  // history feature cyclesWithMaxPainGte7_last3 to fire alongside it.
   const features = {
-    ...historyFeatures,
     ...redFlagFeatures,
-    familyHistoryEndometriosis: profile?.familyHistoryEndometriosis ?? false,
   };
   const { outcome, reasons, firedRules } = evaluate(ruleset, features);
 

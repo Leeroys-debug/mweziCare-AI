@@ -144,7 +144,13 @@ describe.skipIf(!db)("POST & GET /api/v1/assessments", () => {
     expect(getBody.assessment.id).toBe(body.assessment.id);
   });
 
-  it("reads familyHistoryEndometriosis off the user's profile into the stored features", async () => {
+  it("evaluates only today's described symptoms, not profile/history features (deferred for now)", async () => {
+    // Product decision, see route.ts's top comment: multi-cycle history
+    // tracking (and the profile-derived familyHistoryEndometriosis feature
+    // that's only ever combined with a history feature) is deferred until
+    // symptom-trend-tracking is built — a day with no red flags should
+    // reach routine_baseline ("that's good to hear") regardless of profile
+    // data, not get bumped up by a history-only rule that can never fire.
     const [ruleset] = await db!
       .insert(schema.rulesets)
       .values({ version: 999, status: "draft" })
@@ -175,7 +181,8 @@ describe.skipIf(!db)("POST & GET /api/v1/assessments", () => {
     const response = await POST(sameOriginRequest());
     const body = await response.json();
 
-    expect(body.assessment.features.familyHistoryEndometriosis).toBe(true);
+    expect(body.assessment.outcome).toBe("routine");
+    expect(body.assessment.features.familyHistoryEndometriosis).toBeUndefined();
 
     await db!.delete(schema.profiles).where(eq(schema.profiles.userId, userId));
   });
