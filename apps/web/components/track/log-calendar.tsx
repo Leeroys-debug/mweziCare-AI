@@ -392,13 +392,17 @@ export function LogCalendar() {
           const log = logsByDate.get(date);
           const isPeriodDay = log?.periodDay ?? false;
           // Last day of a contiguous period streak — green, so it reads
-          // distinctly from the red fill of the days before it. Derived
-          // purely from periodDay data already loaded for the visible
-          // range; a day with no next-day data loaded (e.g. the last cell
-          // in view) is treated as the end, which is usually correct since
-          // that's typically the most recently logged day.
+          // distinctly from the red fill of the days before it. A day is
+          // only ever inferred as the end once it's safely in the past and
+          // the following day isn't a period day: today (or any day not
+          // yet followed by tomorrow) is deliberately excluded, even though
+          // it has no next-day data either, because we can't yet know
+          // whether an ongoing period continues tomorrow — marking today as
+          // a period day should read as "period day, in progress" (red),
+          // not "period ended today" (green).
           const isPeriodEndDay =
             isPeriodDay &&
+            date < todayIso &&
             !(logsByDate.get(addDaysIso(date, 1))?.periodDay ?? false);
           const painScore = log?.painScore ?? null;
           const badgeClass = painBadgeClass(painScore);
