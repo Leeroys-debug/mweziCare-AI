@@ -28,10 +28,10 @@
     "format": "prettier --write ."
   },
   "devDependencies": {
-    "turbo": "^2.3.0",
+    "turbo": "^2.11.11",
     "typescript": "^5.7.0",
     "eslint": "^9",
-    "prettier": "^3.4.0",
+    "prettier": "^3.10.1",
     "husky": "^9.1.0",
     "lint-staged": "^15.2.0"
   }
