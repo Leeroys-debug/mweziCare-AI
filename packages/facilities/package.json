@@ -24,7 +24,7 @@
   "devDependencies": {
     "@mwezicare/tsconfig": "workspace:*",
     "@mwezicare/eslint-config": "workspace:*",
-    "@testcontainers/postgresql": "^12.2.1",
+    "@testcontainers/postgresql": "^12.2.2",
     "@types/node": "^20",
     "dotenv": "^16.4.7",
     "tsx": "^4.19.2",

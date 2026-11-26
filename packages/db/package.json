@@ -29,11 +29,11 @@
     "@mwezicare/tsconfig": "workspace:*",
     "@mwezicare/eslint-config": "workspace:*",
     "@mwezicare/triage": "workspace:*",
-    "@testcontainers/postgresql": "^12.2.1",
+    "@testcontainers/postgresql": "^12.2.2",
     "@types/node": "^20",
     "dotenv": "^16.4.7",
     "drizzle-kit": "^0.31.11",
-    "testcontainers": "^12.2.1",
+    "testcontainers": "^12.2.2",
     "tsx": "^4.19.2",
     "typescript": "^5",
     "vitest": "^4.1.9"
